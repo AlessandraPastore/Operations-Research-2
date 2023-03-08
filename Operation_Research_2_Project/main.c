@@ -3,13 +3,9 @@
 
 double second();
 void print_error(const char* err);
-//void check_dblsort();
-//double random01();
 void read_input(instance* inst);
 void parse_command_line(int argc, char** argv, instance* inst);
 void free_instance(instance* inst);
-
-//int VRPopt(instance *inst);
 
 int main(int argc, char** argv)
 {

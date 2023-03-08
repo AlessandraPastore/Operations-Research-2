@@ -1,13 +1,7 @@
-//
-// Created by Alessandra on 06/03/2023.
-//
-
 #include "tsp.h"
 
 double second();
 void print_error(const char* err);
-//void check_dblsort();
-//double random01();
 void read_input(instance* inst);
 void parse_command_line(int argc, char** argv, instance* inst);
 
@@ -34,8 +28,6 @@ void free_instance(instance* inst)
     free(inst->load_min);
     free(inst->load_max);
 }
-
-int VRPopt(instance* inst);
 
 void read_input(instance* inst) // simplified CVRP parser, not all SECTIONs detected
 {
@@ -99,7 +91,6 @@ void read_input(instance* inst) // simplified CVRP parser, not all SECTIONs dete
             token1 = strtok(NULL, " :");
             inst->nnodes = atoi(token1);
             if (do_print) printf(" ... nnodes %d\n", inst->nnodes);
-            //inst->demand = (double *) calloc(inst->nnodes, sizeof(double));
             inst->xcoord = (double*)calloc(inst->nnodes, sizeof(double));
             inst->ycoord = (double*)calloc(inst->nnodes, sizeof(double));
             active_section = 0;
@@ -203,7 +194,6 @@ void parse_command_line(int argc, char** argv, instance* inst)
         printf("-max_nodes %d\n", inst->max_nodes);
         printf("-memory %d\n", inst->available_memory);
         printf("-int %d\n", inst->integer_costs);
-        //printf("-node_file %s\n", inst->node_file);
         printf("-cutoff %lf\n", inst->cutoff);
         printf("\nenter -help or --help for help\n");
         printf("----------------------------------------------------------------------------------------------\n\n");

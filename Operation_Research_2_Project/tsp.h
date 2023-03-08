@@ -1,8 +1,4 @@
 #pragma once
-#pragma once
-//
-// Created by Alessandra on 06/03/2023.
-//
 
 #ifndef TSP_H_
 
@@ -13,10 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-//#include <unistd.h>
 
-//#include <cplex.h>
-//#include <pthread.h>
 
 #define VERBOSE				    50		// printing level  (=10 only incumbent, =20 little output, =50-60 good, =70 verbose, >=100 cplex log)
 
