@@ -1,6 +1,4 @@
 #include "tsp.h" 
-//#include <gnuplot_c.h>
-
 
 double second();
 void print_error(const char* err);
@@ -30,16 +28,6 @@ int main(int argc, char** argv)
 	}
 
 	free_instance(&inst);
-
-	/*
-	h_GPC_Plot* plotter;
-	plotter = gpc_init_xy("Best solution", "X coord", "Y coord",
-		GPC_AUTO_SCALE, GPC_KEY_DISABLE);
-
-	
-
-	gpc_close(plotter);
-	*/
 
 	return 0;
 }
