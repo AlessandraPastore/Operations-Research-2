@@ -11,7 +11,7 @@
 *.obj
 *.elf
 *.dat
-*.tsp
+
 
 # Linker output
 *.ilk
