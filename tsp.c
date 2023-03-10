@@ -8,9 +8,9 @@ double dist(instance *inst,int index1,int index2) {
     int i=0;
     int j=0;
     for(i=0;i<inst->nnodes;i++)
-        for(j=0;j<inst->nnodes;j++) 
+        for(j=0;j<i;j++) 
             if(i!=j)
-                inst->cost[i*inst->nnodes+j]=dist(inst,i,j);
+                inst->cost[i*inst->nnodes+j]=inst->cost[j*inst->nnodes+i]=dist(inst,i,j);
 
     inst->flagCost=1;
  }

@@ -61,5 +61,6 @@ inline int imax(int i1, int i2) { return (i1 > i2) ? i1 : i2; }
 inline double dmin(double d1, double d2) { return (d1 < d2) ? d1 : d2; }
 inline double dmax(double d1, double d2) { return (d1 > d2) ? d1 : d2; }
 double dist(instance *inst,int index1,int index2);
+void computeCost(instance *inst);
 #endif   /* TSP_H_ */
 

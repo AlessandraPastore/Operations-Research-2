@@ -4,8 +4,11 @@
 
 int greedy(instance *inst,int startNode)
 {
+    if(inst->flagCost==0)
+        computeCost(inst);
     //vector with the solutions
     int* solution;
+    solution=(int*)calloc(inst->nnodes, sizeof(int));
     int i;
     for(i=0;i<inst->nnodes;i++)
         solution[i]=i;
@@ -22,7 +25,7 @@ int greedy(instance *inst,int startNode)
     {
         for(i=j+1;i<inst->nnodes;i++)
         {
-            double actualDist=dist(inst,j,i);
+            double actualDist=inst->cost[j*inst->nnodes+i];
             if(actualDist<minDist)
             {
                 minDist=actualDist;
