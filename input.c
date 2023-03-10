@@ -127,6 +127,7 @@ void read_input(instance* inst) // simplified CVRP parser, not all SECTIONs dete
             if (i < 0 || i >= inst->nnodes) print_error(" ... unknown node in NODE_COORD_SECTION section");
             token1 = strtok(NULL, " :,");
             token2 = strtok(NULL, " :,");
+            inst->index[i]=i;
             inst->xcoord[i] = atof(token1);
             inst->ycoord[i] = atof(token2);
 
@@ -156,11 +157,7 @@ void parse_command_line(int argc, char** argv, instance* inst)
     inst->randomseed = 0;
     //inst->num_threads = 0;
     inst->timelimit = INFBOUND;
-    //inst->cutoff = INFBOUND;
-    //inst->integer_costs = 0;
-
-    //inst->available_memory = 12000;   			// available memory, in MB, for Cplex execution (e.g., 12000)
-    //inst->max_nodes = -1; 						// max n. of branching nodes in the final run (-1 unlimited)
+   
 
     int help = 0; if (argc < 1) help = 1;
     for (int i = 1; i < argc; i++)
@@ -173,12 +170,6 @@ void parse_command_line(int argc, char** argv, instance* inst)
         //if (strcmp(argv[i], "-old_benders") == 0) { inst->old_benders = atoi(argv[++i]); continue; } 	// old benders
         if (strcmp(argv[i], "-model") == 0) { inst->model_type = atoi(argv[++i]); continue; } 			// model type
         if (strcmp(argv[i], "-seed") == 0) { inst->randomseed = abs(atoi(argv[++i])); continue; } 		// random seed
-        //if (strcmp(argv[i], "-threads") == 0) { inst->num_threads = atoi(argv[++i]); continue; } 		// n. threads
-        //if (strcmp(argv[i], "-memory") == 0) { inst->available_memory = atoi(argv[++i]); continue; }	// available memory (in MB)
-        //if (strcmp(argv[i], "-node_file") == 0) { strcpy(inst->node_file, argv[++i]); continue; }		// cplex's node file
-        //if (strcmp(argv[i], "-max_nodes") == 0) { inst->max_nodes = atoi(argv[++i]); continue; } 		// max n. of nodes
-        //if (strcmp(argv[i], "-cutoff") == 0) { inst->cutoff = atof(argv[++i]); continue; }				// master cutoff
-        //if (strcmp(argv[i], "-int") == 0) { inst->integer_costs = 1; continue; } 						// inteher costs
         if (strcmp(argv[i], "-help") == 0) { help = 1; continue; } 									// help
         if (strcmp(argv[i], "--help") == 0) { help = 1; continue; } 									// help
         help = 1;
@@ -192,13 +183,6 @@ void parse_command_line(int argc, char** argv, instance* inst)
         printf("-model_type %d\n", inst->model_type);
         //printf("-old_benders %d\n", inst->old_benders);
         printf("-seed %d\n", inst->randomseed);
-        /*
-        printf("-threads %d\n", inst->num_threads);
-        printf("-max_nodes %d\n", inst->max_nodes);
-        printf("-memory %d\n", inst->available_memory);
-        printf("-int %d\n", inst->integer_costs);
-        printf("-cutoff %lf\n", inst->cutoff);
-        */
         printf("\nenter -help or --help for help\n");
         printf("----------------------------------------------------------------------------------------------\n\n");
     }

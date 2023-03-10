@@ -27,6 +27,7 @@ typedef struct {
     int nnodes;
     double* xcoord;
     double* ycoord;
+    int* index;
 
     // parameters
     int model_type;

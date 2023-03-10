@@ -1,5 +1,4 @@
 #include "tsp.h" 
-
 double second();
 void print_error(const char* err);
 void read_input(instance* inst);
