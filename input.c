@@ -93,6 +93,8 @@ void read_input(instance* inst) // simplified CVRP parser, not all SECTIONs dete
             if (do_print) printf(" ... nnodes %d\n", inst->nnodes);
             inst->xcoord = (double*)calloc(inst->nnodes, sizeof(double));
             inst->ycoord = (double*)calloc(inst->nnodes, sizeof(double));
+            inst->index=(int*)calloc(inst->nnodes, sizeof(int));
+            inst->cost=(double*)calloc(inst->nnodes*inst->nnodes,sizeof(int));
             active_section = 0;
             continue;
         }

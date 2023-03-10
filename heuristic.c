@@ -1,9 +1,6 @@
 #include "tsp.h"
 #define GRASP_RAND 0.8
-double dist(instance *inst,int index1,int index2) {
 
-    return sqrt((inst->xcoord[index1]-inst->xcoord[index2])*(inst->xcoord[index1]-inst->xcoord[index2])+(inst->ycoord[index1]-inst->ycoord[index2])*(inst->ycoord[index1]-inst->ycoord[index2]));
- }
 
 int greedy(instance *inst,int startNode)
 {

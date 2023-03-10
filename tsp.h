@@ -38,7 +38,12 @@ typedef struct {
     char input_file[1000];		  			// input file
    
 
-    
+    //cost
+    double* cost;
+
+    //flag to see if the cost is set, 0 if not set
+    int flagCost;
+
     double zbest;							// best sol. available
     double tbest;							// time for the best sol. available
     double* best_sol;						// best sol. available
@@ -55,6 +60,6 @@ typedef struct {
 inline int imax(int i1, int i2) { return (i1 > i2) ? i1 : i2; }
 inline double dmin(double d1, double d2) { return (d1 < d2) ? d1 : d2; }
 inline double dmax(double d1, double d2) { return (d1 > d2) ? d1 : d2; }
-
+double dist(instance *inst,int index1,int index2);
 #endif   /* TSP_H_ */
 
