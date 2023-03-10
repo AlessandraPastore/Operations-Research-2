@@ -1,6 +1,6 @@
 #include "tsp.h"
 #define GRASP_RAND 0.8
-inline double dist(instance *inst,int index1,int index2) {
+double dist(instance *inst,int index1,int index2) {
 
     return sqrt((inst->xcoord[index1]-inst->xcoord[index2])*(inst->xcoord[index1]-inst->xcoord[index2])+(inst->ycoord[index1]-inst->ycoord[index2])*(inst->ycoord[index1]-inst->ycoord[index2]));
  }
@@ -17,7 +17,7 @@ int greedy(instance *inst,int startNode)
     solution[0]=startNode;
     solution[startNode]=0;
     int minIndex=0;
-    double minDist=INT_MAX;
+    double minDist=2147483647;
     int j=0;
     int cost=0;
     int swap;
