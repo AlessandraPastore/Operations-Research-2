@@ -1,4 +1,5 @@
 #include "tsp.h" 
+
 double second();
 void print_error(const char* err);
 void read_input(instance* inst);
@@ -15,12 +16,15 @@ int main(int argc, char** argv)
 
 	parse_command_line(argc, argv, &inst);
 
-	//printf(" file %s has %d non-empty lines\n", inst.input_file, number_of_nonempty_lines(inst.input_file)); exit(1);
-
 	read_input(&inst);
-	//if ( VRPopt(&inst) ) print_error(" error within VRPopt()");
+	
+	//if ( greedy(&inst) ) print_error(" error within VRPopt()");
+	
 	double t2 = second();
+
+	//GNUPLOT to cmd
 	system("gnuplot ./plot/commands.txt");
+
 	if (VERBOSE >= 1)
 	{
 		printf("... TSP problem solved in %lf sec.s\n", t2 - t1);

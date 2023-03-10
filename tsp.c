@@ -1,9 +1,11 @@
 #include "tsp.h"
+
 double dist(instance *inst,int index1,int index2) {
 
     return sqrt((inst->xcoord[index1]-inst->xcoord[index2])*(inst->xcoord[index1]-inst->xcoord[index2])+(inst->ycoord[index1]-inst->ycoord[index2])*(inst->ycoord[index1]-inst->ycoord[index2]));
  }
- void computeCost(instance *inst)
+
+void computeCost(instance *inst)
  {
     int i=0;
     int j=0;

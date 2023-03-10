@@ -19,37 +19,36 @@
 #define TICKS_PER_SECOND 	  1000.0  	// cplex's ticks on Intel Core i7 quadcore @2.3GHZ
 #define INFBOUND                99999999999
 
+#define GRASP_RAND 0.8
+
 //data structures
 
 typedef struct {
 
     //input data
     int nnodes;
-    double* xcoord;
+    double* xcoord;     
     double* ycoord;
     int* index;
 
     // parameters
-    int model_type;
-    //int old_benders;
-    int randomseed;
-    //int num_threads;
     double timelimit;						// overall time limit, in sec.s
     char input_file[1000];		  			// input file
    
 
-    //cost
+    //costs 
     double* cost;
 
-    //flag to see if the cost is set, 0 if not set
+    //flag to see if the costs array is set, 0 if not set
     int flagCost;
 
-    double zbest;							// best sol. available
+    //best sol.
+    double zbest;							// cost of best sol. available
     double tbest;							// time for the best sol. available
     double* best_sol;						// best sol. available
     double	best_lb;						// best lower bound available
 
-    // model;
+    // model; starting point
     int xstart;
     int ystart;
     int indexStart;
