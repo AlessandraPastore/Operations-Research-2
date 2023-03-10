@@ -21,12 +21,13 @@ int main(int argc, char** argv)
 	read_input(&inst);
 	//if ( VRPopt(&inst) ) print_error(" error within VRPopt()");
 	double t2 = second();
-
+	system("gnuplot ./plot/commands.txt");
 	if (VERBOSE >= 1)
 	{
 		printf("... TSP problem solved in %lf sec.s\n", t2 - t1);
 	}
 
+	
 	free_instance(&inst);
 
 	return 0;
