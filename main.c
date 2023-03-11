@@ -5,6 +5,7 @@ void print_error(const char* err);
 void read_input(instance* inst);
 void parse_command_line(int argc, char** argv, instance* inst);
 void free_instance(instance* inst);
+int extra_mileage(instance *inst);
 
 int main(int argc, char** argv)
 {
@@ -20,15 +21,20 @@ int main(int argc, char** argv)
 	
 	//if ( greedy(&inst) ) print_error(" error within VRPopt()");
 	
-	double t2 = second();
+	//extra_mileage(&inst);
 
-	//GNUPLOT to cmd
-	system("gnuplot ./plot/commands.txt");
+	double t2 = second();
 
 	if (VERBOSE >= 1)
 	{
 		printf("... TSP problem solved in %lf sec.s\n", t2 - t1);
 	}
+
+
+	//GNUPLOT to cmd
+	system("gnuplot ./plot/commands.txt");
+
+	
 
 	
 	free_instance(&inst);

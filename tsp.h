@@ -45,7 +45,7 @@ typedef struct {
     //best sol.
     double zbest;							// cost of best sol. available
     double tbest;							// time for the best sol. available
-    double* best_sol;						// best sol. available
+    int* best_sol;						// best sol. available
     double	best_lb;						// best lower bound available
 
     // model; starting point
@@ -61,5 +61,6 @@ inline double dmin(double d1, double d2) { return (d1 < d2) ? d1 : d2; }
 inline double dmax(double d1, double d2) { return (d1 > d2) ? d1 : d2; }
 double dist(instance *inst,int index1,int index2);
 void computeCost(instance *inst);
+double get_cost(int i, int j, instance *inst);
 #endif   /* TSP_H_ */
 

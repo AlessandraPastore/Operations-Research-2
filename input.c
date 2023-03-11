@@ -76,6 +76,7 @@ void read_input(instance* inst)
             inst->ycoord = (double*)calloc(inst->nnodes, sizeof(double));
             inst->index=(int*)calloc(inst->nnodes, sizeof(int));
             inst->cost=(double*)calloc(inst->nnodes*inst->nnodes,sizeof(int));
+            inst->flagCost = 0;
             active_section = 0;
             continue;
         }
