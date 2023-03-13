@@ -7,6 +7,7 @@ void parse_command_line(int argc, char** argv, instance* inst);
 void free_instance(instance* inst);
 int extra_mileage(instance *inst);
 int greedy(instance *inst,int startNode);
+int grasp(instance *inst,int startNode);
 
 int main(int argc, char** argv)
 {
@@ -19,7 +20,7 @@ int main(int argc, char** argv)
 	parse_command_line(argc, argv, &inst);
 	read_input(&inst);
 	
-	if ( greedy(&inst,0) ) print_error(" error within VRPopt()");
+	if ( grasp(&inst,0) ) print_error(" error within VRPopt()");
 	//if ( greedy(&inst,0) ) print_error(" error within VRPopt()");
 
 	double t2 = second();
