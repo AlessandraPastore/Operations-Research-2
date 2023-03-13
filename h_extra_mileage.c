@@ -4,7 +4,7 @@
 void init_extra_mileage(instance *inst, int* visited);
 void diameter(instance *inst, int *a, int *b);
 int extra_mileage(instance *inst);
-void plot(instance *inst);
+
 
 
 void init_extra_mileage(instance *inst, int* visited){
@@ -20,8 +20,6 @@ void init_extra_mileage(instance *inst, int* visited){
     visited[a] = visited[b] = 1;
     inst->best_sol[a] = b;
     inst->best_sol[b] = a;
-
-    printf("best sol: %d %d\n", a, b);
 
 
 }
@@ -49,40 +47,9 @@ int extra_mileage(instance *inst){
 
 
     int *visited = (int*)calloc(inst->nnodes, sizeof(int));
-    inst->best_sol = (int *) calloc(inst->nnodes, sizeof(double));
+    inst->best_sol = (int *) calloc(inst->nnodes, sizeof(int));
 
     init_extra_mileage(inst,visited);
-
-    int selected = 2;
-
-/*
-    //keep adding edges until all nodes are covered
-    while(selected != inst->nnodes) {
-
-        //scan selected edges
-        //search for a visited node
-        for(int i=0; i<inst->nnodes; i++){
-            if(!visited[i]) continue;   //skip non visited nodes
-
-            //search for a visited node with connected edge
-            for(int j=0; j<inst->nnodes; j++){
-                if(!visited[j]) continue;   //skip non visited nodes
-                if(i == j) continue;    //skip auto loops
-                if(!inst->best_sol[i*inst->nnodes + j]) continue; //skip non edges
-
-                //search for the node z such that c_ij > c_iz + c_zj
-                for(int z=0; z<inst->nnodes; z++){
-                    if(visited[z]) continue;    //skip visited nodes
-
-                    double newCost = get_cost(i,z,inst) + get_cost(z,j,inst) - get_cost(i,j,inst);
-
-
-                }
-                
-            }
-        }
-    }
-*/
 
     //take generic node, non visited
     for(int z=0; z<inst->nnodes; z++){
@@ -111,35 +78,9 @@ int extra_mileage(instance *inst){
         inst->best_sol[z] = jmin;
         visited[z]=1;
 
-        printf("best sol: %d %d %d\n", imin, z, jmin);
-        
         
     }
-    
-    /*
-    for(int i=0; i<inst->nnodes ; i++){
-            
-            printf("%f %f\n", inst->xcoord[inst->best_sol[x]], inst->ycoord[inst->best_sol[x]] );
-            //fprintf(out_file, "%f %f\n", inst->xcoord[inst->best_sol[x]], inst->ycoord[inst->best_sol[x]] );
-            printf("%f\n",inst->best_sol[x]);
-            x = inst->best_sol[x];
-        }
 
-    */
-
-int x=0;
-    for(int i=0;i<inst->nnodes;i++){
-        
-            //printf("%d\n", inst->best_sol[i] );
-            
-            printf("%f %f\n", inst->xcoord[inst->best_sol[x]], inst->ycoord[inst->best_sol[x]] );
-            fflush(NULL);
-            x = inst->best_sol[x];
-            
-    }
-
-    //plot(inst);
-
-
+    plot(inst);
     return 0;
 }

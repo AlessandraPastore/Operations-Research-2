@@ -8,12 +8,10 @@ double dist(instance *inst,int index1,int index2) {
 
 void computeCost(instance *inst)
  {
-    int i=0;
-    int j=0;
-    for(i=0;i<inst->nnodes;i++)
-        for(j=0;j<i;j++) 
-            if(i!=j)
-                inst->cost[i*inst->nnodes+j] = inst->cost[j*inst->nnodes+i] = dist(inst,i,j);
+    
+    for(int i=0;i<inst->nnodes;i++)
+        for(int j=0;j<i;j++) 
+             inst->cost[i*inst->nnodes+j] = inst->cost[j*inst->nnodes+i] = dist(inst,i,j);
 
     inst->flagCost=1;
  }
@@ -23,6 +21,26 @@ void computeCost(instance *inst)
         printf("get_cost(): unexpected params i: %d, j= %dd",i,j);
     }
     return inst->cost[i * inst->nnodes + j];
+ }
+
+ void plot(instance *inst){
+
+    FILE *out = fopen(".\\output\\out.txt", "w");
+    if (out == NULL) printf("input file not found!");
+
+
+    int x=0;
+    for(int i=0;i<inst->nnodes;i++){
+        
+            fprintf(out, "%f %f\n", inst->xcoord[inst->best_sol[x]], inst->ycoord[inst->best_sol[x]] );
+            x = inst->best_sol[x];
+            
+    }
+    fclose(out);
+
+    //da modificare o aggiungere una funzione per creare il file commands.txt
+    //GNUPLOT to cmd
+	system("gnuplot ./plot/commands.txt");
  }
 
  

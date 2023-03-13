@@ -62,5 +62,6 @@ inline double dmax(double d1, double d2) { return (d1 > d2) ? d1 : d2; }
 double dist(instance *inst,int index1,int index2);
 void computeCost(instance *inst);
 double get_cost(int i, int j, instance *inst);
+void plot(instance *inst);
 #endif   /* TSP_H_ */
 

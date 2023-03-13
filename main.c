@@ -6,6 +6,7 @@ void read_input(instance* inst);
 void parse_command_line(int argc, char** argv, instance* inst);
 void free_instance(instance* inst);
 int extra_mileage(instance *inst);
+int greedy(instance *inst,int startNode);
 
 int main(int argc, char** argv)
 {
@@ -16,12 +17,10 @@ int main(int argc, char** argv)
 	instance inst;
 
 	parse_command_line(argc, argv, &inst);
-
 	read_input(&inst);
 	
-	//if ( greedy(&inst) ) print_error(" error within VRPopt()");
-	
-	//extra_mileage(&inst);
+	if ( extra_mileage(&inst) ) print_error(" error within VRPopt()");
+	//if ( greedy(&inst,0) ) print_error(" error within VRPopt()");
 
 	double t2 = second();
 
@@ -30,13 +29,6 @@ int main(int argc, char** argv)
 		printf("... TSP problem solved in %lf sec.s\n", t2 - t1);
 	}
 
-
-	//GNUPLOT to cmd
-	system("gnuplot ./plot/commands.txt");
-
-	
-
-	
 	free_instance(&inst);
 
 	return 0;
