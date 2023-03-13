@@ -14,6 +14,7 @@ void computeCost(instance *inst)
              inst->cost[i*inst->nnodes+j] = inst->cost[j*inst->nnodes+i] = dist(inst,i,j);
 
     inst->flagCost=1;
+    inst->zbest=-1;
  }
 
  double get_cost(int i, int j, instance *inst){

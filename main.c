@@ -19,7 +19,7 @@ int main(int argc, char** argv)
 	parse_command_line(argc, argv, &inst);
 	read_input(&inst);
 	
-	if ( extra_mileage(&inst) ) print_error(" error within VRPopt()");
+	if ( greedy(&inst,0) ) print_error(" error within VRPopt()");
 	//if ( greedy(&inst,0) ) print_error(" error within VRPopt()");
 
 	double t2 = second();
