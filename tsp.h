@@ -71,6 +71,6 @@ void computeCost(instance *inst);
 double get_cost(int i, int j, instance *inst);
 void plot(instance *inst);
 int timeOut(instance *inst);
-int checkSol(instance *inst);
+int checkSol(instance *inst, int *sol);
 #endif   /* TSP_H_ */
 

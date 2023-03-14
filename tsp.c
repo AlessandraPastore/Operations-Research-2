@@ -54,14 +54,14 @@ int timeOut(instance *inst){
    return (t - inst->timeStart) > inst->timelimit;
 }
 
-int checkSol(instance *inst){
+int checkSol(instance *inst, int* sol){
    int *visited = (int*)calloc(inst->nnodes, sizeof(int));
    for(int i = 0 ; i < inst->nnodes;i++){
-        visited[inst->best_sol[i]]++;
+        visited[sol[i]]++;
     }
 
    for(int i = 0 ; i < inst->nnodes; i++){
-        if(visited[i] != 1) printf("ERROR IN THE SOLUTION: %d as %d",i, visited[i]);
+        if(visited[i] != 1) printf("ERROR IN THE SOLUTION: %d as %d\n\n",i, visited[i]);
    }
    
    return 0;

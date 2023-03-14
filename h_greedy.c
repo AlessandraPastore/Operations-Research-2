@@ -6,7 +6,7 @@ void updateCost(instance *inst, double cost, int* solution)
     if(VERBOSE >= 10) printf("-------- Updating best solution --------\n");
     inst->zbest = cost;
     memcpy(inst->best_sol, solution, inst->nnodes * sizeof(int));
-    if(VERBOSE >= 10)checkSol(inst);
+    if(VERBOSE >= 10) checkSol(inst,solution);
 }
 
 int greedy(instance *inst,int startNode)
@@ -72,6 +72,8 @@ int greedy(instance *inst,int startNode)
         solution[current] = start;
 
         if(VERBOSE >= 10) printf("current cost: %f\n", cost);
+
+        if(VERBOSE >= 10)checkSol(inst,solution);
 
         //if current cost is better, update best solution
         if(inst->zbest == -1 || inst->zbest > cost){
@@ -150,6 +152,12 @@ int grasp(instance *inst, int startNode)
                     minIndex2 = i;
                 }
             }
+
+            //last iter with only one node to pair (no second min)
+                if(j == inst->nnodes-2) {
+                    minDist2 = minDist;
+                    minIndex2 = minIndex;
+                    }
             
             if((rand() % 10) <= (GRASP_RAND * 10))
             {
@@ -163,9 +171,6 @@ int grasp(instance *inst, int startNode)
             }
             else
             {
-                //last iter with only one node to pair (no second min)
-                if(j == inst->nnodes-2) minDist2 = minDist;
-
                 cost += minDist2;
                 
                 //now I add the new edge
@@ -183,17 +188,14 @@ int grasp(instance *inst, int startNode)
         solution[current] = start;
 
         if(VERBOSE >= 10) printf("current cost: %f\n", cost);
+        if(VERBOSE >= 10)checkSol(inst,solution);
 
         //if current cost is better, update best solution
         if(inst->zbest == -1 || inst->zbest > cost){
             updateCost(inst,cost,solution);
             inst->indexStart = start;
         }
-        if(cost > 100000000){
-            updateCost(inst,cost,solution);
-            inst->indexStart = start;
-            break;
-        }
+        
     } while (!timeOut(inst));
 
     printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
