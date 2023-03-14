@@ -47,7 +47,6 @@ int extra_mileage(instance *inst){
 
 
     int *visited = (int*)calloc(inst->nnodes, sizeof(int));
-    inst->best_sol = (int *) calloc(inst->nnodes, sizeof(int));
 
     init_extra_mileage(inst,visited);
 

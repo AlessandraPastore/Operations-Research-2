@@ -13,6 +13,9 @@ void free_instance(instance* inst)
     free(inst->xcoord);
     free(inst->ycoord);
     free(inst->index);
+    free(inst->best_sol);
+    free(inst->cost);
+
 }
 
 //simple parser for TSPLIB 
@@ -118,7 +121,7 @@ void read_input(instance* inst)
             inst->xcoord[i] = atof(token1);
             inst->ycoord[i] = atof(token2);
 
-            if (VERBOSE >=50) { printf("coord: %f,%f \n", inst->xcoord[i], inst->ycoord[i]); fflush(NULL); }
+            if (VERBOSE >=100) { printf("coord: %f,%f \n", inst->xcoord[i], inst->ycoord[i]); fflush(NULL); }
                 
             continue;
         }
@@ -139,7 +142,9 @@ void parse_command_line(int argc, char** argv, instance* inst)
 
     //DEFAULT VALUES
     strcpy(inst->input_file, "NULL");
-    inst->timelimit = INFBOUND;
+    inst->timelimit = 0;
+    inst->seed = -1;
+    strcpy(inst->heuristic, "NULL");
    
 
     int help = 0; if (argc < 1) help = 1;
@@ -149,6 +154,8 @@ void parse_command_line(int argc, char** argv, instance* inst)
         if (strcmp(argv[i], "-input") == 0) { strcpy(inst->input_file, argv[++i]); continue; } 			// input file
         if (strcmp(argv[i], "-f") == 0) { strcpy(inst->input_file, argv[++i]); continue; } 				// input file
         if (strcmp(argv[i], "-time_limit") == 0) { inst->timelimit = atof(argv[++i]); continue; }		// total time limit
+        if (strcmp(argv[i], "-heuristic") == 0) { strcpy(inst->heuristic, argv[++i]); continue; } 		//
+        if (strcmp(argv[i], "-seed") == 0) { inst->seed = atof(argv[++i]); continue; } 		//  
         if (strcmp(argv[i], "-help") == 0) { help = 1; continue; } 									// help
         if (strcmp(argv[i], "--help") == 0) { help = 1; continue; } 									// help
         help = 1;

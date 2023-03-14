@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 
-#define VERBOSE				    50		// printing level  (=10 only incumbent, =20 little output, =50-60 good, =70 verbose, >=100 cplex log)
+#define VERBOSE				    10		// printing level  (=10 only incumbent, =20 little output, =50-60 good, =70 verbose, >=100 cplex log)
 
 //hard-wired parameters
 #define XSMALL		  		  1e-5 		// 1e-4*	// tolerance used to decide ingerality of 0-1 var.s
@@ -34,6 +34,10 @@ typedef struct {
     // parameters
     double timelimit;						// overall time limit, in sec.s
     char input_file[1000];		  			// input file
+    double timeStart;
+    char heuristic[25];
+
+    int seed;
    
 
     //costs 
@@ -55,6 +59,7 @@ typedef struct {
  
 } instance;
 
+
 //inline
 inline int imax(int i1, int i2) { return (i1 > i2) ? i1 : i2; }
 inline double dmin(double d1, double d2) { return (d1 < d2) ? d1 : d2; }
@@ -63,5 +68,7 @@ double dist(instance *inst,int index1,int index2);
 void computeCost(instance *inst);
 double get_cost(int i, int j, instance *inst);
 void plot(instance *inst);
+int timeOut(instance *inst);
+int checkSol(instance *inst);
 #endif   /* TSP_H_ */
 
