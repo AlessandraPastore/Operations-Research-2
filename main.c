@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 
 	
 	if(strcmp(inst.heuristic, "NULL")){
-		printf("- - - Solving a heuristic - - - \n");
+		printf("- - - Solving a heuristic: %s - - - \n", inst.heuristic);
 		if(heuristic(&inst)) print_error("heuristic name not appropriate");
 	}
 
