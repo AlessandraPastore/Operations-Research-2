@@ -20,27 +20,25 @@ int greedy(instance *inst,int startNode)
     int* solution = (int*)calloc(inst->nnodes, sizeof(int));
 
     //0-1 vector to memorize nodes already part of the solution
-    int *visited = (int*)calloc(inst->nnodes, sizeof(int));
+    int *visited = (int*)malloc(inst->nnodes * sizeof(int));
 
     do{
 
-
-
+        //puts visited all at zeros
         memset(visited, 0, inst->nnodes * sizeof(int));
         
 
+        //init
         int minIndex = -1;
         double minDist = INFBOUND;
+
+        //start node at random
         int current = rand() % inst->nnodes;
         int start = current;
-
-        printf("Starting node: %d", start);
 
         visited[current] = 1;
         
         double cost = 0;
-
-        int selected = 1;
 
         for(int j=0; j<inst->nnodes-1; j++)
         {
@@ -50,6 +48,7 @@ int greedy(instance *inst,int startNode)
 
                 double actualDist = get_cost(current,i,inst);
 
+                //if current dist is better, update
                 if( actualDist < minDist)
                 {
                     minDist = actualDist;
@@ -66,13 +65,14 @@ int greedy(instance *inst,int startNode)
 
             current = minIndex;
             minDist = INFBOUND;
-            selected++;
         }
 
+        //close the circuit last-first
         solution[current] = start;
 
         if(VERBOSE >= 10) printf("current cost: %f\n", cost);
 
+        //if current cost is better, update best solution
         if(inst->zbest == -1 || inst->zbest > cost){
             updateCost(inst,cost,solution);
             inst->indexStart = start;

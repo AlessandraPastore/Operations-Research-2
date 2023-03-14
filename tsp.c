@@ -39,6 +39,9 @@ void computeCost(instance *inst)
             x = inst->best_sol[x];
             
     }
+
+   fprintf(out, "%f %f\n", inst->xcoord[inst->best_sol[x]], inst->ycoord[inst->best_sol[x]] );
+   
     fclose(out);
 
     //da modificare o aggiungere una funzione per creare il file commands.txt
