@@ -1,4 +1,5 @@
 #include "tsp.h"
+double second();
 
 void updateCost(instance *inst, double cost, int* solution)
 {
@@ -80,7 +81,8 @@ int greedy(instance *inst,int startNode)
         
     } while (!timeOut(inst));
     
-    printf("BEST SOLUTION START: %d     COST: %f",inst->indexStart, inst->zbest);
+    printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
+    inst->timeEnd = second();
     plot(inst);
     return 0;
 }
@@ -89,6 +91,7 @@ int grasp(instance *inst, int startNode)
 {
     if(inst->flagCost==0)
         computeCost(inst);
+        
     //vector with the solutions
     int* solution;
     solution=(int*)calloc(inst->nnodes, sizeof(int));

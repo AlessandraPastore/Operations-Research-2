@@ -20,8 +20,8 @@ int main(int argc, char** argv)
 
 	parse_command_line(argc, argv, &inst);
 	read_input(&inst);
-	double t1 = second();
-	inst.timeStart = t1;
+	//double t1 = second();
+	inst.timeStart = second();
 
 	
 	if(strcmp(inst.heuristic, "NULL")){
@@ -32,11 +32,11 @@ int main(int argc, char** argv)
 	//if ( greedy(&inst,0) ) print_error(" error within VRPopt()");
 	//if ( greedy(&inst,0) ) print_error(" error within VRPopt()");
 
-	double t2 = second();
+	//double t2 = second();
 
 	if (VERBOSE >= 1)
 	{
-		printf("... TSP problem solved in %lf sec.s\n", t2 - t1);
+		printf("... TSP problem solved in %lf sec.s\n", inst.timeEnd - inst.timeStart);
 	}
 
 	free_instance(&inst);

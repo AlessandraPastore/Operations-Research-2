@@ -34,10 +34,12 @@ typedef struct {
     // parameters
     double timelimit;						// overall time limit, in sec.s
     char input_file[1000];		  			// input file
-    double timeStart;
-    char heuristic[25];
+    char heuristic[25];                     //name of the heuristic to use
 
-    int seed;
+    int seed;                               //random seed
+
+    double timeStart;                       //start of the computation
+    double timeEnd;                         //end of the computation
    
 
     //costs 
