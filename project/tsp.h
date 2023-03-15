@@ -19,7 +19,7 @@
 #define TICKS_PER_SECOND 	  1000.0  	// cplex's ticks on Intel Core i7 quadcore @2.3GHZ
 #define INFBOUND                99999999999
 
-#define GRASP_RAND 0.5
+//#define GRASP_RAND 0.5
 
 //data structures
 
