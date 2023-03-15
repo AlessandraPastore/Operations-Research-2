@@ -86,6 +86,8 @@ int greedy(instance *inst,int startNode)
     printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
     inst->timeEnd = second();
     plot(inst);
+    free(visited);
+    free(solution);
     return 0;
 }
 
@@ -201,5 +203,7 @@ int grasp(instance *inst, int startNode)
     printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
     inst->timeEnd = second();
     plot(inst);
+    free(visited);
+    free(solution);
     return 0;
 }

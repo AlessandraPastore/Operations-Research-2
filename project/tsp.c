@@ -63,7 +63,7 @@ int checkSol(instance *inst, int* sol){
    for(int i = 0 ; i < inst->nnodes; i++){
         if(visited[i] != 1) printf("ERROR IN THE SOLUTION: %d as %d\n\n",i, visited[i]);
    }
-   
+   free(visited);
    return 0;
 
 }
