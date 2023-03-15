@@ -1,14 +1,4 @@
-#include "tsp.h" 
-
-double second();
-void print_error(const char* err);
-void read_input(instance* inst);
-void parse_command_line(int argc, char** argv, instance* inst);
-void free_instance(instance* inst);
-int extra_mileage(instance *inst);
-int greedy(instance *inst,int startNode);
-int grasp(instance *inst,int startNode);
-int heuristic(instance *inst);
+#include "utils.h" 
 
 int main(int argc, char** argv)
 {
@@ -20,7 +10,6 @@ int main(int argc, char** argv)
 
 	parse_command_line(argc, argv, &inst);
 	read_input(&inst);
-	//double t1 = second();
 	inst.timeStart = second();
 
 	
@@ -29,10 +18,6 @@ int main(int argc, char** argv)
 		if(heuristic(&inst)) print_error("heuristic name not appropriate");
 	}
 
-	//if ( greedy(&inst,0) ) print_error(" error within VRPopt()");
-	//if ( greedy(&inst,0) ) print_error(" error within VRPopt()");
-
-	//double t2 = second();
 
 	if (VERBOSE >= 1)
 	{

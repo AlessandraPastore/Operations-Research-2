@@ -1,9 +1,4 @@
-#include "tsp.h"
-
-double second();
-void print_error(const char* err);
-void read_input(instance* inst);
-void parse_command_line(int argc, char** argv, instance* inst);
+#include "utils.h"
 
 void print_error(const char* err) { printf("\n\n ERROR: %s \n\n", err); fflush(NULL); exit(1); }
 
@@ -150,11 +145,9 @@ void parse_command_line(int argc, char** argv, instance* inst)
     int help = 0; if (argc < 1) help = 1;
     for (int i = 1; i < argc; i++)
     {
-        if (strcmp(argv[i], "-file") == 0) { strcpy(inst->input_file, argv[++i]); continue; } 			// input file
-        if (strcmp(argv[i], "-input") == 0) { strcpy(inst->input_file, argv[++i]); continue; } 			// input file
-        if (strcmp(argv[i], "-f") == 0) { strcpy(inst->input_file, argv[++i]); continue; } 				// input file
-        if (strcmp(argv[i], "-time_limit") == 0) { inst->timelimit = atof(argv[++i]); continue; }		// total time limit
-        if (strcmp(argv[i], "-heuristic") == 0) { strcpy(inst->heuristic, argv[++i]); continue; } 		//
+        if (strcmp(argv[i], "-f") == 0) { strcpy(inst->input_file, argv[++i]); continue; } 			// input file
+        if (strcmp(argv[i], "-tl") == 0) { inst->timelimit = atof(argv[++i]); continue; }		// time limit
+        if (strcmp(argv[i], "-h") == 0) { strcpy(inst->heuristic, argv[++i]); continue; } 		// heuristic to run
         if (strcmp(argv[i], "-seed") == 0) { inst->seed = atof(argv[++i]); continue; } 		//  
         if (strcmp(argv[i], "-help") == 0) { help = 1; continue; } 									// help
         if (strcmp(argv[i], "--help") == 0) { help = 1; continue; } 									// help
@@ -164,8 +157,8 @@ void parse_command_line(int argc, char** argv, instance* inst)
     if (help || (VERBOSE >= 10))		// print current parameters
     {
         printf("\n\navailable parameters (vers. 16-may-2015) --------------------------------------------------\n");
-        printf("-file %s\n", inst->input_file);
-        printf("-time_limit %lf\n", inst->timelimit);
+        printf("-f %s\n", inst->input_file);
+        printf("-tl %lf\n", inst->timelimit);
         printf("\nenter -help or --help for help\n");
         printf("----------------------------------------------------------------------------------------------\n\n");
     }

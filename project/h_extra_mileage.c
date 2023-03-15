@@ -1,28 +1,4 @@
-#include "tsp.h"
-
-
-void init_extra_mileage(instance *inst, int* visited);
-void diameter(instance *inst, int *a, int *b);
-int extra_mileage(instance *inst);
-
-
-
-void init_extra_mileage(instance *inst, int* visited){
-    
-    //compute costs
-    if(!inst->flagCost) computeCost(inst);
-
-
-    //find diameter and put it on visited and init best_sol
-    int a,b;
-    diameter(inst, &a, &b);
-
-    visited[a] = visited[b] = 1;
-    inst->best_sol[a] = b;
-    inst->best_sol[b] = a;
-
-
-}
+#include "utils.h"
 
 //Sets in a and b the index of the nodes of the diameter (max cost)
 void diameter(instance *inst, int *a, int *b)
@@ -41,6 +17,22 @@ void diameter(instance *inst, int *a, int *b)
     }
 }
 
+void init_extra_mileage(instance *inst, int* visited){
+    
+    //compute costs
+    if(!inst->flagCost) computeCost(inst);
+
+
+    //find diameter and put it on visited and init best_sol
+    int a,b;
+    diameter(inst, &a, &b);
+
+    visited[a] = visited[b] = 1;
+    inst->best_sol[a] = b;
+    inst->best_sol[b] = a;
+
+
+}
 
 
 int extra_mileage(instance *inst){
@@ -80,6 +72,7 @@ int extra_mileage(instance *inst){
         
     }
 
+    inst->timeEnd = second();
     plot(inst);
     return 0;
 }

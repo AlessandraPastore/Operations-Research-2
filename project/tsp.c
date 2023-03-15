@@ -1,6 +1,5 @@
-#include "tsp.h"
-void print_error(const char* err);
-double second();
+#include "utils.h"
+
 
 double dist(instance *inst,int index1,int index2) {
 

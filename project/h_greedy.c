@@ -1,5 +1,5 @@
-#include "tsp.h"
-double second();
+#include "utils.h"
+
 
 void updateCost(instance *inst, double cost, int* solution)
 {
@@ -45,7 +45,7 @@ int grasp(instance *inst, int greedy)
         int current = rand() % inst->nnodes;
         int start = current;
 
-        printf("start %d - ",current);
+        if(VERBOSE >= 10)   printf("start %d - ",current);
 
         visited[current] = 1;
         
@@ -130,6 +130,6 @@ int grasp(instance *inst, int greedy)
 
     free(visited);
     free(solution);
-    
+
     return 0;
 }
