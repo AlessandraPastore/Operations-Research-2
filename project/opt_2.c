@@ -29,11 +29,9 @@ int opt_2(instance *inst){
         
         delta=0;
         int a=-1,b=-1;
-        for(int i=0;i<inst->nnodes;i++)
-            for(int j=0;j<inst->nnodes;j++)
+        for(int i=0;i<inst->nnodes-1;i++)
+            for(int j=i+1;j<inst->nnodes;j++)
             {
-                if(i!=j){
-                    
                      double deltaTemp = get_cost(i,j,inst)  +  get_cost(inst->best_sol[j],inst->best_sol[i],inst) -  (get_cost(i,inst->best_sol[i],inst)  +  get_cost(j,inst->best_sol[j],inst));
                     
                     if(deltaTemp<delta)
@@ -43,8 +41,6 @@ int opt_2(instance *inst){
                         a=i;
                         b=j;
                     }
-                }
-                
             }
             inst->zbest+=delta;
             if(delta<0)
