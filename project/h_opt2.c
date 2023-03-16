@@ -13,41 +13,46 @@ void reverse(instance *inst,int a,int b)
     
     while (i!=b)
         {
-            inst->best_sol[old[i]]=i;
-            i=old[i];
+            inst->best_sol[old[i]] = i;
+            i = old[i];
         }
 
     free(old);
 
 }
+
 int opt_2(instance *inst){
-    double t=second();
-    int improvement=0;
+
+    if(VERBOSE >= 10) printf("--- Starting OPT2 ---\n");
+    double t = second();
     double delta;
 
     do{
-        
-        delta=0;
-        int a=-1,b=-1;
-        for(int i=0;i<inst->nnodes-1;i++)
-            for(int j=i+1;j<inst->nnodes;j++)
+        delta = 0;
+        int a = -1, b = -1;
+        for(int i=0; i<inst->nnodes-1; i++)
+            for(int j=i+1; j<inst->nnodes; j++)
             {
                      double deltaTemp = get_cost(i,j,inst)  +  get_cost(inst->best_sol[j],inst->best_sol[i],inst) -  (get_cost(i,inst->best_sol[i],inst)  +  get_cost(j,inst->best_sol[j],inst));
                     
-                    if(deltaTemp<delta)
+                    if(deltaTemp < delta)
                     {   
                     
-                        delta=deltaTemp;
-                        a=i;
-                        b=j;
+                        delta = deltaTemp;
+                        a = i;
+                        b = j;
                     }
             }
-            inst->zbest+=delta;
-            if(delta<0)
+
+            inst->zbest += delta;
+            
+            if(delta < 0)
                 reverse(inst,a,b);
 
-    }while(second()-t<inst->timelimit && delta<0);
-    printf("COST: %f\n", inst->zbest);
+    } while(second()-t < inst->timelimit && delta < 0);
+    
+    if(VERBOSE >= 10) printf("OPT2 COST: %f\n", inst->zbest);
+
     plot(inst);
   
     return 0;
