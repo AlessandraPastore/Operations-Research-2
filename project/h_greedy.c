@@ -1,5 +1,5 @@
-#include "tsp.h"
-double second();
+#include "utils.h"
+
 
 void updateCost(instance *inst, double cost, int* solution)
 {
@@ -9,89 +9,10 @@ void updateCost(instance *inst, double cost, int* solution)
     if(VERBOSE >= 10) checkSol(inst,solution);
 }
 
-int greedy(instance *inst,int startNode)
-{
-    if(!inst->flagCost)
-        computeCost(inst);
-
-    if(inst->seed != -1) 
-        srand(inst->seed);
-
-    //vector with the solutions
-    int* solution = (int*)calloc(inst->nnodes, sizeof(int));
-
-    //0-1 vector to memorize nodes already part of the solution
-    int *visited = (int*)malloc(inst->nnodes * sizeof(int));
-
-    do{
-
-        //puts visited all at zeros
-        memset(visited, 0, inst->nnodes * sizeof(int));
-        
-
-        //init
-        int minIndex = -1;
-        double minDist = INFBOUND;
-
-        //start node at random
-        int current = rand() % inst->nnodes;
-        int start = current;
-
-        visited[current] = 1;
-        
-        double cost = 0;
-
-        for(int j=0; j<inst->nnodes-1; j++)
-        {
-            for(int i=0; i<inst->nnodes; i++)
-            {
-                if(visited[i]) continue;    //I skip nodes already part of the solution
-
-                double actualDist = get_cost(current,i,inst);
-
-                //if actual dist is better, update
-                if(actualDist < minDist)
-                {
-                    minDist = actualDist;
-                    minIndex = i;
-                }
-            }
-
-            
-            cost += minDist;
-            
-            //now I add the new edge
-            solution[current] = minIndex;
-            visited[minIndex] = 1;
-
-            current = minIndex;
-            minDist = INFBOUND;
-        }
-
-        //close the circuit last-first
-        solution[current] = start;
-
-        if(VERBOSE >= 10) printf("current cost: %f\n", cost);
-
-        if(VERBOSE >= 10)checkSol(inst,solution);
-
-        //if current cost is better, update best solution
-        if(inst->zbest == -1 || inst->zbest > cost){
-            updateCost(inst,cost,solution);
-            inst->indexStart = start;
-        }
-        
-    } while (!timeOut(inst));
-    
-    printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
-    inst->timeEnd = second();
-    plot(inst);
-    free(visited);
-    free(solution);
-    return 0;
-}
-
-int grasp(instance *inst, int startNode)
+//int greedy flag: 
+//                  0 -> we are calling grasp
+//                  1 -> we are calling greedy
+int grasp(instance *inst, int greedy)
 {
     if(!inst->flagCost)
         computeCost(inst);
@@ -104,6 +25,9 @@ int grasp(instance *inst, int startNode)
 
     //0-1 vector to memorize nodes already part of the solution
     int *visited = (int*)malloc(inst->nnodes * sizeof(int));
+
+    double graspRand = 0.8;
+    if(greedy) graspRand = 1;
 
     do {
 
@@ -121,7 +45,7 @@ int grasp(instance *inst, int startNode)
         int current = rand() % inst->nnodes;
         int start = current;
 
-        printf("start %d - ",current);
+        if(VERBOSE >= 10)   printf("start %d - ",current);
 
         visited[current] = 1;
         
@@ -161,7 +85,7 @@ int grasp(instance *inst, int startNode)
                     minIndex2 = minIndex;
                     }
             
-            if((rand() % 10) <= (GRASP_RAND * 10))
+            if((rand() % 11) <= (graspRand * 10))
             {
                 cost += minDist;
                 
@@ -203,7 +127,9 @@ int grasp(instance *inst, int startNode)
     printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
     inst->timeEnd = second();
     plot(inst);
+
     free(visited);
     free(solution);
+
     return 0;
 }
