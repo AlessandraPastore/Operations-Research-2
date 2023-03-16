@@ -1,13 +1,17 @@
 #include "utils.h"
-void reverse(instance *inst,int i,int j)
+void reverse(instance *inst,int a,int b)
 {
-    int a=i,b=j,a1=inst->best_sol[i],b1=inst->best_sol[j];
+    int a1=inst->best_sol[a],b1=inst->best_sol[b];
     int* old = (int*)malloc(inst->nnodes * sizeof(int));
+    
     memcpy(old,inst->best_sol,sizeof(int)*inst->nnodes);
+    
     inst->best_sol[a]=b;
     inst->best_sol[a1]=b1;
-     i=a1;
-    while (i!=j)
+    
+    int i=a1;
+    
+    while (i!=b)
         {
             inst->best_sol[old[i]]=i;
             i=old[i];
@@ -18,31 +22,36 @@ void reverse(instance *inst,int i,int j)
 }
 int opt_2(instance *inst){
     double t=second();
-    
+    int improvement=0;
     
     do{
-        double delta=INFBOUND;
-        int swap1=-1,swap2=-1;
+        improvement=0;
+        double delta=0;
+        int a=-1,b=-1;
         for(int i=0;i<inst->nnodes;i++)
             for(int j=0;j<inst->nnodes;j++)
             {
                 if(i!=j){
                     
-                    double deltaTemp = get_cost(i,j,inst)  +  get_cost(inst->best_sol[j],inst->best_sol[i],inst) -  (get_cost(i,inst->best_sol[i],inst)  +  get_cost(j,inst->best_sol[j],inst));
+                     double deltaTemp = get_cost(i,j,inst)  +  get_cost(inst->best_sol[j],inst->best_sol[i],inst) -  (get_cost(i,inst->best_sol[i],inst)  +  get_cost(j,inst->best_sol[j],inst));
                     
                     if(deltaTemp<delta)
-                    {
+                    {   
+                        improvement=1;
                         delta=deltaTemp;
-                        swap1=i;
-                        swap2=j;
+                        a=i;
+                        b=j;
                     }
                 }
                 
             }
-        reverse(inst,swap1,swap2);
+            inst->zbest+=delta;
+            if(delta<0)
+                reverse(inst,a,b);
 
-    }while(second()-t<inst->timelimit);
+    }while(second()-t<inst->timelimit && improvement==1);
+    printf("COST: %f\n", inst->zbest);
     plot(inst);
-    
+  
     return 0;
 }
