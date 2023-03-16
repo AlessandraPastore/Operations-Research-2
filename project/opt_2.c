@@ -23,10 +23,11 @@ void reverse(instance *inst,int a,int b)
 int opt_2(instance *inst){
     double t=second();
     int improvement=0;
-    
+    double delta;
+
     do{
-        improvement=0;
-        double delta=0;
+        
+        delta=0;
         int a=-1,b=-1;
         for(int i=0;i<inst->nnodes;i++)
             for(int j=0;j<inst->nnodes;j++)
@@ -37,7 +38,7 @@ int opt_2(instance *inst){
                     
                     if(deltaTemp<delta)
                     {   
-                        improvement=1;
+                    
                         delta=deltaTemp;
                         a=i;
                         b=j;
@@ -49,7 +50,7 @@ int opt_2(instance *inst){
             if(delta<0)
                 reverse(inst,a,b);
 
-    }while(second()-t<inst->timelimit && improvement==1);
+    }while(second()-t<inst->timelimit && delta<0);
     printf("COST: %f\n", inst->zbest);
     plot(inst);
   
