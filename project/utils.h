@@ -19,5 +19,6 @@ void free_instance(instance* inst);
 int extra_mileage(instance *inst);
 int grasp(instance *inst,int greedy);
 int heuristic(instance *inst);
+int opt_2(instance *inst);
 
 #endif

@@ -1,15 +1,16 @@
-#include "tsp.h"
+#include "utils.h"
 void reverse(instance *inst,int i,int j)
 {
+    int a=i,b=j,a1=inst->best_sol[i],b1=inst->best_sol[j];
     int* old = (int*)malloc(inst->nnodes * sizeof(int));
     memcpy(old,inst->best_sol,sizeof(int)*inst->nnodes);
-    inst->best_sol[i]=j;
-    inst->best_sol[inst->best_sol[j]]=inst->best_sol[j];
-    int k=inst->best_sol[i];
-    while (k!=j)
+    inst->best_sol[a]=b;
+    inst->best_sol[a1]=b1;
+     i=a1;
+    while (i!=j)
         {
-            inst->best_sol[old[k]]=k;
-            k=old[k];
+            inst->best_sol[old[i]]=i;
+            i=old[i];
         }
 
     free(old);
@@ -40,7 +41,7 @@ int opt_2(instance *inst){
         reverse(inst,swap1,swap2);
 
     }while(second()-t<inst->timelimit);
-    
+    plot(inst);
     
     return 0;
 }
