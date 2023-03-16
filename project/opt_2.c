@@ -1,11 +1,17 @@
 #include "tsp.h"
-void reverse(instance *inst,int swap1,int swap2)
+void reverse(instance *inst,int i,int j)
 {
     int* old = (int*)malloc(inst->nnodes * sizeof(int));
     memcpy(old,inst->best_sol,sizeof(int)*inst->nnodes);
+    inst->best_sol[i]=j;
+    inst->best_sol[inst->best_sol[j]]=inst->best_sol[j];
+    int k=inst->best_sol[i];
+    while (k!=j)
+        {
+            inst->best_sol[old[k]]=k;
+            k=old[k];
+        }
 
-
-    
     free(old);
 
 }
