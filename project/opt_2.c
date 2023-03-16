@@ -19,9 +19,10 @@ void reverse(instance *inst,int i,int j)
 int opt_2(instance *inst){
     double t=second();
     
-    double delta=INFBOUND;
-    int swap1=-1,swap2=-1;
+    
     do{
+        double delta=INFBOUND;
+        int swap1=-1,swap2=-1;
         for(int i=0;i<inst->nnodes;i++)
             for(int j=0;j<inst->nnodes;j++)
             {
