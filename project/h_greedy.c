@@ -112,6 +112,7 @@ int grasp(instance *inst, int greedy)
 
         //close the circuit last-first
         solution[current] = start;
+        cost += get_cost(current,start,inst);
 
         if(VERBOSE >= 10) printf("current cost: %f\n", cost);
         if(VERBOSE >= 10)checkSol(inst,solution);
@@ -124,7 +125,7 @@ int grasp(instance *inst, int greedy)
         
     } while (!timeOut(inst));
 
-    printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
+    if(VERBOSE >= 10) printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
     inst->timeEnd = second();
     plot(inst);
 

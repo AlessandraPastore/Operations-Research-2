@@ -1,7 +1,7 @@
 #include "utils.h"
 
 //Sets in a and b the index of the nodes of the diameter (max cost)
-void diameter(instance *inst, int *a, int *b)
+double diameter(instance *inst, int *a, int *b)
 {
     double maxCost = 0;
     for(int i = 0; i < inst->nnodes; i++) {
@@ -15,32 +15,31 @@ void diameter(instance *inst, int *a, int *b)
             }
         }
     }
+
+    return maxCost;
 }
-
-void init_extra_mileage(instance *inst, int* visited){
-    
-    //compute costs
-    if(!inst->flagCost) computeCost(inst);
-
-
-    //find diameter and put it on visited and init best_sol
-    int a,b;
-    diameter(inst, &a, &b);
-
-    visited[a] = visited[b] = 1;
-    inst->best_sol[a] = b;
-    inst->best_sol[b] = a;
-
-
-}
-
 
 int extra_mileage(instance *inst){
 
+    //compute costs
+    if(!inst->flagCost) computeCost(inst);
 
+    //vector with the solutions
+    int* solution = (int*)calloc(inst->nnodes, sizeof(int));
+
+    //0-1 vector to memorize nodes already part of the solution
     int *visited = (int*)calloc(inst->nnodes, sizeof(int));
 
-    init_extra_mileage(inst,visited);
+    int a,b;
+    double cost = diameter(inst, &a, &b);
+
+    printf("cost %f",cost);
+
+    visited[a] = visited[b] = 1;
+    solution[a] = b;
+    solution[b] = a;
+    
+    
 
     //take generic node, non visited
     for(int z=0; z<inst->nnodes; z++){
@@ -54,7 +53,7 @@ int extra_mileage(instance *inst){
         for(int i=0; i<inst->nnodes; i++){
             if(!visited[i]) continue;   //skip non visited nodes
 
-            double extraM = get_cost(i,z,inst) + get_cost(z,inst->best_sol[i],inst) - get_cost(i,inst->best_sol[i],inst);
+            double extraM = get_cost(i,z,inst) + get_cost(z,solution[i],inst) - get_cost(i,solution[i],inst);
             
             if(extraM < min){
                 min = extraM;
@@ -64,15 +63,32 @@ int extra_mileage(instance *inst){
         }
 
 
-        jmin = inst->best_sol[imin];
-        inst->best_sol[imin] = z;
-        inst->best_sol[z] = jmin;
+        jmin = solution[imin];
+        solution[imin] = z;
+        solution[z] = jmin;
         visited[z]=1;
+
+        cost += min;
 
         
     }
 
     inst->timeEnd = second();
+
+
+    //update of best solution
+    inst->zbest = cost;
+    memcpy(inst->best_sol, solution, inst->nnodes * sizeof(int));
+
+    if(VERBOSE >= 10) {
+        checkSol(inst,solution);
+        printf("BEST SOLUTION FOUND\nCOST: %f\n",inst->zbest);
+    }
+
     plot(inst);
+
+    free(visited);
+    free(solution);
+
     return 0;
 }
