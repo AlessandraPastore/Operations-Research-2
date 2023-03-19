@@ -116,6 +116,7 @@ int grasp(instance *inst, int greedy)
 
         if(VERBOSE >= 10) printf("current cost: %f\n", cost);
         if(VERBOSE >= 10)checkSol(inst,solution);
+        if(VERBOSE >= 10)checkCost(inst,solution,cost);
 
         //if current cost is better, update best solution
         if(inst->zbest == -1 || inst->zbest > cost){

@@ -66,4 +66,17 @@ int checkSol(instance *inst, int* sol){
    return 0;
 
 }
+
+int checkCost(instance *inst, int* sol, double c){
+   double cost = 0;
+   for(int i = 0 ; i < inst->nnodes; i++){
+        cost += get_cost(i,sol[i],inst);
+   }
+
+   //checks that the true cost of the solution and the computed cost are equal
+   if(fabs(cost-c) > 0.000001) printf("ERROR IN THE SOLUTION COST: %f as %f\n\n",cost, c);
+
+   return 0;
+
+ }  
  

@@ -31,9 +31,8 @@ int extra_mileage(instance *inst){
     int *visited = (int*)calloc(inst->nnodes, sizeof(int));
 
     int a,b;
-    double cost = diameter(inst, &a, &b);
+    double cost = 2*diameter(inst, &a, &b);
 
-    printf("cost %f",cost);
 
     visited[a] = visited[b] = 1;
     solution[a] = b;
@@ -82,6 +81,7 @@ int extra_mileage(instance *inst){
 
     if(VERBOSE >= 10) {
         checkSol(inst,solution);
+        checkCost(inst,solution,cost);
         printf("BEST SOLUTION FOUND\nCOST: %f\n",inst->zbest);
     }
 

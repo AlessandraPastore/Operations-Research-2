@@ -5,6 +5,7 @@ void reverse(instance *inst,int a,int b)
     int* old = (int*)malloc(inst->nnodes * sizeof(int));
     
     memcpy(old,inst->best_sol,sizeof(int)*inst->nnodes);
+
     
     inst->best_sol[a]=b;
     inst->best_sol[a1]=b1;
@@ -27,6 +28,9 @@ int opt_2(instance *inst){
     double t = second();
     double delta;
 
+    double oldCost = inst->zbest;
+    double cost = oldCost;
+
     do{
         delta = 0;
         int a = -1, b = -1;
@@ -37,21 +41,25 @@ int opt_2(instance *inst){
                     
                     if(deltaTemp < delta)
                     {   
-                    
                         delta = deltaTemp;
                         a = i;
                         b = j;
                     }
             }
 
-            inst->zbest += delta;
+            //inst->zbest += delta;
+            cost += delta;  //update cost
             
             if(delta < 0)
                 reverse(inst,a,b);
 
     } while(second()-t < inst->timelimit && delta < 0);
     
-    if(VERBOSE >= 10) printf("OPT2 COST: %f\n", inst->zbest);
+    if(VERBOSE >= 10)checkSol(inst,inst->best_sol);
+    if(VERBOSE >= 10)checkCost(inst,inst->best_sol,cost);
+
+    inst->zbest = cost;
+    if(VERBOSE >= 10) printf("OPT2 IMROVEMENT: old cost %f --> new cost %f\n",oldCost, inst->zbest);
 
     plot(inst);
   
