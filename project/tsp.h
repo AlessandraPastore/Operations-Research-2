@@ -10,8 +10,8 @@
 #include <string.h>
 #include <stdio.h>
 
-
-#define VERBOSE				    10		// printing level  (=10 only incumbent, =20 little output, =50-60 good, =70 verbose, >=100 cplex log)
+//to re define
+#define VERBOSE				    1		// printing level  (=10 only incumbent, =20 little output, =50-60 good, =70 verbose, >=100 cplex log)
 
 //hard-wired parameters
 #define XSMALL		  		  1e-5 		// 1e-4*	// tolerance used to decide ingerality of 0-1 var.s
@@ -67,7 +67,7 @@ double dist(instance *inst,int index1,int index2);
 void computeCost(instance *inst);
 double get_cost(int i, int j, instance *inst);
 void plot(instance *inst);
-int timeOut(instance *inst);
+int timeOut(instance *inst, double tl);
 int checkSol(instance *inst, int *sol);
 int checkCost(instance *inst, int* sol, double c);
 #endif   /* TSP_H_ */

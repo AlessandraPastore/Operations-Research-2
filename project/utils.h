@@ -16,9 +16,11 @@ void parse_command_line(int argc, char** argv, instance* inst);
 void free_instance(instance* inst);
 
 //heuristics
-int extra_mileage(instance *inst);
-int grasp(instance *inst,int greedy);
 int heuristic(instance *inst);
-int opt_2(instance *inst);
+
+int extra_mileage(instance *inst);
+int grasp(instance *inst, int greedy, double tl);
+int opt_2(instance *inst, double tl);
+int VNS(instance *inst);
 
 #endif

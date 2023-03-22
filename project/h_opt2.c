@@ -1,7 +1,7 @@
 #include "utils.h"
 void reverse(instance *inst,int a,int b)
 {
-    int a1=inst->best_sol[a],b1=inst->best_sol[b];
+    int a1=inst->best_sol[a], b1 = inst->best_sol[b];
     int* old = (int*)malloc(inst->nnodes * sizeof(int));
     
     memcpy(old,inst->best_sol,sizeof(int)*inst->nnodes);
@@ -22,10 +22,11 @@ void reverse(instance *inst,int a,int b)
 
 }
 
-int opt_2(instance *inst){
+int opt_2(instance *inst, double tl){
 
     if(VERBOSE >= 10) printf("--- Starting OPT2 ---\n");
-    double t = second();
+    //double t = second();
+    double lostTime = second() - inst->timeEnd;
     double delta;
 
     double oldCost = inst->zbest;
@@ -53,13 +54,19 @@ int opt_2(instance *inst){
             if(delta < 0)
                 reverse(inst,a,b);
 
-    } while(second()-t < inst->timelimit && delta < 0);
+
+    } while(!timeOut(inst, tl + lostTime)  && delta < 0);
+
+    inst->timeEnd = second() - lostTime; //removes the time of plot greedy
+    
     
     if(VERBOSE >= 10)checkSol(inst,inst->best_sol);
     if(VERBOSE >= 10)checkCost(inst,inst->best_sol,cost);
 
     inst->zbest = cost;
-    if(VERBOSE >= 10) printf("OPT2 IMROVEMENT: old cost %f --> new cost %f\n",oldCost, inst->zbest);
+
+
+    if(VERBOSE >= 1) printf("OPT2 IMROVEMENT: old cost %f --> new cost %f\n",oldCost, inst->zbest);
 
     plot(inst);
   

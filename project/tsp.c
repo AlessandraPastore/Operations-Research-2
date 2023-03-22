@@ -48,9 +48,8 @@ void computeCost(instance *inst)
 	system("gnuplot ./plot/commands.txt");
  }
 
-int timeOut(instance *inst){
-   double t = second();
-   return (t - inst->timeStart) > inst->timelimit;
+int timeOut(instance *inst, double tl){
+   return (second() - inst->timeStart) > tl;
 }
 
 int checkSol(instance *inst, int* sol){

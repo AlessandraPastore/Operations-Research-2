@@ -6,13 +6,13 @@ void updateCost(instance *inst, double cost, int* solution)
     if(VERBOSE >= 10) printf("-------- Updating best solution --------\n");
     inst->zbest = cost;
     memcpy(inst->best_sol, solution, inst->nnodes * sizeof(int));
-    if(VERBOSE >= 10) checkSol(inst,solution);
+    //if(VERBOSE >= 10) checkSol(inst,solution);
 }
 
 //int greedy flag: 
 //                  0 -> we are calling grasp
 //                  1 -> we are calling greedy
-int grasp(instance *inst, int greedy)
+int grasp(instance *inst, int greedy, double tl)
 {
     if(!inst->flagCost)
         computeCost(inst);
@@ -115,8 +115,8 @@ int grasp(instance *inst, int greedy)
         cost += get_cost(current,start,inst);
 
         if(VERBOSE >= 10) printf("current cost: %f\n", cost);
-        if(VERBOSE >= 10)checkSol(inst,solution);
-        if(VERBOSE >= 10)checkCost(inst,solution,cost);
+        if(VERBOSE >= 10) checkSol(inst,solution);
+        if(VERBOSE >= 10) checkCost(inst,solution,cost);
 
         //if current cost is better, update best solution
         if(inst->zbest == -1 || inst->zbest > cost){
@@ -124,10 +124,13 @@ int grasp(instance *inst, int greedy)
             inst->indexStart = start;
         }
         
-    } while (!timeOut(inst));
+    } while (!timeOut(inst,tl));
 
-    if(VERBOSE >= 10) printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
     inst->timeEnd = second();
+
+    if(VERBOSE >= 10) printf("timeOut greedy: %f    that should be tl: %f\n", inst->timeEnd - inst->timeStart, tl);
+    if(VERBOSE >= 1) printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
+    
     plot(inst);
 
     free(visited);
