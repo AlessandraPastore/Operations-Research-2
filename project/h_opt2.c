@@ -1,9 +1,12 @@
 #include "utils.h"
-void reverse(instance *inst,int a,int b)
+
+//reverse path b -> a1
+void reverse(instance *inst, int a,int b)
 {
-    int a1=inst->best_sol[a], b1 = inst->best_sol[b];
+    int a1 = inst->best_sol[a];
+    int b1 = inst->best_sol[b];
+
     int* old = (int*)malloc(inst->nnodes * sizeof(int));
-    
     memcpy(old,inst->best_sol,sizeof(int)*inst->nnodes);
 
     
@@ -53,7 +56,7 @@ int opt_2(instance *inst, double tl){
             
             if(delta < 0)
                 reverse(inst,a,b);
-
+                
 
     } while(!timeOut(inst, tl + lostTime)  && delta < 0);
 

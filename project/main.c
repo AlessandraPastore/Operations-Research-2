@@ -19,12 +19,14 @@ int main(int argc, char** argv)
 	}
 
 
-	if (VERBOSE >= 1)
+	if (VERBOSE >= 0)
 	{
 		printf("... TSP problem solved in %lf sec.s\n", inst.timeEnd - inst.timeStart);
 	}
 
 	free_instance(&inst);
+
+	fflush(stdout);
 
 	return 0;
 }

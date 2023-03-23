@@ -8,6 +8,12 @@ int heuristic(instance *inst){
     if(strcmp(inst->heuristic, "2_OPT") == 0)   {
         grasp(inst, 0, inst->timelimit / 5); //to modify, how much time do we actually want to use?
         return opt_2(inst, inst->timelimit);
-     }
+    }
+    if(strcmp(inst->heuristic, "VNS") == 0)   {
+        grasp(inst, 0, inst->timelimit / 5); //to modify, how much time do we actually want to use?
+        opt_2(inst, inst->timelimit);
+        VNS(inst);
+    }
+
     return 1;
 }
