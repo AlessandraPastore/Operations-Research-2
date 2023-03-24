@@ -54,15 +54,19 @@ int timeOut(instance *inst, double tl){
 
 int checkSol(instance *inst, int* sol){
    int *visited = (int*)calloc(inst->nnodes, sizeof(int));
+   int error = 0;
    for(int i = 0 ; i < inst->nnodes;i++){
         visited[sol[i]]++;
     }
 
    for(int i = 0 ; i < inst->nnodes; i++){
-        if(visited[i] != 1) printf("ERROR IN THE SOLUTION: %d as %d\n\n",i, visited[i]);
+        if(visited[i] != 1) {
+         printf("ERROR IN THE SOLUTION: %d as %d\n\n",i, visited[i]);
+         error = 1;
+        }
    }
    free(visited);
-   return 0;
+   return error;
 
 }
 
@@ -73,9 +77,20 @@ int checkCost(instance *inst, int* sol, double c){
    }
 
    //checks that the true cost of the solution and the computed cost are equal
-   if(fabs(cost-c) > 0.000001) printf("ERROR IN THE SOLUTION COST: %f as %f\n\n",cost, c);
+   if(fabs(cost-c) > 0.000001) {
+      printf("ERROR IN THE SOLUTION COST: %f as %f\n\n",cost, c);
+      return 1;
+   }
 
    return 0;
 
- }  
+ } 
+
+//updates best solution and zcost
+void updateSol(instance *inst, double cost, int* solution)
+{
+    if(VERBOSE >= 10) printf("-------- Updating best solution --------\n");
+    inst->zbest = cost;
+    memcpy(inst->best_sol, solution, inst->nnodes * sizeof(int));
+} 
  

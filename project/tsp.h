@@ -70,5 +70,6 @@ void plot(instance *inst);
 int timeOut(instance *inst, double tl);
 int checkSol(instance *inst, int *sol);
 int checkCost(instance *inst, int* sol, double c);
-#endif   /* TSP_H_ */
+void updateSol(instance *inst, double cost, int* solution);
 
+#endif   /* TSP_H_ */

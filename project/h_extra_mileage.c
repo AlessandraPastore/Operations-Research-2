@@ -74,14 +74,17 @@ int extra_mileage(instance *inst){
 
     inst->timeEnd = second();
 
+    if(VERBOSE >= 10) {
+        if(checkSol(inst,solution)) return 1;
+        if(checkCost(inst,solution,cost)) return 1;
+    }
 
     //update of best solution
-    inst->zbest = cost;
-    memcpy(inst->best_sol, solution, inst->nnodes * sizeof(int));
+    if(inst->zbest == -1 || inst->zbest > cost){
+            updateSol(inst,cost,solution);
+        }
 
     if(VERBOSE >= 10) {
-        checkSol(inst,solution);
-        checkCost(inst,solution,cost);
         printf("BEST SOLUTION FOUND\nCOST: %f\n",inst->zbest);
     }
 

@@ -1,7 +1,7 @@
 #include "utils.h"
 
 //void reverse(instance *inst, int* old, int a1,int b);
-int opt_2(instance *inst, double tl);
+//int opt_2(instance *inst, double tl);
 
 
 int VNS(instance *inst){
@@ -17,6 +17,13 @@ int VNS(instance *inst){
     double lostTime = second() - inst->timeEnd;
     int a,b,c,d,e;
     int a1,b1,c1,d1,e1;
+
+    //vector with the new edge combination
+    int* newSol = (int*)calloc(inst->nnodes, sizeof(int));
+    
+    //old solution copy
+    int* oldSol = (int*)malloc(inst->nnodes * sizeof(int));
+    memcpy(oldSol,inst->best_sol,sizeof(int)*inst->nnodes);
 
 
     do{
@@ -38,9 +45,6 @@ int VNS(instance *inst){
         d1 = inst->best_sol[d];
         e1 = inst->best_sol[e];
 
-        //old solution copy
-        int* old = (int*)malloc(inst->nnodes * sizeof(int));
-        memcpy(old,inst->best_sol,sizeof(int)*inst->nnodes);
 
 
         //create new path
@@ -49,22 +53,22 @@ int VNS(instance *inst){
         int done = 0;
 
         while(done != 5){
-            if(old[i] == a1){ inst->best_sol[j] = a1; j = a; i = a1; done++; continue; }
-            if(old[i] == b1){ inst->best_sol[j] = b1; j = b; i = b1; done++; continue; }
-            if(old[i] == c1){ inst->best_sol[j] = c1; j = c; i = c1; done++; continue; }
-            if(old[i] == d1){ inst->best_sol[j] = d1; j = d; i = d1; done++; continue; }
-            if(old[i] == e1){ inst->best_sol[j] = e1; j = e; i = e1; done++; continue; }
-            i = old[i];
+            if(oldSol[i] == a1){ inst->best_sol[j] = i = a1; j = a; done++; continue; }    
+            if(oldSol[i] == b1){ inst->best_sol[j] = i = b1; j = b; done++; continue; }
+            if(oldSol[i] == c1){ inst->best_sol[j] = i = c1; j = c; done++; continue; }
+            if(oldSol[i] == d1){ inst->best_sol[j] = i = d1; j = d; done++; continue; }
+            if(oldSol[i] == e1){ inst->best_sol[j] = i = e1; j = e; done++; continue; }
+            i = oldSol[i];
         }
         
         //new crossed edges
-        plot(inst);
-
-        free(old);
+        //plot(inst);
 
         printf("entering opt2");
-        opt_2(inst, inst->timelimit); //to change tl
+        //opt_2(inst, inst->timelimit); //to change tl
 
+        free(oldSol);
+        free(newSol);
 
         
         
