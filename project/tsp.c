@@ -25,7 +25,7 @@ void computeCost(instance *inst)
     return inst->cost[i * inst->nnodes + j];
  }
 
- void plot(instance *inst){
+ void plot(instance *inst, int *solution){
 
     FILE *out = fopen(".\\output\\out.txt", "w");
     if (out == NULL) printf("input file not found!");
@@ -34,12 +34,12 @@ void computeCost(instance *inst)
     int x=0;
     for(int i=0;i<inst->nnodes;i++){
         
-            fprintf(out, "%f %f\n", inst->xcoord[inst->best_sol[x]], inst->ycoord[inst->best_sol[x]] );
-            x = inst->best_sol[x];
+            fprintf(out, "%f %f\n", inst->xcoord[solution[x]], inst->ycoord[solution[x]] );
+            x = solution[x];
             
     }
 
-   fprintf(out, "%f %f\n", inst->xcoord[inst->best_sol[x]], inst->ycoord[inst->best_sol[x]] );
+   fprintf(out, "%f %f\n", inst->xcoord[solution[x]], inst->ycoord[solution[x]] );
    
     fclose(out);
 

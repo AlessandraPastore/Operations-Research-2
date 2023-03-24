@@ -3,6 +3,7 @@
 //reverse path b -> a1
 void reverse(instance *inst, int *solution, int a,int b)
 {
+    printf("SWAP 2OPT: %d with %d\n",a,b);
     int a1 = solution[a];
     int b1 = solution[b];
 
@@ -75,7 +76,7 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
 
     if(VERBOSE >= 1) printf("OPT2 IMROVEMENT: old cost %f --> new cost %f\n",oldCost, *cost);
 
-    plot(inst);
+    plot(inst, solution);
   
     return 0;
 }

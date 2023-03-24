@@ -125,7 +125,7 @@ int grasp(instance *inst, int greedy, double tl)
     if(VERBOSE >= 10) printf("timeOut greedy: %f    that should be tl: %f\n", inst->timeEnd - inst->timeStart, tl);
     if(VERBOSE >= 1) printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n",inst->indexStart, inst->zbest);
     
-    plot(inst);
+    plot(inst, inst->best_sol);
 
     free(visited);
     free(solution);

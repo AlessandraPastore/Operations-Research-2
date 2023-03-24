@@ -5,7 +5,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-            "args": ["-f", ".\\input\\att48.tsp", "-tl", "1", "-h", "GREEDY", "-seed", "2455"],
+            "args": ["-f", ".\\input\\att48.tsp", "-tl", "1", "-h", "VNS", "-seed", "2455"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
