@@ -69,10 +69,14 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
     }
 
 
+    if(VERBOSE >= 10) printf("zbest: %f, cost: %f\n", inst->zbest,*cost);
+    
+    //update solution
     if(inst->zbest == -1 || inst->zbest > *cost){
         updateSol(inst,*cost,solution);
     }
-
+    
+    
 
     if(VERBOSE >= 1) printf("OPT2 IMROVEMENT: old cost %f --> new cost %f\n",oldCost, *cost);
 

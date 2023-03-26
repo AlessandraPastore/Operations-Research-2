@@ -3,14 +3,9 @@
 //void reverse(instance *inst, int* old, int a1,int b);
 //int opt_2(instance *inst, double tl);
 
-
-
 int VNS(instance *inst){
 
     if(VERBOSE >= 10) printf("--- Starting VNS ---\n");
-
-    
-    //chiama greedy, chiama opt2 che trova bestSol
 
     //forse non serve perchè viene chiamato già in grasp
     if(inst->seed != -1) 
@@ -27,6 +22,7 @@ int VNS(instance *inst){
     
     //old solution copy
     int* oldSol = (int*)malloc(inst->nnodes * sizeof(int));
+    double oldCost;
 
     //solution copies the actual local minimum
     memcpy(solution,inst->best_sol,sizeof(int)*inst->nnodes);
@@ -34,6 +30,8 @@ int VNS(instance *inst){
 
 
     do{
+
+        oldCost = cost;
 
         //copy solution in oldSol
         memcpy(oldSol,solution,sizeof(int)*inst->nnodes);
@@ -46,84 +44,60 @@ int VNS(instance *inst){
         do{ d = rand() % inst->nnodes; }while(a == d || b == d || c == d);
         do{ e = rand() % inst->nnodes; }while(a == e || b == e || c == e || d == e);
 
+        //order the nodes based on current tour
+        int start = a;
+        int curr = solution[a];
+        int order[5];
+        int count = 1;
+        order[0] = start;
 
-        //save a-a1 etc current edges
-        a1 = solution[a];
-        b1 = solution[b];
-        c1 = solution[c];
-        d1 = solution[d];
-        e1 = solution[e];
+        while (curr != a) {
+            if (curr == b) order[count++] = b;
+            else if (curr == c) order[count++] = c;
+            else if (curr == d) order[count++] = d;
+            else if (curr == e) order[count++] = e;
 
-        cost = cost - get_cost(a,a1,inst) 
-                    - get_cost(b,b1,inst) 
-                    - get_cost(c,c1,inst) 
-                    - get_cost(d,d1,inst) 
-                    - get_cost(e,e1,inst);
-
-
-        //create new crossed paths
-        int i = a1;
-        int j = a;
-        int done = 0;
-
-        while(done != 5){
-
-            if(oldSol[i] == a1) {    
-
-                printf("SWAP: %d,%d with %d\n",j,i,a1);
-                solution[j] = i = a1; 
-                cost = cost + get_cost(j,i,inst); 
-                j = a; 
-                done++; 
-                continue; 
-            }    
-
-            if(oldSol[i] == b1) { 
-                printf("SWAP: %d,%d with %d\n",j,i,b1);
-                solution[j] = i = b1; 
-                cost = cost + get_cost(j,i,inst);
-                j = b; 
-                done++; 
-                continue; 
-            }
-
-            if(oldSol[i] == c1) {   
-                printf("SWAP: %d,%d with %d\n",j,i,c1); 
-                solution[j] = i = c1; 
-                cost = cost + get_cost(j,i,inst); 
-                j = c; 
-                done++; 
-                continue; 
-            }  
-
-            if(oldSol[i] == d1) {   
-                printf("SWAP: %d,%d with %d\n",j,i,d1); 
-                solution[j] = i = d1; 
-                cost = cost + get_cost(j,i,inst); 
-                j = d; 
-                done++; 
-                continue; 
-            }  
-
-            if(oldSol[i] == e1) {    
-                printf("SWAP: %d,%d with %d\n",j,i,e1);
-                solution[j] = i = e1; 
-                cost = cost + get_cost(j,i,inst); 
-                j = e; 
-                done++; 
-                continue; 
-            }  
-
-            i = oldSol[i];
+            if (count == 5) break;
+            curr = solution[curr];
         }
+
+        //save corresponding pairs in order
+        a1 = solution[order[0]];
+        b1 = solution[order[1]];
+        c1 = solution[order[2]];
+        d1 = solution[order[3]];
+        e1 = solution[order[4]];
+
+        //removes old edge cost 
+        cost = cost - get_cost(order[0],a1,inst) 
+                    - get_cost(order[1],b1,inst) 
+                    - get_cost(order[2],c1,inst) 
+                    - get_cost(order[3],d1,inst) 
+                    - get_cost(order[4],e1,inst);
+
+        //swaps the edges to create a new path
+        solution[order[0]] = c1;
+        solution[order[1]] = d1;
+        solution[order[2]] = e1;
+        solution[order[3]] = a1;
+        solution[order[4]] = b1;
+
+        //add new edge cost
+        cost = cost + get_cost(order[0],c1,inst) 
+                    + get_cost(order[1],d1,inst) 
+                    + get_cost(order[2],e1,inst) 
+                    + get_cost(order[3],a1,inst) 
+                    + get_cost(order[4],b1,inst);
+
 
         if(VERBOSE >= 10) {
             if(checkSol(inst,solution)) return 1;
             if(checkCost(inst,solution,cost)) return 1;
         }
+
+        if(VERBOSE >= 10) printf("VNS REGRESSION: old cost %f --> new cost %f\n", oldCost,cost );
         
         //new crossed edges
-        printf("new edges\n");
         plot(inst, solution);
 
         //printf("- - entering opt2 - -\n");

@@ -11,7 +11,7 @@ int heuristic(instance *inst){
     }
     if(strcmp(inst->heuristic, "VNS") == 0)   {
         
-        grasp(inst, 0, inst->timelimit / 5); //to modify, how much time do we actually want to use?
+        grasp(inst, 0, inst->timelimit / 10); //to modify, how much time do we actually want to use?
         opt_2(inst, inst->timelimit, inst->best_sol, &(inst->zbest)); //TIME DA MODIFICARE
         return VNS(inst);
 
