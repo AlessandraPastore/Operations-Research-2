@@ -25,7 +25,7 @@ void computeCost(instance *inst)
     return inst->cost[i * inst->nnodes + j];
  }
 
- void plot(instance *inst, int *solution){
+ void plot(instance *inst, int *solution,char name[]){
 
     FILE *out = fopen(".\\output\\out.txt", "w");
     if (out == NULL) printf("input file not found!");
@@ -45,6 +45,19 @@ void computeCost(instance *inst)
 
     //da modificare o aggiungere una funzione per creare il file commands.txt
     //GNUPLOT to cmd
+   FILE *commands = fopen(".\\plot\\commands.txt","w+");
+
+   fprintf(commands,"set terminal png\n");
+   fprintf(commands,"set output \"./plot/%s.png\"\n",name);
+   fprintf(commands,"set style line 1 \\\n");
+   fprintf(commands,"    linecolor rgb'#FF0000' \\\n");
+   fprintf(commands,"    linetype 1 linewidth 2 \\\n");
+   fprintf(commands,"    pointtype 7 pointsize 2\n");
+   fprintf(commands,"plot \"./output/out.txt\" with linespoint linestyle 1\n");
+
+
+
+   fclose(commands);
 	system("gnuplot ./plot/commands.txt");
  }
 

@@ -66,7 +66,7 @@ typedef struct {
 double dist(instance *inst,int index1,int index2);
 void computeCost(instance *inst);
 double get_cost(int i, int j, instance *inst);
-void plot(instance *inst, int *solution);
+void plot(instance *inst, int *solution,char name[]);
 int timeOut(instance *inst, double tl);
 int checkSol(instance *inst, int *sol);
 int checkCost(instance *inst, int* sol, double c);

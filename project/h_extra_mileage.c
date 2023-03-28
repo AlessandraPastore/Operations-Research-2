@@ -88,7 +88,7 @@ int extra_mileage(instance *inst){
         printf("BEST SOLUTION FOUND\nCOST: %f\n",inst->zbest);
     }
 
-    plot(inst, inst->best_sol);
+    plot(inst, inst->best_sol,"extra_mileage");
 
     free(visited);
     free(solution);

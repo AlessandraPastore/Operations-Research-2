@@ -98,7 +98,7 @@ int VNS(instance *inst){
         if(VERBOSE >= 10) printf("VNS REGRESSION: old cost %f --> new cost %f\n", oldCost,cost );
         
         //new crossed edges
-        plot(inst, solution);
+        plot(inst, solution,"VNS");
 
         //printf("- - entering opt2 - -\n");
         opt_2(inst, inst->timelimit, solution, &cost); //to change tl

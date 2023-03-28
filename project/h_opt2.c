@@ -80,7 +80,7 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
 
     if(VERBOSE >= 1) printf("OPT2 IMROVEMENT: old cost %f --> new cost %f\n",oldCost, *cost);
 
-    plot(inst, solution);
+    plot(inst, solution,"2_opt");
   
     return 0;
 }
