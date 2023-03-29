@@ -1,5 +1,5 @@
 #include "utils.h"
-
+#define tmax 20
 //reverse path b -> a1
 void reverse(instance *inst, int *solution, int a,int b)
 {
@@ -22,6 +22,7 @@ void reverse(instance *inst, int *solution, int a,int b)
             i = old[i];
         }
 
+    
     free(old);
 
 }
@@ -30,6 +31,8 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
 
     if(VERBOSE >= 10) printf("--- Starting OPT2 ---\n");
 
+     inst->tabu = (int*)calloc(inst->nnodes, sizeof(int));
+    int tcurrent=1;
     double lostTime = second() - inst->timeEnd;
     double delta;
 
@@ -40,24 +43,33 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
         delta = 0;
         int a = -1, b = -1;
         for(int i=0; i<inst->nnodes-1; i++)
-            for(int j=i+1; j<inst->nnodes; j++)
-            {
-                     double deltaTemp = get_cost(i,j,inst)  +  get_cost(solution[j],solution[i],inst) -  (get_cost(i,solution[i],inst)  +  get_cost(j,solution[j],inst));
+          {  if((inst->tabu[i]==0 && inst->tabu[solution[i]]==0)||(inst->tabu[i] + tmax < tcurrent&& inst->tabu[solution[i]] + tmax < tcurrent))
+                 for(int j=i+1; j<inst->nnodes; j++)
+                {
+                    if((inst->tabu[j]==0 && inst->tabu[solution[j]]==0)||(inst->tabu[j] + tmax < tcurrent&& inst->tabu[solution[j]] + tmax < tcurrent))
+                    {
+                         double deltaTemp = get_cost(i,j,inst)  +  get_cost(solution[j],solution[i],inst) -  (get_cost(i,solution[i],inst)  +  get_cost(j,solution[j],inst));
                     
-                    if(deltaTemp < delta)
-                    {   
-                        delta = deltaTemp;
-                        a = i;
-                        b = j;
+                         if(deltaTemp < delta)
+                        {   
+                            delta = deltaTemp;
+                            a = i;
+                            b = j;
+                        }
                     }
             }
-
+           
+          }
             *cost += delta;  //update cost
             
-            if(delta < 0)
-                reverse(inst,solution,a,b);
-                
 
+            if(delta < 0)
+            {   if(inst->flagtabu==1)
+                    inst->tabu[a]=tcurrent;
+                reverse(inst,solution,a,b);
+            }   
+            if(a>=0)
+            tcurrent++;
     } while(!timeOut(inst, tl + lostTime)  && delta < 0);
 
     inst->timeEnd = second() - lostTime; //removes the time of plot greedy
@@ -79,8 +91,9 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
     
 
     if(VERBOSE >= 1) printf("OPT2 IMROVEMENT: old cost %f --> new cost %f\n",oldCost, *cost);
-
-    plot(inst, solution,"2_opt");
-  
+    if(inst->flagtabu==0)
+        plot(inst, solution,"2_opt");
+    
+    free(inst->tabu);
     return 0;
 }

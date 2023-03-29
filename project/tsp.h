@@ -48,6 +48,12 @@ typedef struct {
     //flag to see if the costs array is set, 0 if not set
     int flagCost;
 
+    //flag to see if we have to check a tabu list
+    int flagtabu;
+
+    //list of tabu
+    int* tabu;
+
     //best sol.
     double zbest;							// cost of best sol. available
     double tbest;							// time for the best sol. available

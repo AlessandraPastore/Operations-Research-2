@@ -16,6 +16,14 @@ int heuristic(instance *inst){
         return VNS(inst);
 
     }
+    if(strcmp(inst->heuristic, "TABU") == 0)   {
+        inst->flagtabu=0;
+        grasp(inst, 0, inst->timelimit / 10); //to modify, how much time do we actually want to use?
+        opt_2(inst, inst->timelimit, inst->best_sol, &(inst->zbest)); //TIME DA MODIFICARE
+        inst->flagtabu=1;
+        return TABU(inst);
+
+    }
 
     print_error("heuristic name not appropriate");
     return 1;
