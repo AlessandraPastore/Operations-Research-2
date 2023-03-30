@@ -11,8 +11,6 @@ int VNS(instance *inst){
     if(inst->seed != -1) 
         srand(inst->seed);
 
-    //tempo tra il plot di opt2 e l inizio di VNS
-    double lostTime = second() - inst->timeEnd;
     int a,b,c,d,e;
     int a1,b1,c1,d1,e1;
 
@@ -98,19 +96,21 @@ int VNS(instance *inst){
         if(VERBOSE >= 10) printf("VNS REGRESSION: old cost %f --> new cost %f\n", oldCost,cost );
         
         //new crossed edges
-        plot(inst, solution,"VNS");
+        plot(inst, solution,"VNS_kick");
 
         //printf("- - entering opt2 - -\n");
         opt_2(inst, inst->timelimit, solution, &cost); //to change tl
 
-        
-
-
-
-    } while (!timeOut(inst, inst->timelimit + lostTime));
+    } while (!timeOut(inst, inst->timelimit));
     
     free(oldSol);
     free(solution);
+
+    if(VERBOSE >= 1) printf("VNS BEST SOL COST: %f \n", inst->zbest);
+    
+    //best sol found
+    plot(inst, inst->best_sol,"VNS_BestSol");
+
     
     
     return 0;

@@ -18,6 +18,8 @@ int main(int argc, char** argv)
 		if(heuristic(&inst)) print_error("ERROR IN HEURISTIC");
 	}
 
+	inst.timeEnd = second();
+
 
 	if (VERBOSE >= 0)
 	{

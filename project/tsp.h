@@ -53,7 +53,7 @@ typedef struct {
 
     //list of tabu
     int* tabu;
-
+    
     //best sol.
     double zbest;							// cost of best sol. available
     double tbest;							// time for the best sol. available
@@ -72,7 +72,7 @@ typedef struct {
 double dist(instance *inst,int index1,int index2);
 void computeCost(instance *inst);
 double get_cost(int i, int j, instance *inst);
-void plot(instance *inst, int *solution,char name[]);
+void plot(instance *inst, int *solution, char name[]);
 int timeOut(instance *inst, double tl);
 int checkSol(instance *inst, int *sol);
 int checkCost(instance *inst, int* sol, double c);

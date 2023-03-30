@@ -3,9 +3,6 @@
 int TABU(instance *inst)
 {
      if(VERBOSE >= 10) printf("--- Starting TABU ---\n");
-
-    double lostTime = second() - inst->timeEnd;
-    
     
     //vector with the new edge combination
     int* solution = (int*)calloc(inst->nnodes, sizeof(int));

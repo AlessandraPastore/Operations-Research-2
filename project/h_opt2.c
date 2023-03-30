@@ -1,5 +1,6 @@
 #include "utils.h"
 #define tmax 20
+
 //reverse path b -> a1
 void reverse(instance *inst, int *solution, int a,int b)
 {
@@ -31,9 +32,8 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
 
     if(VERBOSE >= 10) printf("--- Starting OPT2 ---\n");
 
-     inst->tabu = (int*)calloc(inst->nnodes, sizeof(int));
+    inst->tabu = (int*)calloc(inst->nnodes, sizeof(int));
     int tcurrent=1;
-    double lostTime = second() - inst->timeEnd;
     double delta;
 
     double oldCost = *cost; 
@@ -70,10 +70,8 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
             }   
             if(a>=0)
             tcurrent++;
-    } while(!timeOut(inst, tl + lostTime)  && delta < 0);
+    } while(!timeOut(inst, tl)  && delta < 0);
 
-    inst->timeEnd = second() - lostTime; //removes the time of plot greedy
-    
     
     if(VERBOSE >= 10) {
         if(checkSol(inst,solution)) return 1;
