@@ -68,8 +68,12 @@ int timeOut(instance *inst, double tl){
 int checkSol(instance *inst, int* sol){
    int *visited = (int*)calloc(inst->nnodes, sizeof(int));
    int error = 0;
-   for(int i = 0 ; i < inst->nnodes;i++){
-        visited[sol[i]]++;
+
+   int next = 0;
+
+   for(int i = 0 ; i < inst->nnodes; i++){
+        visited[sol[next]]++;
+        next = sol[next];
     }
 
    for(int i = 0 ; i < inst->nnodes; i++){

@@ -36,9 +36,9 @@ int TABU(instance *inst,double tl)
     do{
         delta = INFBOUND;
         int a = -1, b = -1;
-        for(int i=0; i<inst->nnodes-1; i++)
+        for(int i=0; i<inst->nnodes-1; i++){
             //if a node i or it neighbour solution[i] form a tabu edge I skip the trial to see if exist a delta
-            if(abs(tabu[i] - iteration) > tmax  && abs(tabu[solution[i]] - iteration) > tmax ) 
+            if(abs(tabu[i] - iteration) > tmax  && abs(tabu[solution[i]] - iteration) > tmax ) {
                 
                 for(int j=i+1; j<inst->nnodes; j++)
                 {
@@ -57,7 +57,10 @@ int TABU(instance *inst,double tl)
                          }
                     }
                 }
+            }
+        }
         
+
         if(a>=0 && b>=0)
         { 
             reverse(inst,solution,a,b);
@@ -74,26 +77,33 @@ int TABU(instance *inst,double tl)
                 tabu[solution[b]]=iteration;
             
             newCost += delta;  //update cost
+            //printf("- %d\n",delta);
+            
         }   
 
         iteration++;
+        
+        if(VERBOSE >= 10) {
+            if(checkSol(inst,solution)) return 1;
+            if(checkCost(inst,solution,newCost)) return 1;
+        }
+
+        //update solution
+        if(inst->zbest == -1 || inst->zbest > newCost){
+            updateSol(inst,newCost,solution);
+        }
+
+        for(int i=0; i<inst->nnodes;i++){
+
+        }
 
 
      }while(!timeOut(inst, tl));
 
+    printf("it: %d\n",iteration);
     
-    if(VERBOSE >= 10) {
-        if(checkSol(inst,solution)) return 1;
-        if(checkCost(inst,solution,newCost)) return 1;
-    }
-
 
     if(VERBOSE >= 10) printf("zbest: %f, cost: %f\n", inst->zbest,newCost);
-    
-    //update solution
-    if(inst->zbest == -1 || inst->zbest > newCost){
-        updateSol(inst,newCost,solution);
-    }
     
     plot(inst,solution,"Tabu");
 
