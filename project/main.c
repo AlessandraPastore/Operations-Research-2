@@ -9,9 +9,11 @@ int main(int argc, char** argv)
 	instance inst;
 
 	parse_command_line(argc, argv, &inst);
+
+	inst.timeStart = second();
 	//performance(&inst);
 	read_input(&inst);
-	inst.timeStart = second();
+	
 
 	
 	if(strcmp(inst.heuristic, "NULL")){
