@@ -29,7 +29,7 @@ typedef struct {
     int nnodes;
     double* xcoord;     
     double* ycoord;
-    int* index;
+    //int* index;
 
     // parameters
     double timelimit;						// overall time limit, in sec.s

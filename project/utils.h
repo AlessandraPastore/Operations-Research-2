@@ -24,4 +24,6 @@ int opt_2(instance *inst, double tl, int *solution, double *cost);
 int VNS(instance *inst);
 int TABU(instance *inst);
 
+int performance(instance *inst);
+
 #endif

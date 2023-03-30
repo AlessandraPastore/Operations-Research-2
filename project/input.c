@@ -7,7 +7,7 @@ void free_instance(instance* inst)
 {
     free(inst->xcoord);
     free(inst->ycoord);
-    free(inst->index);
+    //free(inst->index);
     free(inst->best_sol);
     free(inst->cost);
 
@@ -72,7 +72,7 @@ void read_input(instance* inst)
             inst->nnodes = atoi(token1);
             inst->xcoord = (double*)calloc(inst->nnodes, sizeof(double));
             inst->ycoord = (double*)calloc(inst->nnodes, sizeof(double));
-            inst->index=(int*)calloc(inst->nnodes, sizeof(int));
+            //inst->index=(int*)calloc(inst->nnodes, sizeof(int));
             inst->cost=(double*)calloc(inst->nnodes*inst->nnodes,sizeof(double));
             inst->flagCost = 0;
             active_section = 0;
@@ -112,7 +112,7 @@ void read_input(instance* inst)
             
             token1 = strtok(NULL, " :,");
             token2 = strtok(NULL, " :,");
-            inst->index[i]=i;
+            //inst->index[i]=i;
             inst->xcoord[i] = atof(token1);
             inst->ycoord[i] = atof(token2);
 
@@ -148,9 +148,10 @@ void parse_command_line(int argc, char** argv, instance* inst)
         if (strcmp(argv[i], "-f") == 0) { strcpy(inst->input_file, argv[++i]); continue; } 			// input file
         if (strcmp(argv[i], "-tl") == 0) { inst->timelimit = atof(argv[++i]); continue; }		// time limit
         if (strcmp(argv[i], "-h") == 0) { strcpy(inst->heuristic, argv[++i]); continue; } 		// heuristic to run
-        if (strcmp(argv[i], "-seed") == 0) { inst->seed = atof(argv[++i]); continue; } 		//  
+        if (strcmp(argv[i], "-seed") == 0) { inst->seed = atof(argv[++i]); continue; } 		//  random seed
         if (strcmp(argv[i], "-help") == 0) { help = 1; continue; } 									// help
         if (strcmp(argv[i], "--help") == 0) { help = 1; continue; } 									// help
+        //if (strcmp(argv[i], "-performance") == 0) { help = 1; break; } 
         help = 1;
     }
 

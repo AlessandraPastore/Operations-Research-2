@@ -6,6 +6,10 @@
 //                  1 -> we are calling greedy
 int grasp(instance *inst, int greedy, double tl)
 {
+
+    if(greedy) printf("--- Starting GREEDY ---\n");
+    else printf("--- Starting GRASP ---\n");
+
     if(!inst->flagCost)
         computeCost(inst);
 
@@ -37,7 +41,7 @@ int grasp(instance *inst, int greedy, double tl)
         int current = rand() % inst->nnodes;
         int start = current;
 
-        if(VERBOSE >= 10)   printf("start %d - ",current);
+        if(VERBOSE >= 100)   printf("start %d - ",current);
 
         visited[current] = 1;
         
@@ -106,7 +110,7 @@ int grasp(instance *inst, int greedy, double tl)
         solution[current] = start;
         cost += get_cost(current,start,inst);
 
-        if(VERBOSE >= 10) printf("current cost: %f\n", cost);
+        if(VERBOSE >= 100) printf("current cost: %f\n", cost);
         
         if(VERBOSE >= 10) {
             if(checkSol(inst,solution)) return 1;

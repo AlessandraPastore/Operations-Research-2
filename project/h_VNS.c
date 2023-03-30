@@ -89,7 +89,9 @@ int VNS(instance *inst){
 
     if(VERBOSE >= 10) printf("--- Starting VNS ---\n");
 
-    //forse non serve perchè viene chiamato già in grasp
+    if(!inst->flagCost)
+        computeCost(inst);
+
     if(inst->seed != -1) 
         srand(inst->seed);
 

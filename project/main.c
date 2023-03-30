@@ -9,6 +9,7 @@ int main(int argc, char** argv)
 	instance inst;
 
 	parse_command_line(argc, argv, &inst);
+	//performance(&inst);
 	read_input(&inst);
 	inst.timeStart = second();
 
@@ -17,6 +18,8 @@ int main(int argc, char** argv)
 		printf("- - - Solving a heuristic: %s - - - \n", inst.heuristic);
 		if(heuristic(&inst)) print_error("ERROR IN HEURISTIC");
 	}
+	
+
 
 	inst.timeEnd = second();
 

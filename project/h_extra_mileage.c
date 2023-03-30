@@ -21,6 +21,8 @@ double diameter(instance *inst, int *a, int *b)
 
 int extra_mileage(instance *inst){
 
+    printf("--- Starting EXTRA MILEAGE ---\n");
+
     //compute costs
     if(!inst->flagCost) computeCost(inst);
 

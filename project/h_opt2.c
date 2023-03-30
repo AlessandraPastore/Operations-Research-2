@@ -31,6 +31,10 @@ void reverse(instance *inst, int *solution, int a,int b)
 int opt_2(instance *inst, double tl, int *solution, double *cost){
 
     if(VERBOSE >= 10) printf("--- Starting OPT2 ---\n");
+    
+    if(!inst->flagCost)
+        computeCost(inst);
+
 
     inst->tabu = (int*)calloc(inst->nnodes, sizeof(int));
     int tcurrent=1;
