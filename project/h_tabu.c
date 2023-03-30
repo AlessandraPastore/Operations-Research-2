@@ -16,7 +16,7 @@ int TABU(instance *inst)
          //new crossed edges
     plot(inst, solution,"TABU");
 
-    inst->flagtabu=0;
+   
    
     return 0;
 }

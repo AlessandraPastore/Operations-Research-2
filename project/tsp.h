@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 //to re define
-#define VERBOSE				    10		// printing level  (=10 only incumbent, =20 little output, =50-60 good, =70 verbose, >=100 cplex log)
+#define VERBOSE				    50	// printing level  (=10 only incumbent, =20 little output, =50-60 good, =70 verbose, >=100 cplex log)
 
 //hard-wired parameters
 #define XSMALL		  		  1e-5 		// 1e-4*	// tolerance used to decide ingerality of 0-1 var.s
@@ -47,12 +47,6 @@ typedef struct {
 
     //flag to see if the costs array is set, 0 if not set
     int flagCost;
-
-    //flag to see if we have to check a tabu list
-    int flagtabu;
-
-    //list of tabu
-    int* tabu;
     
     //best sol.
     double zbest;							// cost of best sol. available

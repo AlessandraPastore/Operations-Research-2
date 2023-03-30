@@ -1,5 +1,5 @@
 set terminal png
-set output "./plot/VNS_BEST_SOL.png"
+set output "./plot/2OPT.png"
 set style line 1 \
     linecolor rgb'#FF0000' \
     linetype 1 linewidth 2 \

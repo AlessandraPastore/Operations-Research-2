@@ -34,12 +34,8 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
     
     if(!inst->flagCost)
         computeCost(inst);
-
-
-    inst->tabu = (int*)calloc(inst->nnodes, sizeof(int));
-    int tcurrent=1;
+    
     double delta;
-
     double oldCost = *cost; 
 
 
@@ -47,34 +43,26 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
         delta = 0;
         int a = -1, b = -1;
         for(int i=0; i<inst->nnodes-1; i++)
-          {  if((inst->tabu[i]==0 && inst->tabu[solution[i]]==0)||(inst->tabu[i] + tmax < tcurrent&& inst->tabu[solution[i]] + tmax < tcurrent))
-                 for(int j=i+1; j<inst->nnodes; j++)
+                for(int j=i+1; j<inst->nnodes; j++)
                 {
-                    if((inst->tabu[j]==0 && inst->tabu[solution[j]]==0)||(inst->tabu[j] + tmax < tcurrent&& inst->tabu[solution[j]] + tmax < tcurrent))
-                    {
-                         double deltaTemp = get_cost(i,j,inst)  +  get_cost(solution[j],solution[i],inst) -  (get_cost(i,solution[i],inst)  +  get_cost(j,solution[j],inst));
+                   double deltaTemp = get_cost(i,j,inst)  +  get_cost(solution[j],solution[i],inst) -  (get_cost(i,solution[i],inst)  +  get_cost(j,solution[j],inst));
                     
-                         if(deltaTemp < delta)
-                        {   
-                            delta = deltaTemp;
-                            a = i;
-                            b = j;
-                        }
-                    }
-            }
+                    if(deltaTemp < delta)
+                    {   
+                        delta = deltaTemp;
+                        a = i;
+                        b = j;
+                     }
+                    
+                }
            
-          }
+        if(delta < 0)  
+        {
+            reverse(inst,solution,a,b);
             *cost += delta;  //update cost
+        }
             
-
-            if(delta < 0)
-            {   if(inst->flagtabu==1)
-                    inst->tabu[a]=tcurrent;
-                reverse(inst,solution,a,b);
-            }   
-            if(a>=0)
-            tcurrent++;
-    } while(!timeOut(inst, tl)  && delta < 0);
+     }while(!timeOut(inst, tl)  && delta < 0);
 
     
     if(VERBOSE >= 10) {
@@ -90,12 +78,9 @@ int opt_2(instance *inst, double tl, int *solution, double *cost){
         updateSol(inst,*cost,solution);
     }
     
-    
+    plot(inst,solution,"2OPT");
 
     if(VERBOSE >= 1) printf("OPT2 IMROVEMENT: old cost %f --> new cost %f\n",oldCost, *cost);
-    if(inst->flagtabu==0)
-        plot(inst, solution,"2_opt");
     
-    free(inst->tabu);
     return 0;
 }
