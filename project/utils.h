@@ -22,7 +22,7 @@ int extra_mileage(instance *inst);
 int grasp(instance *inst, int greedy, double tl);
 int opt_2(instance *inst, double tl, int *solution, double *cost);
 int VNS(instance *inst);
-int TABU(instance *inst);
+int TABU(instance *inst,double tl);
 int genetic(instance *inst);
 
 int performance(instance *inst);

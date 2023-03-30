@@ -107,3 +107,30 @@ void updateSol(instance *inst, double cost, int* solution)
     memcpy(inst->best_sol, solution, inst->nnodes * sizeof(int));
 } 
  
+
+//reverse path b -> a1
+void reverse(instance *inst, int *solution, int a,int b)
+{
+    //printf("SWAP 2OPT: %d with %d\n",a,b);
+    int a1 = solution[a];
+    int b1 = solution[b];
+
+    int* old = (int*)malloc(inst->nnodes * sizeof(int));
+    memcpy(old,solution,sizeof(int)*inst->nnodes);
+
+    
+    solution[a]=b;
+    solution[a1]=b1;
+    
+    int i=a1;
+    
+    while (i!=b)
+        {
+            solution[old[i]] = i;
+            i = old[i];
+        }
+
+    
+    free(old);
+
+}

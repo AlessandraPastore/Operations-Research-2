@@ -18,7 +18,7 @@ int heuristic(instance *inst){
     }
     if(strcmp(inst->heuristic, "TABU") == 0)   {
         grasp(inst, 0, inst->timelimit / 10); //to modify, how much time do we actually want to use?
-        return TABU(inst);
+        return TABU(inst,inst->timelimit);
 
     }
 
