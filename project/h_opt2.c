@@ -4,7 +4,7 @@
 //reverse path b -> a1
 void reverse(instance *inst, int *solution, int a,int b)
 {
-    printf("SWAP 2OPT: %d with %d\n",a,b);
+    //printf("SWAP 2OPT: %d with %d\n",a,b);
     int a1 = solution[a];
     int b1 = solution[b];
 

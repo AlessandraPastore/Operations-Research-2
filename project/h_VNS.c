@@ -3,6 +3,18 @@
 //void reverse(instance *inst, int* old, int a1,int b);
 //int opt_2(instance *inst, double tl);
 
+//reverse path b -> a1
+void reverse2(instance *inst, int *solution, int *old, int a1, int b)
+{   
+    int i = a1;
+      
+    while (i != b)
+        {
+            solution[old[i]] = i;
+            i = old[i];
+        }
+}
+
 int VNS(instance *inst){
 
     if(VERBOSE >= 10) printf("--- Starting VNS ---\n");
@@ -18,24 +30,25 @@ int VNS(instance *inst){
     int* solution = (int*)calloc(inst->nnodes, sizeof(int));
     double cost = inst->zbest;
     
-    //old solution copy
-    int* oldSol = (int*)malloc(inst->nnodes * sizeof(int));
     double oldCost;
 
     //solution copies the actual local minimum
     memcpy(solution,inst->best_sol,sizeof(int)*inst->nnodes);
+
+    int start, curr, order[5], count ;
+    int* old = (int*)malloc(inst->nnodes * sizeof(int));
     
 
 
     do{
 
+        //puts visited all at zeros
+        memset(old, 0, inst->nnodes * sizeof(int));
+
         oldCost = cost;
 
-        //copy solution in oldSol
-        memcpy(oldSol,solution,sizeof(int)*inst->nnodes);
-        
         //select 5 random edges
-        int a = rand() % inst->nnodes;
+        a = rand() % inst->nnodes;
 
         do{ b = rand() % inst->nnodes; }while(a == b);
         do{ c = rand() % inst->nnodes; }while(a == c || b == c);
@@ -43,10 +56,9 @@ int VNS(instance *inst){
         do{ e = rand() % inst->nnodes; }while(a == e || b == e || c == e || d == e);
 
         //order the nodes based on current tour
-        int start = a;
-        int curr = solution[a];
-        int order[5];
-        int count = 1;
+        start = a;
+        curr = solution[a];
+        count = 1;
         order[0] = start;
 
         while (curr != a) {
@@ -74,18 +86,30 @@ int VNS(instance *inst){
                     - get_cost(order[4],e1,inst);
 
         //swaps the edges to create a new path
-        solution[order[0]] = c1;
-        solution[order[1]] = d1;
-        solution[order[2]] = e1;
-        solution[order[3]] = a1;
+        //solution[order[0]] = c1;
+        //solution[order[1]] = d1;
+        //solution[order[2]] = e1;
+        //solution[order[3]] = a1;
+        //solution[order[4]] = b1;
+
+        memcpy(old,solution,sizeof(int)*inst->nnodes);
+
+        //swaps the edges to create a new path
+        solution[order[0]] = order[3];
+        solution[c1] = order[1];
+        solution[a1] = d1;
         solution[order[4]] = b1;
+        solution[order[2]] = e1;
+
+        reverse2(inst,solution, old,a1,order[1]);
+        reverse2(inst,solution, old, c1,order[3]);
 
         //add new edge cost
-        cost = cost + get_cost(order[0],c1,inst) 
-                    + get_cost(order[1],d1,inst) 
-                    + get_cost(order[2],e1,inst) 
-                    + get_cost(order[3],a1,inst) 
-                    + get_cost(order[4],b1,inst);
+        cost = cost + get_cost(order[0],order[3],inst) 
+                    + get_cost(order[1],c1,inst) 
+                    + get_cost(a1,d1,inst) 
+                    + get_cost(order[4],b1,inst) 
+                    + get_cost(order[2],e1,inst);
 
 
         if(VERBOSE >= 10) {
@@ -101,10 +125,12 @@ int VNS(instance *inst){
         //printf("- - entering opt2 - -\n");
         opt_2(inst, inst->timelimit, solution, &cost); //to change tl
 
+
     } while (!timeOut(inst, inst->timelimit));
     
-    free(oldSol);
+    
     free(solution);
+    free(old);
 
     if(VERBOSE >= 1) printf("VNS BEST SOL COST: %f \n", inst->zbest);
     
