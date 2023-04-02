@@ -22,6 +22,7 @@ void read_input(instance* inst)
 
     //default
     inst->nnodes = -1;
+    strcpy(inst->weight_type,"EMPTY");
 
     char line[180];
     char* par_name;
@@ -83,7 +84,16 @@ void read_input(instance* inst)
         if (strncmp(par_name, "EDGE_WEIGHT_TYPE", 16) == 0)
         {
             token1 = strtok(NULL, " :");
-            if (strncmp(token1, "ATT", 3) != 0) print_error(" format error:  only EDGE_WEIGHT_TYPE == ATT implemented so far!!!!!!");
+            //if (strncmp(token1, "ATT", 3) != 0) print_error(" format error:  only EDGE_WEIGHT_TYPE == ATT implemented so far!!!!!!");
+
+            if (strncmp(token1, "EUC_2D", 6) == 0) strcpy(inst->weight_type,"EUC_2D");
+            if (strncmp(token1, "MAX_2D", 6) == 0) strcpy(inst->weight_type,"MAX_2D");
+            if (strncmp(token1, "MAN_2D", 6) == 0) strcpy(inst->weight_type,"MAN_2D");
+            if (strncmp(token1, "CEIL_2D", 7) == 0) strcpy(inst->weight_type,"CEIL_2D");
+            if (strncmp(token1, "GEO", 3) == 0) strcpy(inst->weight_type,"GEO");
+            if (strncmp(token1, "ATT", 3) == 0) strcpy(inst->weight_type,"ATT");
+            if (strncmp(token1, "EMPTY", 5) == 0) print_error(" format error:  EDGE_WEIGHT_TYPE not implemented");
+
             active_section = 0;
             continue;
         }
@@ -96,6 +106,12 @@ void read_input(instance* inst)
         }
 
         if (strncmp(par_name, "EOF", 3) == 0)
+        {
+            active_section = 0;
+            break;
+        }
+
+        if (strncmp(par_name, "DISPLAY_DATA_TYPE", 18) == 0)
         {
             active_section = 0;
             break;

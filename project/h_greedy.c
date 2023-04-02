@@ -23,7 +23,11 @@ int grasp(instance *inst, int greedy, double tl)
     int *visited = (int*)malloc(inst->nnodes * sizeof(int));
 
     double graspRand = 0.8;
-    if(greedy) graspRand = 1;
+    if(greedy) {
+        graspRand = 1;
+        
+        }
+
 
     do {
 
@@ -81,7 +85,7 @@ int grasp(instance *inst, int greedy, double tl)
                     minIndex2 = minIndex;
                     }
             
-            if((rand() % 11) <= (graspRand * 10))
+            if((rand() % 10 + 1) <= (graspRand * 10))
             {
                 cost += minDist;
                 

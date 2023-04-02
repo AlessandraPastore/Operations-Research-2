@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <dirent.h>
 
 //to re define
 #define VERBOSE				    50	// printing level  (=10 only incumbent, =20 little output, =50-60 good, =70 verbose, >=100 cplex log)
@@ -21,8 +22,7 @@
 
 //#define GRASP_RAND 0.5
 
-//data structures
-
+//Instance
 typedef struct {
 
     //input data
@@ -34,7 +34,8 @@ typedef struct {
     // parameters
     double timelimit;						// overall time limit, in sec.s
     char input_file[1000];		  			// input file
-    char heuristic[25];                     //name of the heuristic to use
+    char heuristic[25];                     // name of the heuristic to use
+    char weight_type[10];                   // weight type for distance function
 
     int seed;                               //random seed
 

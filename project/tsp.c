@@ -1,10 +1,96 @@
 #include "utils.h"
 
+double EUC_2D(instance *inst,int index1,int index2){
+   double x = inst->xcoord[index1]-inst->xcoord[index2];
+   
+   double y = inst->ycoord[index1]-inst->ycoord[index2];
+   
+   return sqrt( (x*x + y*y) );
+}
 
-double dist(instance *inst,int index1,int index2) {
-
-    return sqrt((inst->xcoord[index1]-inst->xcoord[index2])*(inst->xcoord[index1]-inst->xcoord[index2])+(inst->ycoord[index1]-inst->ycoord[index2])*(inst->ycoord[index1]-inst->ycoord[index2]));
+double ATT(instance *inst,int index1,int index2) {
+   double x = inst->xcoord[index1]-inst->xcoord[index2];
+   
+   double y = inst->ycoord[index1]-inst->ycoord[index2];
+   
+   return sqrt( (x*x + y*y) / 10 );
  }
+
+ double MAN_2D(instance *inst,int index1,int index2){
+   double x = abs(inst->xcoord[index1]-inst->xcoord[index2]);
+   
+   double y = abs(inst->ycoord[index1]-inst->ycoord[index2]);
+   
+   return x+y;
+}
+
+double MAX_2D(instance *inst,int index1,int index2){
+   double x = abs(inst->xcoord[index1]-inst->xcoord[index2]);
+   
+   double y = abs(inst->ycoord[index1]-inst->ycoord[index2]);
+   
+   return (x > y) ? x : y;
+}
+
+double GEO(instance *inst,int index1,int index2){
+
+   double pi = 3.141592;
+
+   //converts x1 and y1 in latitude and longitude
+   int deg = (int) (inst->xcoord[index1] + 0.5);
+
+   int min = inst->xcoord[index1] - deg;
+
+   double lat1 = pi * (deg + 5.0 * min / 3.0) / 180.0;
+
+   deg = (int) (inst->ycoord[index1] + 0.5);
+
+   min = inst->ycoord[index1] - deg;
+   
+   double long1 = pi * (deg + 5.0 * min / 3.0) / 180.0;
+
+   //converts x2 and y2 in latitude and longitude
+   deg = (int) (inst->xcoord[index2] + 0.5);
+
+   min = inst->xcoord[index2] - deg;
+
+   double lat2 = pi * (deg + 5.0 * min / 3.0) / 180.0;
+
+   deg = (int) (inst->ycoord[index2] + 0.5);
+
+   min = inst->ycoord[index2] - deg;
+   
+   double long2 = pi * (deg + 5.0 * min / 3.0) / 180.0;
+
+   //compute distance
+   double rrr = 6378.388;
+   double q1 = cos(long1 - long2);
+   double q2 = cos(lat1 - lat2);
+   double q3 = cos(lat1 + lat2);
+
+   
+   return rrr * acos(0.5*((1+q1)*q2 - (1-q1)*q3)) + 1;
+}
+
+double CEIL_2D(instance *inst,int index1,int index2){
+   double d = EUC_2D(inst,index1,index2);
+   return (int) (d + 0.5);
+}
+
+
+
+double dist(instance *inst,int index1,int index2){
+
+   if (strncmp(inst->weight_type, "EUC_2D", 6) == 0) return EUC_2D(inst,index1,index2);
+            if (strncmp(inst->weight_type, "MAX_2D", 6) == 0) return MAX_2D(inst,index1,index2);
+            if (strncmp(inst->weight_type, "MAN_2D", 6) == 0) return MAN_2D(inst,index1,index2);
+            if (strncmp(inst->weight_type, "CEIL_2D", 7) == 0) return CEIL_2D(inst,index1,index2);
+            if (strncmp(inst->weight_type, "GEO", 3) == 0) return GEO(inst,index1,index2);
+            if (strncmp(inst->weight_type, "ATT", 3) == 0) return ATT(inst,index1,index2);
+            if (strncmp(inst->weight_type, "EMPTY", 5) == 0) print_error(" format error:  EDGE_WEIGHT_TYPE not implemented");
+
+   return 0;
+}
 
 void computeCost(instance *inst)
  {

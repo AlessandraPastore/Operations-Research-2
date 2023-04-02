@@ -44,39 +44,64 @@ int call(instance *inst, char name[]){
 }
 
 int performance(instance *inst){
-    
-    initInstance(inst);
+
     FILE *out = fopen(".\\output\\perf.txt", "w");
     if (out == NULL) printf("input file not found!");
-    
-    for(int i=0; i<10; i++){
+
+    initInstance(inst);
+    fprintf(out,"3,greedy,grasp,extra\n");
+
+    DIR *d;
+  	struct dirent *dir;
+  	d = opendir(".\\input");
+  	if (d) {
+    	while ((dir = readdir(d)) != NULL) {
+    	    printf("%s\n", dir->d_name);
+            if(strncmp(dir->d_name,".", 1) == 0) continue;
+            if(strncmp(dir->d_name,"..", 1) == 0) continue;
+            
+
+            //for(int i=0; i<20; i++){
         
-        randomInstance(inst);
+                //randomInstance(inst);
+                char file[] = ".\\input\\";
+                strcat(file,dir->d_name);
+                printf("FILE:%s\n", file);
+                strcpy(inst->input_file,file);
+                read_input(inst);
 
-        if(call(inst,"GREEDY")) return 1;
+                if(call(inst,"GREEDY")) return 1;
 
-        printf("%d,%f\n",i,inst->zbest);
-        fprintf(out,"%d,%f",i,inst->zbest);
+                printf("%s,%f\n",dir->d_name,inst->zbest);
+                fprintf(out,"%s,%f",dir->d_name,inst->zbest);
 
-        inst->best_sol = (int *) calloc(inst->nnodes, sizeof(int));
-        inst->zbest = -1;
+                memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+                inst->zbest = -1;
 
-        if(call(inst,"GREEDYGRASP")) return 1;
+                if(call(inst,"GREEDYGRASP")) return 1;
 
-        printf(",%f\n",inst->zbest);
-        fprintf(out,",%f",inst->zbest);
+                printf(",%f\n",inst->zbest);
+                fprintf(out,",%f",inst->zbest);
 
 
-        inst->best_sol = (int *) calloc(inst->nnodes, sizeof(int));
-        inst->zbest = -1;
+                memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+                inst->zbest = -1;
 
-        if(call(inst,"EXTRAMILEAGE")) return 1;
+                if(call(inst,"EXTRAMILEAGE")) return 1;
 
-        printf(",%f\n",inst->zbest);
-        fprintf(out,",%f\n",inst->zbest);
+                printf(",%f\n",inst->zbest);
+                fprintf(out,",%f\n",inst->zbest);
 
-    }
-
+            //}
+    	}
+    	closedir(d);
+  	}
+    
+    
+    
+    
+    
+    free(dir);
     free_instance(inst);
     fclose(out);
     return 0;
