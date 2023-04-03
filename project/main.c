@@ -12,16 +12,16 @@ int main(int argc, char** argv)
 
 	
 	
-	performance(&inst);
-	//inst.timeStart = second();
-	//read_input(&inst);
+	//performance(&inst);
+	inst.timeStart = second();
+	read_input(&inst);
 	
 
 	
-	//if(strcmp(inst.heuristic, "NULL")){
-	//	printf("- - - Solving a heuristic: %s - - - \n", inst.heuristic);
-	//	if(heuristic(&inst)) print_error("ERROR IN HEURISTIC");
-	//}
+	if(strcmp(inst.heuristic, "NULL")){
+		printf("- - - Solving a heuristic: %s - - - \n", inst.heuristic);
+		if(heuristic(&inst)) print_error("ERROR IN HEURISTIC");
+	}
 	
 
 

@@ -19,28 +19,7 @@ double diameter(instance *inst, int *a, int *b)
     return maxCost;
 }
 
-int extra_mileage(instance *inst){
-
-    printf("--- Starting EXTRA MILEAGE ---\n");
-
-    //compute costs
-    if(!inst->flagCost) computeCost(inst);
-
-    //vector with the solutions
-    int* solution = (int*)calloc(inst->nnodes, sizeof(int));
-
-    //0-1 vector to memorize nodes already part of the solution
-    int *visited = (int*)calloc(inst->nnodes, sizeof(int));
-
-    int a,b;
-    double cost = 2*diameter(inst, &a, &b);
-
-
-    visited[a] = visited[b] = 1;
-    solution[a] = b;
-    solution[b] = a;
-    
-    
+void computeExtra(instance *inst, int *visited, int *solution, double *cost){
 
     //take generic node, non visited
     for(int z=0; z<inst->nnodes; z++){
@@ -69,10 +48,36 @@ int extra_mileage(instance *inst){
         solution[z] = jmin;
         visited[z]=1;
 
-        cost += min;
+        *cost += min;
 
         
     }
+
+}
+
+
+int extra_mileage(instance *inst){
+
+    printf("--- Starting EXTRA MILEAGE ---\n");
+
+    //compute costs
+    if(!inst->flagCost) computeCost(inst);
+
+    //vector with the solutions
+    int* solution = (int*)calloc(inst->nnodes, sizeof(int));
+
+    //0-1 vector to memorize nodes already part of the solution
+    int *visited = (int*)calloc(inst->nnodes, sizeof(int));
+
+    int a,b;
+    double cost = 2*diameter(inst, &a, &b);
+
+
+    visited[a] = visited[b] = 1;
+    solution[a] = b;
+    solution[b] = a;
+    
+    computeExtra(inst,visited,solution,&cost);
 
     inst->timeEnd = second();
 
