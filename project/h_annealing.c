@@ -27,6 +27,7 @@ int annealing(instance *inst,double tl)
     int i,j; 
 
     int T=Tmax;
+    int iteration=0;
     do{
     
         i=rand()%inst->nnodes;
@@ -47,7 +48,8 @@ int annealing(instance *inst,double tl)
             newCost += deltaTemp;
         }
 
-        T= T*alpha;
+        T= T*pow(alpha,iteration)+Tmin;
+        iteration++;
 
         if(T<Tmin)
             T=Tmax; 
@@ -71,8 +73,6 @@ int annealing(instance *inst,double tl)
 
 
     if(VERBOSE >= 10) printf("zbest: %f, cost: %f\n", inst->zbest,newCost);
-    
-    plot(inst,solution,"Tabu");
 
     if(VERBOSE >= 1 && newCost<oldCost) 
         printf("Tabu IMROVEMENT: old cost %f --> new cost %f\n",oldCost, newCost);
