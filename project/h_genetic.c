@@ -2,8 +2,8 @@
 
 #define POPULATION 50
 #define OFFSPRING_RATE 0.5
-#define MUTATION_RATE 0.05
-#define MAX_GEN 50
+#define MUTATION_RATE 0.04
+#define MAX_GEN 100
 
 
 // member of the population
@@ -203,6 +203,8 @@ int genetic(instance *inst){
     chromosome mutant;
     mutant.solution = (int*) calloc(inst->nnodes,sizeof(int));
 
+    inst->timeStart = second();
+
     do{
 
         //compute the wheel roulette probabilities
@@ -226,8 +228,6 @@ int genetic(instance *inst){
 
         
         int count = 0;
-
-        if(VERBOSE >= 10) printf("\nSTARTING PARENTING\n");
         
         //produce the entire offpring
         while(count < POPULATION * OFFSPRING_RATE){
@@ -242,9 +242,6 @@ int genetic(instance *inst){
 
             produceOffspring(inst,population[p1].solution, population[p2].solution, &offspring[count]);
 
-
-            printf("\n\n");
-
             if(VERBOSE >= 10) {
                 if(checkSol(inst,offspring[count].solution)) return 1;
                 if(checkCost(inst,offspring[count].solution,offspring[count].fitness)) return 1;
@@ -256,7 +253,6 @@ int genetic(instance *inst){
         //try to apply a mutation
         double m = (double)rand() / RAND_MAX;
         int mutantIndex = -1;
-        
 
         if(m < MUTATION_RATE){
             mutantIndex = rand() % (POPULATION-1) +1;   //assures that the first element remains elite
@@ -264,6 +260,7 @@ int genetic(instance *inst){
             memcpy(mutant.solution,population[mutantIndex].solution,sizeof(int)*inst->nnodes);
             mutant.fitness = population[mutantIndex].fitness;
 
+            
             mutate(inst, &mutant);
 
             if(VERBOSE >= 10) {
@@ -305,7 +302,7 @@ int genetic(instance *inst){
             }
         }
 
-    }while(gen <= MAX_GEN);
+    }while(gen <= MAX_GEN && !timeOut(inst,inst->timelimit));
 
     //checks last generation for the best solution
     //sort population based on fitness. First we have the one with better fitness, last the worse
@@ -317,6 +314,7 @@ int genetic(instance *inst){
 
     plot(inst,inst->best_sol,"GENETIC");
     if(VERBOSE >= 1)printf("BEST GENETIC COST FOUND: %f",inst->zbest);
+    if(VERBOSE >= 10)printf("generation: %d",gen);
     
 
 
