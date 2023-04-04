@@ -4,7 +4,7 @@
 //int opt_2(instance *inst, double tl);
 
 //reverse path b -> a1
-void reverse2(instance *inst, int *solution, int *old, int a1, int b)
+void reverse2(int *solution, int *old, int a1, int b)
 {   
     int i = a1;
       
@@ -69,8 +69,8 @@ void kick(instance *inst, int* solution, double* cost){
     solution[order[4]] = b1;
     solution[order[2]] = e1;
 
-    reverse2(inst,solution, old,a1,order[1]);
-    reverse2(inst,solution, old, c1,order[3]);
+    reverse2(solution, old,a1,order[1]);
+    reverse2(solution, old, c1,order[3]);
 
     //add new edge cost
     *cost = *cost + get_cost(order[0],order[3],inst) 

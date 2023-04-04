@@ -23,7 +23,10 @@ void computeExtra(instance *inst, int *visited, int *solution, double *cost);
 
 int grasp(instance *inst, int greedy, double tl);
 int opt_2(instance *inst, double tl, int *solution, double *cost);
+
 int VNS(instance *inst);
+void reverse2(int *solution, int *old, int a1, int b);
+
 int TABU(instance *inst,double tl);
 int genetic(instance *inst);
 

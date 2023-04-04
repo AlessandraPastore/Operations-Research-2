@@ -7,9 +7,10 @@
 
 // member of the population
 typedef struct {
-    int* solution;  // tsp feasible tour
-    double fitness; // score of the member
-    double wheelProb;
+    int* solution;      // tsp feasible tour
+    double fitness;     // score of the member
+    double wheelProb;   // fitness / totalFitness
+    double sumProb;     // cumulative probability
 } chromosome;
 
 void computeFitness(instance *inst, int *solution, int *visited, double *cost){
@@ -24,17 +25,21 @@ void computeFitness(instance *inst, int *solution, int *visited, double *cost){
     }while(index != 0);
 }
 
+int compareChromosomes(const void *lhs, const void *rhs) {
+    const chromosome* lp = lhs;
+    const chromosome* rp = rhs;
+
+    return rp->fitness - lp->fitness;
+}
+
 int selectParent(chromosome *population){
     
-    double sum = 0;
     // Select a random number between 0 and 1
     double random = (double)rand() / RAND_MAX;
 
     // Use the roulette wheel to select a chromosome
-    for(int i=0; i<POPULATION; i++){
-        sum += population[i].wheelProb;
-
-        if(random <= sum) return i;
+    for(int i=POPULATION -1; i>0; i--){
+        if(random <= population[i].sumProb) return i;
     }
 
     exit(1);
@@ -85,6 +90,16 @@ void produceOffspring(instance *inst, int *p1, int *p2, chromosome *offspring){
 
 }
 
+void mutate(instance *inst, chromosome *member){
+    //int* old = (int*)malloc(inst->nnodes * sizeof(int));
+    //memcpy(old,member->solution,sizeof(int)*inst->nnodes);
+
+    //swaps the edges to create a new path
+
+
+
+}
+
 
 
 void initMember(instance *inst, chromosome *member){
@@ -121,18 +136,29 @@ int genetic(instance *inst){
 
     for(int i=0; i<POPULATION; i++){
         population[i].wheelProb = population[i].fitness / totalFit;
-        printf("Probability for n.%d: %f\n",i,population[i].wheelProb);
+        //printf("Probability for n.%d: %f\n",i,population[i].wheelProb);
     }
+
+
 
     //to do
     int gen = 1;
-    
+    chromosome *offspring = (chromosome*)calloc(POPULATION * OFFSPRING_RATE, sizeof(chromosome));
+
+    //sort population based on fitness. First we have the one with better fitness, last the worse
+    qsort(population, POPULATION, sizeof(chromosome), compareChromosomes);
+
+    population[0].sumProb = 1;
+    for(int i=1;i<POPULATION;i++){
+        population[i].sumProb = population[i-1].sumProb - population[i-1].wheelProb;
+    }
 
     int *visited = (int*)calloc(POPULATION,sizeof(int));
     int count = 0;
 
     printf("\nSTARTING PARENTING\n",totalFit);
     
+    //produce the entire offpring
     while(count < POPULATION * OFFSPRING_RATE){
         
         int p1,p2; 
@@ -147,31 +173,33 @@ int genetic(instance *inst){
 
         printf("parent 2: %d\n",p2);
 
-        chromosome offspring;
+        produceOffspring(inst,population[p1].solution, population[p2].solution, &offspring[count]);
 
-        produceOffspring(inst,population[p1].solution, population[p2].solution, &offspring);
-
-        printf("offspring solution: %f\n",offspring.fitness);
+        printf("offspring solution: %f\n",offspring[count].fitness);
         for(int i=0; i<inst->nnodes; i++){
-            printf("%d ",offspring.solution[i]);
+            printf("%d ",offspring[count].solution[i]);
         }
 
         printf("\n\n");
 
-
         if(VERBOSE >= 10) {
-            if(checkSol(inst,offspring.solution)) return 1;
-            if(checkCost(inst,offspring.solution,offspring.fitness)) return 1;
+            if(checkSol(inst,offspring[count].solution)) return 1;
+            if(checkCost(inst,offspring[count].solution,offspring[count].fitness)) return 1;
         }
         
-
         count++;
-        
     }
+
+    //mutation
+    //elitism
+    //create the new generation
+
+
     
         
 
     free(visited);
+    free(offspring);
     free(population);
     return 0;
 }
