@@ -24,6 +24,12 @@ int heuristic(instance *inst){
 
     if(strcmp(inst->heuristic, "GENETIC") == 0)           return genetic(inst);
 
+    if(strcmp(inst->heuristic, "ANNEALING") == 0)   {
+        grasp(inst, 0, inst->timelimit / 10); //to modify, how much time do we actually want to use?
+        return annealing(inst,inst->timelimit);
+
+    }
+
     print_error("heuristic name not appropriate");
     return 1;
 }

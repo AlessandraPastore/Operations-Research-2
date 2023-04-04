@@ -93,11 +93,6 @@ int TABU(instance *inst,double tl)
             updateSol(inst,newCost,solution);
         }
 
-        for(int i=0; i<inst->nnodes;i++){
-
-        }
-
-
      }while(!timeOut(inst, tl));
 
     printf("it: %d\n",iteration);
