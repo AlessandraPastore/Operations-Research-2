@@ -2,6 +2,7 @@
 
 #define POPULATION 20
 #define OFFSPRING_RATE 0.5
+#define MUTATION_RATE 0.08
 #define MAX_GEN 20
 
 
@@ -38,10 +39,11 @@ int selectParent(chromosome *population){
     double random = (double)rand() / RAND_MAX;
 
     // Use the roulette wheel to select a chromosome
-    for(int i=POPULATION -1; i>0; i--){
+    for(int i=POPULATION-1; i>=0; i--){
         if(random <= population[i].sumProb) return i;
     }
 
+    print_error("ROULETTE WHEEL FAILED");
     exit(1);
 }
 
@@ -91,12 +93,33 @@ void produceOffspring(instance *inst, int *p1, int *p2, chromosome *offspring){
 }
 
 void mutate(instance *inst, chromosome *member){
-    //int* old = (int*)malloc(inst->nnodes * sizeof(int));
-    //memcpy(old,member->solution,sizeof(int)*inst->nnodes);
 
-    //swaps the edges to create a new path
+    printf("\nSTART MUTATION\n");
+    
+    int* old = (int*)malloc(inst->nnodes * sizeof(int));
+    memcpy(old,member->solution,sizeof(int)*inst->nnodes);
 
+    int a = rand() % inst->nnodes;
+    int a1 = member->solution[a];
 
+    int b;
+    do{b = rand() % inst->nnodes;} while(b == a || b == a1 || member->solution[b] == a);
+    int b1 = member->solution[b];
+
+    //update fitness
+    member->fitness = member->fitness 
+                        - get_cost(a,a1,inst)
+                        - get_cost(b,b1,inst)
+                        + get_cost(a,b,inst)
+                        + get_cost(a1,b1,inst);
+
+    //swap edges
+    member->solution[a] = b;
+    member->solution[a1] = b1;
+
+    reverse2(member->solution, old, a1, b);
+
+    free(old);
 
 }
 
@@ -191,7 +214,22 @@ int genetic(instance *inst){
     }
 
     //mutation
+    double m = (double)rand() / RAND_MAX;
+    int mutant = -1;
+    if(m < MUTATION_RATE){
+        mutant = rand() % POPULATION;
+        mutate(inst, &population[mutant]);
+
+        if(VERBOSE >= 10) {
+            if(checkSol(inst,population[mutant].solution)) return 1;
+            if(checkCost(inst,population[mutant].solution,population[mutant].fitness)) return 1;
+        }
+
+    }
+
     //elitism
+    
+
     //create the new generation
 
 
