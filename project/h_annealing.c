@@ -4,7 +4,7 @@
 
 #define alpha 0.99
 #define e 2.71828
-#define Tmin 100
+
 
 
 int annealing(instance *inst,double tl)
@@ -28,7 +28,7 @@ int annealing(instance *inst,double tl)
     int i,j; 
 
     int T=Tmax;
-    int iteration=0;
+   
     do{
     
         i=rand()%inst->nnodes;
@@ -51,10 +51,9 @@ int annealing(instance *inst,double tl)
         }
 
         T= T*alpha;
-        iteration++;
+       
 
-        if(T<Tmin)
-            T=Tmax; 
+        
 
 
         if(VERBOSE >= 10) {
