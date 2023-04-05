@@ -1,8 +1,9 @@
 #include "utils.h"
+#include "math.h"
+
 
 #define alpha 0.99
 #define e 2.71828
-#define Tmax 5000
 #define Tmin 100
 
 
@@ -11,8 +12,8 @@ int annealing(instance *inst,double tl)
     if(VERBOSE >= 10) printf("--- Starting SIMULATED ANNEALING ---\n");
     if(!inst->flagCost)
         computeCost(inst);
-    
-    double delta;
+    double Tmax= (inst->zbest/inst->nnodes)*4;
+
     double oldCost = inst->zbest;
     double newCost = oldCost;
     
@@ -40,15 +41,16 @@ int annealing(instance *inst,double tl)
 
         double deltaTemp = get_cost(i,j,inst)  +  get_cost(solution[j],solution[i],inst) -  (get_cost(i,solution[i],inst)  +  get_cost(j,solution[j],inst));    
 
-        int prob=pow(e,(-delta/T));
-
-        if(rand() % 10 < prob*10)
+        double prob=pow(e,(-deltaTemp/T));
+        int random=rand() % 10;
+        printf("delta %f prob %f random %d\n",deltaTemp,prob,random);
+        if( random< prob*10)
         {
             reverse(inst,solution,i,j);
             newCost += deltaTemp;
         }
 
-        T= T*pow(alpha,iteration)+Tmin;
+        T= T*alpha;
         iteration++;
 
         if(T<Tmin)
