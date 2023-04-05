@@ -43,7 +43,7 @@ int annealing(instance *inst,double tl)
 
         double prob=pow(e,(-deltaTemp/T));
         int random=rand() % 10;
-        printf("delta %f prob %f random %d\n",deltaTemp,prob,random);
+       
         if( random< prob*10)
         {
             reverse(inst,solution,i,j);
