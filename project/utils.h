@@ -33,4 +33,8 @@ int genetic(instance *inst);
 int performance(instance *inst);
 
 int annealing(instance *inst,double tl);
+
+//cplex
+int TSPopt(instance *inst);
+
 #endif

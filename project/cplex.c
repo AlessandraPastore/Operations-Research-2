@@ -22,6 +22,7 @@ void set_params(instance *inst, CPXENVptr env){
 void build_model(instance *inst, CPXENVptr env, CPXLPptr lp)
 {    
 
+
 	//double zero = 0.0;  
 	char binary = 'B'; 
 
@@ -40,10 +41,13 @@ void build_model(instance *inst, CPXENVptr env, CPXLPptr lp)
 		for ( int j = i+1; j < inst->nnodes; j++ )
 		{
 			sprintf(cname[0], "x(%d,%d)", i+1,j+1);  		// ... x(1,2), x(1,3) ....
-			double obj = dist(i,j,inst); // cost == distance   
+			printf("x(%d,%d)", i + 1, j + 1);
+			double obj = dist(inst,i,j); // cost == distance   
 			double lb = 0.0;
 			double ub = 1.0;
-			/*https://www.ibm.com/docs/en/icos/22.1.0?topic=o-cpxxnewcols-cpxnewcols
+
+			//printf("dd4\n");
+			/*
 
 			int CPXnewcols: adds empty columns
 					env
@@ -58,10 +62,14 @@ void build_model(instance *inst, CPXENVptr env, CPXLPptr lp)
 			if ( CPXnewcols(env, lp, 1, &obj, &lb, &ub, &binary, cname) ) print_error(" wrong CPXnewcols on x var.s");
     		if ( CPXgetnumcols(env,lp)-1 != xpos(i,j, inst) ) print_error(" wrong position for x var.s");
 		}
+		printf("\n");
 	} 
 
 	// add the degree constraints 
 	// max 2 degree per node 
+
+	//printf("debug3\n");
+
 
 	int *index = (int *) calloc(inst->nnodes, sizeof(int));
 	double *value = (double *) calloc(inst->nnodes, sizeof(double));
@@ -80,7 +88,7 @@ void build_model(instance *inst, CPXENVptr env, CPXLPptr lp)
 			nnz++;
 		}
 		int izero = 0;
-		/*https://www.ibm.com/docs/en/icos/22.1.0?topic=cpxxaddrows-cpxaddrows
+		/*
 
 		int CPXaddrows: adds constraints
 				env
@@ -105,7 +113,7 @@ void build_model(instance *inst, CPXENVptr env, CPXLPptr lp)
 	free(cname[0]);
 	free(cname);
 
-	if ( VERBOSE >= 100 ) CPXwriteprob(env, lp, "model.lp", NULL);   
+	if ( VERBOSE >= 1 ) CPXwriteprob(env, lp, "model.lp", NULL);   
 
 }
 
@@ -128,7 +136,7 @@ int TSPopt(instance *inst)
 	if ( error ) print_error("CPXcreateprob() error");
 
     // ----- create TSP model -----
-	//build_model(inst, env, lp);
+	build_model(inst, env, lp);
 	
 	// ----- Cplex's parameter setting -----
 	set_params(inst, env);
@@ -144,6 +152,8 @@ int TSPopt(instance *inst)
 	}
 
 	// use the optimal solution found by CPLEX and prints it
+
+	printf("debug\n");
 	
 	int ncols = CPXgetnumcols(env, lp);
 	double *xstar = (double *) calloc(ncols, sizeof(double));

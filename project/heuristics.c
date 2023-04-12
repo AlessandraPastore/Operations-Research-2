@@ -30,6 +30,8 @@ int heuristic(instance *inst){
 
     }
 
+    if(strcmp(inst->heuristic, "CPLEX") == 0) return TSPopt(inst);
+
     print_error("heuristic name not appropriate");
     return 1;
 }
