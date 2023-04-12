@@ -46,7 +46,7 @@ int call(instance *inst, char name[]){
 int performance(instance *inst){
 
     FILE *out = fopen(".\\output\\perf.txt", "w");
-    if (out == NULL) printf("input file not found!");
+    if (out == NULL) printf("output directory not found!");
 
     initInstance(inst);
     fprintf(out,"3,greedy,grasp,extra\n");

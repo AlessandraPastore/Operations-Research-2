@@ -114,7 +114,7 @@ void computeCost(instance *inst)
  void plot(instance *inst, int *solution,char name[]){
 
     FILE *out = fopen(".\\output\\out.txt", "w");
-    if (out == NULL) printf("input file not found!");
+    if (out == NULL) printf("output dir not found!");
 
 
     int x=0;
