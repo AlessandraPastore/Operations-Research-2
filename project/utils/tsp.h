@@ -25,55 +25,55 @@
 //Instance
 typedef struct {
 
-    //input data
-    int nnodes;
-    double* xcoord;     
-    double* ycoord;
-    //int* index;
+	//input data
+	int nnodes;
+	double* xcoord;
+	double* ycoord;
+	//int* index;
 
-    // parameters
-    double timelimit;						// overall time limit, in sec.s
-    char input_file[1000];		  			// input file
-    char heuristic[25];                     // name of the heuristic to use
-    char cplex[25];                     // name of the heuristic to use
-    char weight_type[10];                   // weight type for distance function
+	// parameters
+	double timelimit;						// overall time limit, in sec.s
+	char input_file[1000];		  			// input file
+	char heuristic[25];                     // name of the heuristic to use
+	char cplex[25];                     // name of the heuristic to use
+	char weight_type[10];                   // weight type for distance function
 
-    int seed;                               //random seed
+	int seed;                               //random seed
 
-    double timeStart;                       //start of the computation
-    double timeEnd;                         //end of the computation
-   
+	double timeStart;                       //start of the computation
+	double timeEnd;                         //end of the computation
 
-    //costs 
-    double* cost;
 
-    //flag to see if the costs array is set, 0 if not set
-    int flagCost;
-    
-    //best sol.
-    double zbest;							// cost of best sol. available
-    double tbest;							// time for the best sol. available
-    int* best_sol;						// best sol. available
-    //double	best_lb;						// best lower bound available
+	//costs 
+	double* cost;
 
-    // model; starting point
-    int xstart;
-    int ystart;
-    int indexStart;
- 
+	//flag to see if the costs array is set, 0 if not set
+	int flagCost;
+
+	//best sol.
+	double zbest;							// cost of best sol. available
+	double tbest;							// time for the best sol. available
+	int* best_sol;						// best sol. available
+	//double	best_lb;						// best lower bound available
+
+	// model; starting point
+	int xstart;
+	int ystart;
+	int indexStart;
+
 } instance;
 
 
 //inline
-double dist(instance *inst,int index1,int index2);
-void computeCost(instance *inst);
-double get_cost(int i, int j, instance *inst);
-void plot(instance *inst, int *solution, char name[]);
-int timeOut(instance *inst, double tl);
-int checkSol(instance *inst, int *sol);
-int checkCost(instance *inst, int* sol, double c);
-void updateSol(instance *inst, double cost, int* solution);
-void reverse(instance *inst, int *solution, int a,int b);
+double dist(instance* inst, int index1, int index2);
+void computeCost(instance* inst);
+double get_cost(int i, int j, instance* inst);
+void plot(instance* inst, int* solution, char name[]);
+int timeOut(instance* inst, double tl);
+int checkSol(instance* inst, int* sol);
+int checkCost(instance* inst, int* sol, double c);
+void updateSol(instance* inst, double cost, int* solution);
+void reverse(instance* inst, int* solution, int a, int b);
 
 //cplex
 int xpos(int i, int j, instance* inst);
