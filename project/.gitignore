@@ -1,4 +1,10 @@
-# Created by https://www.toptal.com/developers/gitignore/api/visualstudio,c
+test.c
+CppProperties.json
+.vscode/
+*.png
+plot/
+# Created by https:/
+/www.toptal.com/developers/gitignore/api/visualstudio,c
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudio,c
 
 ### C ###
@@ -475,3 +481,5 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,c
 .vscode/settings.json
 output/out.txt
+
+

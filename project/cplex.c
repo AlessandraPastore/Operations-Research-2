@@ -12,7 +12,7 @@ void set_params(instance *inst, CPXENVptr env){
 
     //time limit
 	if(inst->timelimit == 0) inst->timelimit = 3600;
-    CPXsetdblparam(env, CPX_PARAM_TILIM,inst->timelimit); 
+    //CPXsetdblparam(env, CPX_PARAM_TILIM,inst->timelimit); 
 
 	// TO DO, NUM THREADS
 	// TO DO, set tree memory limit
@@ -41,12 +41,11 @@ void build_model(instance *inst, CPXENVptr env, CPXLPptr lp)
 		for ( int j = i+1; j < inst->nnodes; j++ )
 		{
 			sprintf(cname[0], "x(%d,%d)", i+1,j+1);  		// ... x(1,2), x(1,3) ....
-			printf("x(%d,%d)", i + 1, j + 1);
+			//printf("x(%d,%d)", i + 1, j + 1);
 			double obj = dist(inst,i,j); // cost == distance   
 			double lb = 0.0;
 			double ub = 1.0;
 
-			//printf("dd4\n");
 			/*
 
 			int CPXnewcols: adds empty columns
@@ -68,7 +67,6 @@ void build_model(instance *inst, CPXENVptr env, CPXLPptr lp)
 	// add the degree constraints 
 	// max 2 degree per node 
 
-	//printf("debug3\n");
 
 
 	int *index = (int *) calloc(inst->nnodes, sizeof(int));
@@ -125,6 +123,70 @@ int xpos(int i, int j, instance *inst)      // to be verified
 	return pos;
 }
 
+#define DEBUG    // comment out to avoid debugging 
+#define EPS 1e-5
+
+void build_sol(const double* xstar, instance* inst, int* succ, int* comp, int* ncomp) // build succ() and comp() wrt xstar()...
+{
+
+#ifdef DEBUG
+	int* degree = (int*)calloc(inst->nnodes, sizeof(int));
+	for (int i = 0; i < inst->nnodes; i++)
+	{
+		for (int j = i + 1; j < inst->nnodes; j++)
+		{
+			int k = xpos(i, j, inst);
+			if (fabs(xstar[k]) > EPS && fabs(xstar[k] - 1.0) > EPS ) print_error(" wrong xstar in build_sol()");
+			if (xstar[k] > 0.5)
+			{
+				++degree[i];
+				++degree[j];
+			}
+		}
+	}
+	for (int i = 0; i < inst->nnodes; i++)
+	{
+		if (degree[i] != 2) print_error("wrong degree in build_sol()");
+	}
+	free(degree);
+#endif
+
+	* ncomp = 0;
+	for (int i = 0; i < inst->nnodes; i++)
+	{
+		succ[i] = -1;
+		comp[i] = -1;
+	}
+
+	for (int start = 0; start < inst->nnodes; start++)
+	{
+		if (comp[start] >= 0) continue;  // node "start" was already visited, just skip it
+
+		// a new component is found
+		(*ncomp)++;
+		int i = start;
+		int done = 0;
+		while (!done)  // go and visit the current component
+		{
+			comp[i] = *ncomp;
+			done = 1;
+			for (int j = 0; j < inst->nnodes; j++)
+			{
+				if (i != j && xstar[xpos(i, j, inst)] > 0.5 && comp[j] == -1) // the edge [i,j] is selected in xstar and j was not visited before 
+				{
+					succ[i] = j;
+					i = j;
+					done = 0;
+					break;
+				}
+			}
+		}
+		succ[i] = start;  // last arc to close the cycle
+
+		// go to the next component...
+	}
+}
+
 int TSPopt(instance *inst)
 {  
 
@@ -140,37 +202,18 @@ int TSPopt(instance *inst)
 	
 	// ----- Cplex's parameter setting -----
 	set_params(inst, env);
+
 	
-    // TO DO choose formulation
-
-    // run CPLEX to get a solution
-	error = CPXmipopt(env,lp);
-	if ( error ) 
-	{
-		printf("CPX error code %d\n", error);
-		print_error("CPXmipopt() error"); 
-	}
-
-	// use the optimal solution found by CPLEX and prints it
-
-	printf("debug\n");
 	
-	int ncols = CPXgetnumcols(env, lp);
-	double *xstar = (double *) calloc(ncols, sizeof(double));
-	if ( CPXgetx(env, lp, xstar, 0, ncols-1) ) print_error("CPXgetx() error");	
-	for ( int i = 0; i < inst->nnodes; i++ )
-	{
-		for ( int j = i+1; j < inst->nnodes; j++ )
-		{
-			if ( xstar[xpos(i,j,inst)] > 0.5 ) printf("  ... x(%3d,%3d) = 1\n", i+1,j+1);
-		}
-	}
-	free(xstar);
+    //choose formulation
+	if (strcmp(inst->heuristic, "BENDERS") == 0) return benders();
+
+	
 	
 	// free and close cplex model   
 	CPXfreeprob(env, &lp);
 	CPXcloseCPLEX(&env); 
 
-	return 0; // or an appropriate nonzero error code
+	return 0; 
 
 }

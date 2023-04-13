@@ -35,6 +35,7 @@ typedef struct {
     double timelimit;						// overall time limit, in sec.s
     char input_file[1000];		  			// input file
     char heuristic[25];                     // name of the heuristic to use
+    char cplex[25];                     // name of the heuristic to use
     char weight_type[10];                   // weight type for distance function
 
     int seed;                               //random seed
@@ -73,4 +74,10 @@ int checkSol(instance *inst, int *sol);
 int checkCost(instance *inst, int* sol, double c);
 void updateSol(instance *inst, double cost, int* solution);
 void reverse(instance *inst, int *solution, int a,int b);
+
+//cplex
+int xpos(int i, int j, instance* inst);
+void build_sol(const double* xstar, instance* inst, int* succ, int* comp, int* ncomp); // build succ() and comp() wrt xstar()...
+
+
 #endif   /* TSP_H_ */

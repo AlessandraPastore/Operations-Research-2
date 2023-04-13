@@ -13,14 +13,20 @@ int main(int argc, char** argv)
 	
 	
 	//performance(&inst);
-	inst.timeStart = second();
 	read_input(&inst);
+	inst.timeStart = second();
+	
 	
 
 	
 	if(strcmp(inst.heuristic, "NULL")){
 		printf("- - - Solving a heuristic: %s - - - \n", inst.heuristic);
 		if(heuristic(&inst)) print_error("ERROR IN HEURISTIC");
+	}
+
+	if (strcmp(inst.cplex, "NULL")) {
+		printf("- - - Solving an exact model: %s - - - \n", inst.cplex);
+		if (TSPopt(&inst)) print_error("ERROR IN CPLEX");
 	}
 	
 

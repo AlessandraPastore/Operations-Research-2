@@ -12,8 +12,8 @@ int heuristic(instance *inst){
     if(strcmp(inst->heuristic, "VNS") == 0)   {
         
         grasp(inst, 0, inst->timelimit / 10); //to modify, how much time do we actually want to use?
-        opt_2(inst, inst->timelimit, inst->best_sol, &(inst->zbest)); //TIME DA MODIFICARE
-        return VNS(inst);
+        opt_2(inst, inst->timelimit, inst->best_sol, &(inst->zbest)); //TIME DA MODIFICARE!!
+        return VNS(inst);   //TIME DA MODIFICARE DENTRO A 2_OPT!!
 
     }
     if(strcmp(inst->heuristic, "TABU") == 0)   {
@@ -30,8 +30,12 @@ int heuristic(instance *inst){
 
     }
 
-    if(strcmp(inst->heuristic, "CPLEX") == 0) return TSPopt(inst);
+    
 
     print_error("heuristic name not appropriate");
     return 1;
+}
+
+int cplex(instance* inst) {
+    if (strcmp(inst->cplex, "CPLEX") == 0) return TSPopt(inst);
 }

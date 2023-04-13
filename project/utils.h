@@ -35,6 +35,8 @@ int performance(instance *inst);
 int annealing(instance *inst,double tl);
 
 //cplex
+//int cplex(instance* inst);
+
 int TSPopt(instance *inst);
 
 #endif
