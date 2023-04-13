@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "../utils/utils.h"
 
 #define POPULATION 50
 #define OFFSPRING_RATE 0.5

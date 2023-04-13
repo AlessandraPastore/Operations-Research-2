@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "../utils/utils.h"
 
 //Sets in a and b the index of the nodes of the diameter (max cost)
 double diameter(instance *inst, int *a, int *b)

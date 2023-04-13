@@ -118,25 +118,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="chrono.c" />
-    <ClCompile Include="cplex.c" />
-    <ClCompile Include="c_benders.c" />
-    <ClCompile Include="heuristics.c" />
-    <ClCompile Include="h_annealing.c" />
-    <ClCompile Include="h_extra_mileage.c" />
-    <ClCompile Include="h_genetic.c" />
-    <ClCompile Include="h_greedy.c" />
-    <ClCompile Include="h_opt2.c" />
-    <ClCompile Include="h_tabu.c" />
-    <ClCompile Include="h_VNS.c" />
-    <ClCompile Include="input.c" />
+    <ClCompile Include="utils\chrono.c" />
+    <ClCompile Include="cplex\cplex.c" />
+    <ClCompile Include="cplex\c_benders.c" />
+    <ClCompile Include="heuristics\heuristics.c" />
+    <ClCompile Include="heuristics\h_annealing.c" />
+    <ClCompile Include="heuristics\h_extra_mileage.c" />
+    <ClCompile Include="heuristics\h_genetic.c" />
+    <ClCompile Include="heuristics\h_greedy.c" />
+    <ClCompile Include="heuristics\h_opt2.c" />
+    <ClCompile Include="heuristics\h_tabu.c" />
+    <ClCompile Include="heuristics\h_VNS.c" />
+    <ClCompile Include="utils\input.c" />
     <ClCompile Include="main.c" />
-    <ClCompile Include="performance.c" />
-    <ClCompile Include="tsp.c" />
+    <ClCompile Include="utils\performance.c" />
+    <ClCompile Include="utils\tsp.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tsp.h" />
-    <ClInclude Include="utils.h" />
+    <ClInclude Include="utils\tsp.h" />
+    <ClInclude Include="utils\utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

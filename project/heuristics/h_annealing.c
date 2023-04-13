@@ -1,5 +1,4 @@
-#include "utils.h"
-#include "math.h"
+#include "../utils/utils.h"
 
 
 #define alpha 0.99
@@ -31,10 +30,10 @@ int annealing(instance *inst,double tl)
    
     do{
     
-        i=rand()%inst->nnodes;
+        i = rand() % inst->nnodes;
         do
         {
-            j=rand()%inst->nnodes;
+            j = rand() % inst->nnodes;
 
         } while (i==j);
         

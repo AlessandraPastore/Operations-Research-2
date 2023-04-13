@@ -15,57 +15,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="chrono.c">
+    <ClCompile Include="utils\chrono.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cplex.c">
+    <ClCompile Include="cplex\cplex.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="heuristics.c">
+    <ClCompile Include="heuristics\heuristics.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="h_annealing.c">
+    <ClCompile Include="heuristics\h_annealing.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="h_extra_mileage.c">
+    <ClCompile Include="heuristics\h_extra_mileage.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="h_genetic.c">
+    <ClCompile Include="heuristics\h_genetic.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="h_greedy.c">
+    <ClCompile Include="heuristics\h_greedy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="h_opt2.c">
+    <ClCompile Include="heuristics\h_opt2.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="h_tabu.c">
+    <ClCompile Include="heuristics\h_tabu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="h_VNS.c">
+    <ClCompile Include="heuristics\h_VNS.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="input.c">
+    <ClCompile Include="utils\input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="performance.c">
+    <ClCompile Include="utils\performance.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="tsp.c">
+    <ClCompile Include="utils\tsp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="c_benders.c">
+    <ClCompile Include="cplex\c_benders.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tsp.h">
+    <ClInclude Include="utils\tsp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="utils.h">
+    <ClInclude Include="utils\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

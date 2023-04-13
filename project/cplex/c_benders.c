@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "../utils/utils.h"
 #include <cplex.h>
 
 int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
