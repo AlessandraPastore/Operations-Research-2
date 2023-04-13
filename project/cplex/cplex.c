@@ -1,5 +1,4 @@
 #include "../utils/utils.h"
-#include <cplex.h>
 
 //TO DO
 void set_params(instance* inst, CPXENVptr env) {
@@ -111,7 +110,7 @@ void build_model(instance* inst, CPXENVptr env, CPXLPptr lp)
 	free(cname[0]);
 	free(cname);
 
-	if (VERBOSE >= 1) CPXwriteprob(env, lp, "model.lp", NULL);
+	if (VERBOSE >= 50) CPXwriteprob(env, lp, "model.lp", NULL);
 
 }
 
@@ -206,7 +205,7 @@ int TSPopt(instance* inst)
 
 
 	//choose formulation
-	if (strcmp(inst->heuristic, "BENDERS") == 0) return benders();
+	if (strcmp(inst->cplex, "BENDERS") == 0) return benders(inst, env, lp);
 
 
 

@@ -156,6 +156,7 @@ void parse_command_line(int argc, char** argv, instance* inst)
 	inst->timelimit = 0;
 	inst->seed = -1;
 	strcpy(inst->heuristic, "NULL");
+	strcpy(inst->cplex, "NULL");
 
 
 	int help = 0; if (argc < 1) help = 1;
@@ -164,6 +165,7 @@ void parse_command_line(int argc, char** argv, instance* inst)
 		if (strcmp(argv[i], "-f") == 0) { strcpy(inst->input_file, argv[++i]); continue; } 			// input file
 		if (strcmp(argv[i], "-tl") == 0) { inst->timelimit = atof(argv[++i]); continue; }		// time limit
 		if (strcmp(argv[i], "-h") == 0) { strcpy(inst->heuristic, argv[++i]); continue; } 		// heuristic to run
+		if (strcmp(argv[i], "-c") == 0) { strcpy(inst->cplex, argv[++i]); continue; } 		// exact algorithm to run
 		if (strcmp(argv[i], "-seed") == 0) { inst->seed = atof(argv[++i]); continue; } 		//  random seed
 		if (strcmp(argv[i], "-help") == 0) { help = 1; continue; } 									// help
 		if (strcmp(argv[i], "--help") == 0) { help = 1; continue; } 									// help

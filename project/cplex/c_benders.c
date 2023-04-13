@@ -1,7 +1,9 @@
 #include "../utils/utils.h"
-#include <cplex.h>
+
 
 int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
+
+	printf("--- starting Benders ---\n");
 
 	int ncols = CPXgetnumcols(env, lp);
 
@@ -15,8 +17,6 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	int* comp = (int*)malloc(inst->nnodes * sizeof(int));
 	int ncomp = 0;
 
-
-	//BENDERS
 	do {
 
 		double start = second();
@@ -56,7 +56,8 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 
 
 
-	} while (!timeOut(inst, inst->timelimit));
+	} while (0);
+	//while (!timeOut(inst, inst->timelimit));
 
 
 	free(succ);

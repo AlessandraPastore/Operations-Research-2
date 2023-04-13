@@ -6,6 +6,7 @@
 
 #include "tsp.h"
 
+
 //chrono.c
 double second();
 
@@ -35,8 +36,7 @@ int performance(instance* inst);
 int annealing(instance* inst, double tl);
 
 //cplex
-//int cplex(instance* inst);
-
 int TSPopt(instance* inst);
+int benders(instance* inst, CPXENVptr env, CPXLPptr lp);
 
 #endif
