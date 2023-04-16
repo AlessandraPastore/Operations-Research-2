@@ -7,10 +7,9 @@ void free_instance(instance* inst)
 {
 	free(inst->xcoord);
 	free(inst->ycoord);
-	//free(inst->index);
-	free(inst->best_sol);
 	free(inst->cost);
-
+	free(inst->best_sol);
+	
 }
 
 //simple parser for TSPLIB 

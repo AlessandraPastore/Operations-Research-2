@@ -1,9 +1,10 @@
 #include "../utils/utils.h"
 
-void SEC(instance *inst, CPXENVptr env, CPXLPptr lp, int ncomp, int *comp) {
+void SEC(instance *inst, CPXENVptr env, CPXLPptr lp, int ncomp, int *comp, int ncols, int it) {
 
-	int* index = (int*)calloc(inst->nnodes, sizeof(int));
-	double* value = (double*)calloc(inst->nnodes, sizeof(double));
+	int* index = (int*)malloc(ncols * sizeof(int));
+	double* value = (double*)malloc(ncols * sizeof(double));
+	
 
 
 	//int nnz = 0;
@@ -25,10 +26,11 @@ void SEC(instance *inst, CPXENVptr env, CPXLPptr lp, int ncomp, int *comp) {
 		int nnz = 0;
 		int izero = 0;
 
-		memset(index, 0, inst->nnodes * sizeof(int));
-		memset(value, 0, inst->nnodes * sizeof(double));
+		//memset(index, 0, ncols * sizeof(int));
+		//memset(value, 0, ncols * sizeof(double));
+		
 
-		sprintf(cname[0], "sec(%d)",k);
+		sprintf(cname[0], "sec(%d,%d)",it,k);
 
 		for (int i = 0; i < inst->nnodes; i++) {
 			if (comp[i] != k) continue;
@@ -52,8 +54,7 @@ void SEC(instance *inst, CPXENVptr env, CPXLPptr lp, int ncomp, int *comp) {
 
 		printf("rhs = %f\n", rhs);
 
-		if (CPXaddrows(env, lp, 0, 1, nnz, &rhs, &sense, &izero, index, value, NULL, &cname[0])) print_error("CPXaddrows(): error 1");
-
+		if(CPXaddrows(env, lp, 0, 1, nnz, &rhs, &sense, &izero, index, value, NULL, cname)) print_error("CPXaddrows(): error 1");
 		
 	}
 
@@ -87,6 +88,8 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	//components vector
 	int* comp = (int*)malloc(inst->nnodes * sizeof(int));
 	int ncomp = 0;
+
+	int it = 0;
 
 	do {
 		double start = second();
@@ -123,12 +126,31 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 
 		if (ncomp == 1) break;
 
-		SEC(inst, env, lp, ncomp, comp);
+		SEC(inst, env, lp, ncomp, comp, ncols, it);
+
+		it++;
 
 
 
-	} while (1);
-	//while (!timeOut(inst, inst->timelimit));
+	} while (!timeOut(inst, inst->timelimit));
+
+	double objval = -1;
+	if (CPXgetobjval(env, lp, &objval)) print_error("CPXgetx() error");
+
+	if (VERBOSE >= 10) {
+		if (checkSol(inst, succ)) return 1;
+		if (checkCost(inst, succ, objval)) return 1;
+	}
+
+	//if current cost is better, update best solution
+	if (inst->zbest == -1 || inst->zbest > objval) {
+		updateSol(inst, objval, succ);
+	}
+
+	if (VERBOSE >= 1) printf("BEST SOLUTION FOUND\nCOST: %f\n", inst->zbest);
+
+	plot(inst, succ, "benders");
+
 
 
 

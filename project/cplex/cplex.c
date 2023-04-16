@@ -19,6 +19,8 @@ void set_params(instance* inst, CPXENVptr env) {
 
 void build_model(instance* inst, CPXENVptr env, CPXLPptr lp)
 {
+	if (!inst->flagCost)
+		computeCost(inst);
 
 
 	//double zero = 0.0;  
@@ -40,7 +42,7 @@ void build_model(instance* inst, CPXENVptr env, CPXLPptr lp)
 		{
 			sprintf(cname[0], "x(%d,%d)", i + 1, j + 1);  		// ... x(1,2), x(1,3) ....
 			//printf("x(%d,%d)", i + 1, j + 1);
-			double obj = dist(inst, i, j); // cost == distance   
+			double obj = get_cost(i, j, inst); // cost == distance   
 			double lb = 0.0;
 			double ub = 1.0;
 
@@ -124,6 +126,7 @@ int xpos(int i, int j, instance* inst)      // to be verified
 #define DEBUG    // comment out to avoid debugging 
 #define EPS 1e-5
 
+// ----- Transforms xstar to succ and comp -----
 void build_sol(const double* xstar, instance* inst, int* succ, int* comp, int* ncomp) // build succ() and comp() wrt xstar()...
 {
 
@@ -149,7 +152,7 @@ void build_sol(const double* xstar, instance* inst, int* succ, int* comp, int* n
 	free(degree);
 #endif
 
-	* ncomp = 0;
+	*ncomp = 0;
 	for (int i = 0; i < inst->nnodes; i++)
 	{
 		succ[i] = -1;
@@ -205,6 +208,15 @@ int TSPopt(instance* inst)
 
 	//choose formulation
 	if (strcmp(inst->cplex, "BENDERS") == 0) return benders(inst, env, lp);
+	else {
+		print_error("exact method name not appropriate");
+
+		// free and close cplex model   
+		CPXfreeprob(env, &lp);
+		CPXcloseCPLEX(&env);
+
+		return 1;
+	}
 
 
 
