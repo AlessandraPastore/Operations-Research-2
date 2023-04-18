@@ -1,5 +1,8 @@
 \input{model/Modello_Tesi}
 
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
 \begin{document}
 
 \renewcommand{\contentsname}{Index}
@@ -67,11 +70,6 @@
 \chapter{Heuristic Algorithms} 
 \label{chapter:heuristics} 
 \input{heuristics.tex} 
-
-\clearpage{\pagestyle{plain}\cleardoublepage} %Comando per iniziare il capitolo su pagina dispari
-\chapter{Primo Capitolo} %Nome capitolo
-\label{chapter:primo_capitolo} %Label per creare riferimenti al capitolo
-\input{intro_cap1.tex} %File in cui verrà scritto il capitolo
 
 
 \clearpage{\pagestyle{plain}\cleardoublepage}
