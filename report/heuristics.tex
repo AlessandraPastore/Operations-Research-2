@@ -162,9 +162,9 @@ The Farthest Insertion algorithm has a worst-case time complexity of $O(n^2)$, w
 One of the most popular heuristic algorithms for solving the TSP is the 2-opt algorithm.
 The 2-opt algorithm is a local search algorithm that iteratively improves an initial tour by swapping pairs of edges to reduce the length of the tour. The algorithm starts by generating an initial tour, such as one produced by the Nearest Neighbor or Farthest Insertion algorithm. It then repeatedly examines all possible pairs of edges in the tour, and if swapping a pair of edges will reduce the length of the tour, the edges are swapped.
 
-More specifically, the 2-opt algorithm works as follows: first, it generates an initial solution, in our implementation we choose to generate it using the multistart Nearest Neighbor algorithm paired with a GRASP approach. It then examines all pairs of edges $(a,a’)$ and $(b,b’)$, where $a,a’,b$ and $b’$ are distinct nodes. If swapping the edges $(a,a’)$ and $(b,b’)$ will result in a shorter tour, the edges are swapped, and the algorithm continues to search for other pairs of edges to swap. This process is repeated until no further improvements can be made to the tour or until the time limit permits.
+More specifically, the 2-opt algorithm works as follows: first, it generates an initial solution, in our implementation we choose to generate it using the multistart Nearest Neighbor algorithm paired with a GRASP approach. It then examines all pairs of edges $(a,a')$ and $(b,b')$, where $a,a',b$ and $b'$ are distinct nodes. If swapping the edges $(a,a')$ and $(b,b')$ will result in a shorter tour, the edges are swapped, and the algorithm continues to search for other pairs of edges to swap. This process is repeated until no further improvements can be made to the tour or until the time limit permits.
 
-To know that a certain swap results in a better solution, the algorithm computes $\Delta \operatorname{c}(a,b) = (c_{ab} + c_{a’b’}) - (c_{aa’} + c_{bb’})$ and if it is negative then we found some good candidates, meaning that the new candidates edges would be shorter than the current ones.
+To know that a certain swap results in a better solution, the algorithm computes $\Delta \operatorname{c}(a,b) = (c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$ and if it is negative then we found some good candidates, meaning that the new candidates edges would be shorter than the current ones.
 
 After the swap, the algorithm then changes the order of the successor in the tour to make $b$ connect to $a$ and obtain a new solution, as in fig \ref{fig:2OPT}.
 
@@ -212,13 +212,145 @@ After the swap, the algorithm then changes the order of the successor in the tou
 The 2-opt algorithm is known to be effective in practice, and it has been used to solve many large-scale instances of the TSP. The algorithm is relatively efficient, with a time complexity of $O(n^2)$, where $n$ is the number of nodes in the graph.
 
 The same idea goes behind the more general k-OPT Refining algorithm, where instead of swapping only 2 edges at the time, k edges are selected and swapped. For example, 3-opt involves swapping three edges in the tour, while 4-opt involves swapping four edges. By considering larger sets of edges, k-opt can potentially find more optimal solutions than 2-opt, but it is also computationally more expensive.
+\begin{algorithm}[h!]
+    \caption{2-OPT}\label{algo:2-OPT}
+    \begin{algorithmic}[1]
+    \Require $G = (V,E), c:E \to \mathbb{R}^+$
+    \Ensure $\text{sub optimal TSP solution}$
+
+
+    \State $solution \gets$ GRASP()
+    \State $cost \gets$ cost\textunderscore grasp()
+    
+
+    \While{$ !time\textunderscore expired  $}
+    \State $\Delta\textunderscore temp \gets$ 0
+    \State $edge\textunderscore 1 \gets$ empty
+    \State $edge\textunderscore 2 \gets$ empty
+    \ForEach {$(a,a') \in E $ }
+        \ForEach {$(b,b') \neq (a,a')\in E $}
+        \State $\Delta \operatorname{c}(a,b) \gets$  $(c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$
+        \If{$\Delta\textunderscore temp  > \Delta \operatorname{c}(a,b) $}
+        \State $edge\textunderscore 1 \gets$ (a,a')
+        \State $edge\textunderscore 2 \gets$ (b,b')
+        \State $\Delta\textunderscore temp \gets$ $\Delta \operatorname{c}(a,b)$
+        \EndIf
+        \EndFor
+    \EndFor
+    
+    \If{ $\Delta\textunderscore temp  <0$}
+    \State $swap(edge\textunderscore 1,edge\textunderscore 2) $ // swap the selected (a,a'), (b,b') as shown in figure \ref{fig:2OPT}
+    \State $cost \gets  $ $cost$ + $\Delta\textunderscore temp$
+    \EndIf
+    
+
+    \EndWhile
+
+    \end{algorithmic}
+\end{algorithm}
 
 
 
+\section{Metaheuristics}
+\subsection{Variable Neighborhood Search}
+The Variable Neighborhood Search (VNS), proposed by Mladenović and Hansen in 1997,  is a metaheuristic optimization algorithm used to solve combinatorial optimization problems. The basic idea of VNS is to iteratively apply a perturbation operator to the current solution and then perform a local search around the perturbed solution. VNS is known for its flexibility and ability to escape from local optima by exploring different neighborhood structures.
+In our implementation the VNS algorithm tries to improve the solution made by the 2-opt algorithm. In order to try to escape from the local minima produced by the 2-opt, the algorithm performs for two times a random swap of 5 edges. 
+Then it reapplies the 2-opt procedure and if it finds a better solution it updates the global solution.
+The overall procedure is applied until a certain time limit is reached.
+The algorithm requires O(n) time for each kick, because after the swap operation we have to update the structure that contains all the nodes of the graph. We have also to sum the time required by the 2-opt algorithm. This time at the end has to be multiplied by the number of iterations that this procedure is performed. 
+
+\begin{algorithm}[h!]
+    \caption{VNS}\label{algo:VNS}
+    \begin{algorithmic}[1]
+    \Require $G = (V,E), c:E \to \mathbb{R}^+$
+    \Ensure $\text{sub optimal TSP solution}$
 
 
+    \State $solution \gets$ 2-opt()
+   
+   
+    \While{$ !time\textunderscore expired$}
+    \State kick(solution) 
+    \State kick(solution)  
+    \State $ solution \gets $ 2-opt(solution)
+    
+    
+    \If{cost(solution) < cost(best\textunderscore solution)}
+    \State $ best\textunderscore solution \gets$ solution
+    \EndIf
+    
+
+    \EndWhile
+
+    \end{algorithmic}
+\end{algorithm}
+
+
+
+\subsection{Tabu}
+Tabu search is based on the concept of "tabu" which means "prohibited" or "forbidden". The algorithm maintains a tabu list that keeps track of recent moves that are prohibited from being repeated. 
+Tabu search is known for its ability to find good-quality solutions in a relatively short amount of time, although it does not guarantee finding the optimal solution.
+The algorithm starts with an initial solution, which can be generated randomly or by using a construction heuristic. In our implementation the initial solution is generated by the grasp heuristic.
+In our case at every iteration of the algorithm we select the pair of edges that have the minimum value of delta (delta= as in 2 opt). In this case it doesn't matter if the delta is negative or positive, we only took the minimum delta of the nodes that are not marked as “tabu”.  Then after every swap we select in a random way one of the four nodes involved in the swap operation, and it is inserted into the “tabu” list.
+The tabu list is updated during the search process to prevent cycling, which is repeatedly revisiting the same solutions. This allows tabu search to diversify the search and explore different regions of the solution space. Thanks to this feature the algorithm can move around the solution space, avoid being stuck in local minimum, and so try to find a better solution value.
+In order to implement the tabu list we create a list of length equals to the number of the nodes of the graph. Every time a node is selected to be a “tabu node” we set it corespective element of the list equals to the number of the current iteration. Then this node cannot be involved in any swap operations until the number of the next iterations have overcome the value of a parameter called “Tmax”. This parameter indicates the number of iterations for which the various nodes selected as forbidden cannot be selected in a swap operation.
+The value of Tmax is equivalent to the minimum between 100 and the number of nodes divided by 10.
+Each swap requires time equal to O(n) to rearrange the array containing the actual solution. So the overall complexity is equal to O(n*number of swaps).
+The algorithm stops its iteration after a given time limit.
+
+
+
+\subsection{Simulated Annealing}
+
+Simulated annealing is a metaheuristic optimization algorithm that can be used to solve the Traveling Salesman Problem (TSP).
+The name of the algorithm comes from annealing in metallurgy, a technique involving heating and controlled cooling of a material to alter its physical properties. This technique usually archives an approximate solution to the global minimum.
+The algorithm starts with an initial solution, which can be generated randomly or using a heuristic, in our case we use the output of the Grasp heuristic as the initial solution.
+The algorithm at each iteration selects in a random way two edges (a,a'),(b,b'), where $a,a',b$ and $b'$ are distinct nodes. Then swap it (as shown in figure \ref{fig:2OPT} ) depending on a probability function that depends on a parameter called Temperature (T).
+In our implementation the initial value for the temperature is equal to the Cost of the solution found by the grasp algorithm, split by the number of nodes of the instance of the current TSP problem. At each iteration the temperature is multiplied by a factor alpha equals to 0.99. If the algorithm keeps going after 100 iterations, the temperature is set to its initial value.
+At each iteration the algorithm checks $\Delta \operatorname{c}(a,b) = (c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$, that is the new cost of swapping the two edges, clearly this parameter delta may be positive or negative. If the value of delta is negative, that is swapping the two edges the value of the solution is better, the algorithm makes the swap. Otherwise if the value of delta is positive the exchange depends on the value of the following probability function: $e^{\frac{-\Delta \operatorname{c}(a,b)}{T}}$.
+Each swap requires time equal to O(n) to rearrange the array containing the actual solution. So the overall complexity is equal to O(n*number of swaps).
+The algorithm stops its iteration after a given time limit.
 
 	
+\begin{algorithm}[h!]
+    \caption{Simulated annealing}\label{algo:SimulatedAnnealing}
+    \begin{algorithmic}[1]
+    \Require $G = (V,E), c:E \to \mathbb{R}^+$
+    \Ensure $\text{sub optimal TSP solution}$
 
+
+    \State $solution \gets$ GRASP()
+    \State $cost \gets$ cost\textunderscore grasp()
+    \State $T \textunderscore initial \gets  $ cost/$|$V$|$ 
+    \State $T \gets  $ T\textunderscore initial
+    \State $ \alpha \gets $ 0.99
+    \State $ iteration \gets $ 0
+   
+
+
+
+
+    \While{$ !time\textunderscore expired$}
+    \State $(a,a') \gets $ random edge
+    \State $(b,b') \gets $ random edge 
+    \State $p \gets $ random(0,1) // random value from 0 to 0.99
+    \State $\Delta \operatorname{c}(a,b) \gets$  $(c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$
+    
+    \If{ p $\leq$ $e^{\frac{-\Delta \operatorname{c}(a,b)}{T}}$}
+    \State $cost \gets$ cost + $\Delta \operatorname{c}(a,b) $
+    \State $swap(a,b)$ // swap the edge as shown in figure \ref{fig:2OPT}
+    \EndIf
+    \State $T \gets $ T*$\alpha$
+    \State $iteration \gets $ iteration + 1
+    \If{ iteration $\geq$ 100}
+    \State $T \gets  $ T\textunderscore initial
+    \State $iteration \gets  $ 0
+    \EndIf
+    
+
+    \EndWhile
+
+    \end{algorithmic}
+\end{algorithm}
 
 
