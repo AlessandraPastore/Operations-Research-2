@@ -28,6 +28,8 @@ int grasp(instance* inst, int greedy, double tl)
 
 	}
 
+	int iter = 0;
+
 
 	do {
 
@@ -41,8 +43,12 @@ int grasp(instance* inst, int greedy, double tl)
 		double minDist = INFBOUND;
 		double minDist2 = INFBOUND;
 
+		int current;
+
 		//start node at random
-		int current = rand() % inst->nnodes;
+		if (greedy) current = iter;
+		else current = rand() % inst->nnodes;
+		
 		int start = current;
 
 		if (VERBOSE >= 100)   printf("start %d - ", current);
@@ -127,7 +133,11 @@ int grasp(instance* inst, int greedy, double tl)
 			inst->indexStart = start;
 		}
 
-	} while (!timeOut(inst, tl));
+		iter++;
+
+	} while (!timeOut(inst, tl) && iter*greedy < inst->nnodes);
+
+	if (VERBOSE >= 50) printf("iter: %d\n", iter);
 
 	if (VERBOSE >= 10) printf("timeOut greedy: %f    that should be tl: %f\n", second() - inst->timeStart, tl);
 	if (VERBOSE >= 1) printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n", inst->indexStart, inst->zbest);

@@ -1,9 +1,9 @@
 #include "../utils/utils.h"
 
-#define POPULATION 50
+#define POPULATION 100
 #define OFFSPRING_RATE 0.5
 #define MUTATION_RATE 0.04
-#define MAX_GEN 100
+#define MAX_GEN 1000
 
 
 // member of the population

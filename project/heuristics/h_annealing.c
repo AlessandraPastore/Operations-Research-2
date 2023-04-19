@@ -72,10 +72,10 @@ int annealing(instance* inst, double tl)
 	plot(inst, solution, "annealing");
 
 
-	if (VERBOSE >= 10) printf("zbest: %f, cost: %f\n", inst->zbest, newCost);
+	//if (VERBOSE >= 10) printf("zbest: %f, cost: %f\n", inst->zbest, newCost);
 
 	if (VERBOSE >= 1 && newCost < oldCost)
-		printf("Tabu IMROVEMENT: old cost %f --> new cost %f\n", oldCost, newCost);
+		printf("Simulated Annealing IMROVEMENT: old cost %f --> new cost %f\n", oldCost, inst->zbest);
 	else
 		printf("no improvment\n");
 	return 0;
