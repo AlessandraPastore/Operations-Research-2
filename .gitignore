@@ -1,3 +1,4 @@
 report/Tesi.pdf
 .vscode/
 *.lp
+/project/output/outPerf.txt

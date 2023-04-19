@@ -6,15 +6,6 @@ void SEC(instance *inst, CPXENVptr env, CPXLPptr lp, int ncomp, int *comp, int n
 	double* value = (double*)malloc(ncols * sizeof(double));
 	
 
-
-	//int nnz = 0;
-	//int sk = 0;	//size of each component
-
-	//int izero = 0;
-
-	//char sense = 'L'; // <= constraint
-	//double rhs = 0;
-
 	//colname parameter for CPXnewcols
 	char** cname = (char**)calloc(1, sizeof(char*));		// (char **) required by cplex... array of 1 pointer
 	cname[0] = (char*)calloc(100, sizeof(char));
@@ -25,9 +16,6 @@ void SEC(instance *inst, CPXENVptr env, CPXLPptr lp, int ncomp, int *comp, int n
 		double sk = 0.0;
 		int nnz = 0;
 		int izero = 0;
-
-		//memset(index, 0, ncols * sizeof(int));
-		//memset(value, 0, ncols * sizeof(double));
 		
 
 		sprintf(cname[0], "sec(%d,%d)",it,k);
@@ -45,14 +33,8 @@ void SEC(instance *inst, CPXENVptr env, CPXLPptr lp, int ncomp, int *comp, int n
 			}
 		}
 
-		printf("k = %d\n",k);
-		printf("nnz = %d\n", nnz);
-		printf("sk = %f\n", sk);
-
 
 		double rhs = sk - 1;	// |S|-1
-
-		printf("rhs = %f\n", rhs);
 
 		if(CPXaddrows(env, lp, 0, 1, nnz, &rhs, &sense, &izero, index, value, NULL, cname)) print_error("CPXaddrows(): error 1");
 		

@@ -101,6 +101,8 @@ int VNS(instance* inst) {
 
 	double oldCost;
 
+	int iteration = 0;
+
 	//solution copies the actual local minimum
 	memcpy(solution, inst->best_sol, sizeof(int) * inst->nnodes);
 
@@ -123,6 +125,11 @@ int VNS(instance* inst) {
 
 		//printf("- - entering opt2 - -\n");
 		opt_2(inst, inst->timelimit, solution, &cost); //to change tl
+		
+		//add to plot newCost
+		if (iteration < 25)	addToPlot(cost, iteration);
+
+		iteration++;
 
 
 	} while (!timeOut(inst, inst->timelimit));
@@ -135,6 +142,8 @@ int VNS(instance* inst) {
 
 	//best sol found
 	plot(inst, inst->best_sol, "VNS_BestSol");
+
+	plotPerf("VNSPerf");
 
 
 

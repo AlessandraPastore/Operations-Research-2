@@ -114,8 +114,8 @@ double get_cost(int i, int j, instance* inst) {
 void plot(instance* inst, int* solution, char name[]) {
 
 	FILE* out = fopen(".\\output\\out.txt", "w");
-	if (out == NULL) printf("output dir not found!");
-
+	if (out == NULL) print_error("output dir not found!");
+	
 
 	int x = 0;
 	for (int i = 0; i < inst->nnodes; i++) {
@@ -140,6 +140,50 @@ void plot(instance* inst, int* solution, char name[]) {
 	fprintf(commands, "    linetype 1 linewidth 2 \\\n");
 	fprintf(commands, "    pointtype 7 pointsize 2\n");
 	fprintf(commands, "plot \"./output/out.txt\" with linespoint linestyle 1\n");
+
+
+
+	fclose(commands);
+	system("gnuplot ./plot/commands.txt");
+}
+
+void addToPlot(double obj, int iter) {
+
+	char mode[3];
+	if (iter == 0) {
+		//mode = "w";
+		strcpy(mode, "w");
+	}
+	else strcpy(mode, "a+");
+
+	FILE* out = fopen(".\\output\\outPerf.txt", mode);
+	
+	if (out == NULL) {
+		print_error("output dir not found!");
+		//return;
+	}
+
+	
+
+	fprintf(out, "%d %f\n", iter, obj);
+
+	
+
+	fclose(out);
+}
+
+void plotPerf(char name[]) {
+	//da modificare o aggiungere una funzione per creare il file commands.txt
+	//GNUPLOT to cmd
+	FILE* commands = fopen(".\\plot\\commands.txt", "w+");
+
+	fprintf(commands, "set terminal png\n");
+	fprintf(commands, "set output \"./plot/%s.png\"\n", name);
+	fprintf(commands, "set style line 1 \\\n");
+	fprintf(commands, "    linecolor rgb'#FF0000' \\\n");
+	fprintf(commands, "    linetype 1 linewidth 2 \\\n");
+	fprintf(commands, "    pointtype 7 pointsize 2\n");
+	fprintf(commands, "plot \"./output/outPerf.txt\" with linespoint linestyle 1\n");
 
 
 

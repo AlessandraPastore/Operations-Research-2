@@ -27,6 +27,7 @@ int TABU(instance* inst, double tl)
 		tabu[i] = MAX;
 
 	double oldCost = inst->zbest;
+	printf("----- OPT2: %f -----\n", inst->zbest);
 
 	//solution copies the actual local minimum
 	memcpy(solution, inst->best_sol, sizeof(int) * inst->nnodes);
@@ -48,7 +49,7 @@ int TABU(instance* inst, double tl)
 
 						double deltaTemp = get_cost(i, j, inst) + get_cost(solution[j], solution[i], inst) - (get_cost(i, solution[i], inst) + get_cost(j, solution[j], inst));
 
-						if (deltaTemp < delta)
+						if (deltaTemp!=0 && deltaTemp < delta)
 						{
 
 							delta = deltaTemp;
@@ -81,29 +82,38 @@ int TABU(instance* inst, double tl)
 
 		}
 
-		iteration++;
+		
 
 		if (VERBOSE >= 10) {
 			if (checkSol(inst, solution)) return 1;
 			if (checkCost(inst, solution, newCost)) return 1;
 		}
-
+		
 		//update solution
 		if (inst->zbest == -1 || inst->zbest > newCost) {
 			updateSol(inst, newCost, solution);
 		}
 
+		//add to plot newCost
+		addToPlot(newCost, iteration);
+		printf("----- new: %f -----\n", newCost);
+		
+
+		iteration++;
+
 	} while (!timeOut(inst, tl));
 
 	printf("it: %d\n", iteration);
 
+	plotPerf("TabuPerf");
 
-	if (VERBOSE >= 10) printf("zbest: %f, cost: %f\n", inst->zbest, newCost);
+
+	//if (VERBOSE >= 10) printf("zbest: %f, cost: %f\n", inst->zbest, newCost);
 
 	plot(inst, solution, "Tabu");
 
-	if (VERBOSE >= 1 && newCost < oldCost)
-		printf("Tabu IMROVEMENT: old cost %f --> new cost %f\n", oldCost, newCost);
+	if (VERBOSE >= 1 && inst->zbest < oldCost)
+		printf("Tabu IMROVEMENT: old cost %f --> new cost %f\n", oldCost, inst->zbest);
 	else
 		printf("no improvment\n");
 	return 0;
