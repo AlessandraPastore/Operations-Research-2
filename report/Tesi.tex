@@ -1,4 +1,14 @@
-\input{model/Modello_Tesi}
+\documentclass[a4paper,12pt]{book}
+
+
+%Pacchetti utili
+\input{model/packages.tex}
+
+%Nuovi comandi
+\input{model/new_commands.tex}
+
+%Impostazioni dei margini, definizione di colori e di stili vari
+\input{model/layout.tex}
 
 \algnewcommand\algorithmicforeach{\textbf{for each}}
 \algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
@@ -88,6 +98,9 @@
 \input{intro_cap4.tex} 
 
 \clearpage{\pagestyle{plain}\cleardoublepage}
+
+\nocite{*}
+
 %\input{bibliografia.tex}
 \bibliographystyle{plain} % We choose the "plain" reference style
 \bibliography{biblio.bib} % Entries are in the refs.bib file

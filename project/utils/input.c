@@ -172,11 +172,15 @@ void parse_command_line(int argc, char** argv, instance* inst)
 		help = 1;
 	}
 
-	if (help || (VERBOSE >= 10))		// print current parameters
+	if (help)		// print current parameters
 	{
-		printf("\n\navailable parameters (vers. 16-may-2015) --------------------------------------------------\n");
-		printf("-f %s\n", inst->input_file);
-		printf("-tl %lf\n", inst->timelimit);
+		printf("\n\navailable parameters (vers. may-2023) --------------------------------------------------\n");
+		printf("-f file name\n");
+		printf("-tl time limit\n");
+		printf("-seed random seed\n");
+		printf("-h heuristic method\n");
+		printf("-c exact method using cplex\n");
+
 		printf("\nenter -help or --help for help\n");
 		printf("----------------------------------------------------------------------------------------------\n\n");
 	}

@@ -114,7 +114,7 @@ double get_cost(int i, int j, instance* inst) {
 void plot(instance* inst, int* solution, char name[]) {
 
 	FILE* out = fopen(".\\output\\out.txt", "w");
-	if (out == NULL) print_error("output dir not found!");
+	if (out == NULL) printf("output dir not found!");
 	
 
 	int x = 0;
@@ -132,6 +132,7 @@ void plot(instance* inst, int* solution, char name[]) {
 	//da modificare o aggiungere una funzione per creare il file commands.txt
 	//GNUPLOT to cmd
 	FILE* commands = fopen(".\\plot\\commands.txt", "w+");
+	if (commands == NULL) printf("commands dir not found!");
 
 	fprintf(commands, "set terminal png\n");
 	fprintf(commands, "set output \"./plot/%s.png\"\n", name);
@@ -158,16 +159,10 @@ void addToPlot(double obj, int iter) {
 
 	FILE* out = fopen(".\\output\\outPerf.txt", mode);
 	
-	if (out == NULL) {
-		print_error("output dir not found!");
-		//return;
-	}
-
+	if (out == NULL) printf("output dir not found!");
 	
 
 	fprintf(out, "%d %f\n", iter, obj);
-
-	
 
 	fclose(out);
 }
@@ -176,6 +171,7 @@ void plotPerf(char name[]) {
 	//da modificare o aggiungere una funzione per creare il file commands.txt
 	//GNUPLOT to cmd
 	FILE* commands = fopen(".\\plot\\commands.txt", "w+");
+	if (commands == NULL) printf("commands dir not found!");
 
 	fprintf(commands, "set terminal png\n");
 	fprintf(commands, "set output \"./plot/%s.png\"\n", name);

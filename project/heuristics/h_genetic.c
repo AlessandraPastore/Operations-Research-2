@@ -240,6 +240,7 @@ int genetic(instance* inst) {
 			do { p2 = selectParent(population); } while (p1 == p2 || visited[p2]);
 			visited[p2] = 1;
 
+			//crossover
 			produceOffspring(inst, population[p1].solution, population[p2].solution, &offspring[count]);
 
 			if (VERBOSE >= 10) {

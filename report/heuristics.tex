@@ -81,7 +81,7 @@ Applied to the Nearest Neighbor algorithm, it actually works by adding a certain
 At each iteration, instead of choosing the nearest node to the current one, we have a certain probability of choosing the second nearest node. That way we can add some randomness to the algorithm and this can actually improve the overall optimality of the final solution.
 Obviously even this variant has been implemented and runs similarly to the multistart Nearest Neighbor algorithm within a time limit, and with different starting nodes at each iteration.
 
-\subsection{Extra-Mileage: Farthest Insertion}
+\subsection{Extra-Mileage: Farthest Insertion}\label{extramileage}
 The Farthest Insertion heuristic described in algorithm \ref{algo:extramileage}, also called Extra-Mileage heuristic, unlike the Nearest Neighbor algorithm, doesn’t need a starting node, instead starts by connecting the farthest nodes in the graph as an initial cycle. Because of that it is defined as a deterministic method, meaning that it will always return the same solution over the same input instance.
 
 \begin{figure}[!h]
@@ -352,5 +352,71 @@ The algorithm stops its iteration after a given time limit.
 
     \end{algorithmic}
 \end{algorithm}
+
+\subsection{Genetic Algorithm}
+Another approach to solving the TSP is to use a genetic algorithm, which is a type of heuristic optimization algorithm inspired by the process of natural selection. Genetic algorithms work by creating an initial population of candidate solutions (called chromosomes), and then repeatedly applying genetic operators such as crossover and mutation to generate new, potentially better solutions, called offspring [\ref{algo:genetic}].
+
+
+The choices of crossover and the chromosomes that make it to the next generation are based on the fitness of each chromosome, that is defined as minus the cost of the tsp tour. The genetic algorithm then selects the fittest individuals to serve as parents for the next generation, with the hope that their good qualities will be passed on to their offspring.
+
+To add some randomness in the hope of escaping the local optimums, a mutant is added with some probability to each new generation. A mutant is a chromosome of the current generation, chosen at random, to which a mutation has been applied, aka has some edges swapped at random.
+
+Through this iterative process, the genetic algorithm explores the space of possible solutions and gradually converges on a near-optimal tour.
+
+In conclusion, the genetic algorithm is a powerful and flexible approach to solving the Traveling Salesman Problem. While it may not always find the optimal solution, it can quickly find high-quality solutions that are good enough for many practical applications.
+
+\begin{algorithm}
+    \caption{Genetic algorithm}\label{algo:genetic}
+    \begin{algorithmic}[1]
+    \Require $G = (V,E), c:E \to \mathbb{R}^+$
+    \Ensure $\text{sub optimal TSP solution}$
+    
+    \State $population \gets *$ initialize population of chromosomes using GRASP$*$
+
+    \State $ generation \gets 0$
+
+    \While{$generation < MAX \textunderscore GENERATION$}
+
+        \State $parents \gets *$ initialize the offsparents  using a selection algorithm$*$
+        \State $offspring \gets *$ initialize the offspring using crossover$*$
+
+        \State $mutant \gets *$ if appropriate, initialize the mutant$*$
+
+        \State $ newGeneration() $
+        \State $ generation++ $
+
+    \EndWhile
+
+    \State $ solution \gets *$ chromosome with best fitness$*$
+
+    
+
+    \end{algorithmic}
+\end{algorithm}
+
+It's important to state elitism is implemented which means that the chromosomes with higher fitness (aka with lower cost) are always passed down to the next generation, ensuring that the best solution within all iterations of the genetic algorithm is never killed. 
+
+\subsubsection{Implementation choices}
+There are several algorithms that can be used in conjunction with genetic algorithm to enhance its performance.
+During each iteration of the genetic algorithm, selection, crossover and mutation are the main steps to compute to produce the new generation.
+Selection algorithm determine which individuals from the current population should be chosen for reproduction to generate the next generation. The most commonly used selection algorithms are:
+
+\begin{itemize}
+    \item Roulette Wheel Selection: each chromosome in the population is assigned a probability of selection based on its fitness. The probabilities are proportional to the fitness of the individual, so that individuals with higher fitness have a higher chance of being selected. A random number is then generated, and the individual corresponding to the selected probability is chosen for reproduction. (It is the algorithm that we chose to implement in our project)
+    \item Tournament Selection: a small subset of the population is randomly selected, and the individual with the highest fitness within that subset is chosen for reproduction.
+\end{itemize}
+
+After choosing two parents using selection, a new individual must be generated using a crossover algorithm. 
+These algorithms determine how the tour information is exchanged between two parents during reproduction. Common crossover algorithms include single-point crossover, two-point crossover, and uniform crossover.
+We implemented the single-point crossover and it works by choosing a single breaking point at random within the solutions of the parents and generating a partial new solution merging the chosen halves from the parents, without inserting duplicate nodes.
+After that the new solution must be repaired and we chose to do so using the Extra-Mileage [\ref{extramileage}] algorithm.
+
+Mutation is computed within a certain probability and the chosen individual has its tour modified by the swapping of two random edges. Other common mutation algorithms include bit-flip mutation and inversion mutation.
+
+
+
+
+
+
 
 
