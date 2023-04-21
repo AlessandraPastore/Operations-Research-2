@@ -82,6 +82,7 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 		//time limit for current mip opt
 		CPXsetdblparam(env, CPX_PARAM_TILIM, inst->timeStart + inst->timelimit - start);
 
+		printf("----------------2");
 		 
 		// run CPLEX to get a solution
 		int error = CPXmipopt(env, lp);
@@ -93,7 +94,16 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 
 
 		// use the optimal solution found by CPLEX and prints it
-		if (CPXgetx(env, lp, xstar, 0, ncols - 1)) print_error("CPXgetx() error");
+		if (CPXgetx(env, lp, xstar, 0, ncols - 1)) {
+
+			if (inst->zbest != -1) {
+				printf("----- Terminated before convergence -----\n");
+				printf("BEST SOLUTION FOUND\nCOST: %f\n", inst->zbest);
+				plot(inst, succ, "benders");
+				return 0;
+			}
+			else print_error("CPXgetx() error");
+		}
 		for (int i = 0; i < inst->nnodes; i++)
 		{
 			for (int j = i + 1; j < inst->nnodes; j++)
@@ -122,7 +132,15 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	} while (!timeOut(inst, inst->timelimit));
 
 	double objval = -1;
-	if (CPXgetobjval(env, lp, &objval)) print_error("CPXgetx() error");
+	if (CPXgetobjval(env, lp, &objval)) {
+		if (inst->zbest != -1) {
+			printf("----- Terminated before convergence -----\n");
+			printf("BEST SOLUTION FOUND\nCOST: %f\n", inst->zbest);
+			plot(inst, succ, "benders");
+			return 0;
+		}
+		else print_error("CPXgetx() error");
+	}
 
 	if (VERBOSE >= 10) {
 		if (checkSol(inst, succ)) return 1;
@@ -137,7 +155,7 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	if (VERBOSE >= 1) printf("BEST SOLUTION FOUND\nCOST: %f\n", inst->zbest);
 	if (VERBOSE >= 50) printf("iterations: %d", it);
 
-	plot(inst, succ, "benders");
+	plot(inst, inst->best_sol, "benders");
 
 
 
