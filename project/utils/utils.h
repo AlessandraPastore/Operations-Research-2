@@ -30,10 +30,13 @@ void reverse2(int* solution, int* old, int a1, int b);
 
 int TABU(instance* inst, double tl);
 int genetic(instance* inst);
+int annealing(instance* inst, double tl);
+
+int refinement(instance* inst, int* succ, int* comp, int ncomp, int iter);
+
 
 int performance(instance* inst);
 
-int annealing(instance* inst, double tl);
 
 //cplex
 int TSPopt(instance* inst);

@@ -1,5 +1,7 @@
 #include "../utils/utils.h"
 
+int refinement(instance* inst, int* succ, int* comp, int ncomp, int iter);
+
 void SEC(instance *inst, CPXENVptr env, CPXLPptr lp, int ncomp, int *comp, int ncols, int it) {
 
 	int* index = (int*)malloc(ncols * sizeof(int));
@@ -104,11 +106,18 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 		// ----- Transforms xstar to succ and comp -----
 		build_sol(xstar, inst, succ, comp, &ncomp);
 
-		printf("ncomp = %d\n", ncomp);
+		if(VERBOSE >= 50) printf("ncomp = %d\n", ncomp);
 
 		if (ncomp == 1) break;
 
 		SEC(inst, env, lp, ncomp, comp, ncols, it);
+
+		
+
+		if(refinement(inst, succ, comp, ncomp, it)) return 1;
+
+		//printf("press any key to continue...\n");
+		//getchar();
 
 		it++;
 
@@ -130,6 +139,7 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	}
 
 	if (VERBOSE >= 1) printf("BEST SOLUTION FOUND\nCOST: %f\n", inst->zbest);
+	if (VERBOSE >= 50) printf("iterations: %d", it);
 
 	plot(inst, succ, "benders");
 

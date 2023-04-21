@@ -60,6 +60,9 @@
     <ClCompile Include="cplex\c_benders.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="heuristics\h_refinement.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils\tsp.h">

@@ -106,7 +106,7 @@ void computeCost(instance* inst)
 
 double get_cost(int i, int j, instance* inst) {
 	if (i < 0 || j < 0 || i >= inst->nnodes || j >= inst->nnodes) {
-		printf("get_cost(): unexpected params i: %d, j= %dd", i, j);
+		printf("get_cost(): unexpected params i: %d, j: %d", i, j);
 	}
 	return inst->cost[i * inst->nnodes + j];
 }

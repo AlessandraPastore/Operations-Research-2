@@ -119,6 +119,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="heuristics\h_refinement.c" />
     <ClCompile Include="utils\chrono.c" />
     <ClCompile Include="cplex\cplex.c" />
     <ClCompile Include="cplex\c_benders.c" />
