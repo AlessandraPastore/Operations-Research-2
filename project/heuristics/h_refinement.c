@@ -2,7 +2,7 @@
 
 int refinement(instance *inst, int *succ, int *comp, int ncomp, int iter) {
 
-
+	//repairs the solution succ one component at a time
 	for (int n = 1; n < ncomp; n++) {
 
 		double delta = INFBOUND;

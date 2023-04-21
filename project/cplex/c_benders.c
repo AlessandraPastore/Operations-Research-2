@@ -110,18 +110,14 @@ int benders(instance* inst, CPXENVptr env, CPXLPptr lp) {
 
 		if (ncomp == 1) break;
 
+		//add subtour elimination constraints
 		SEC(inst, env, lp, ncomp, comp, ncols, it);
 
 		
-
+		//repair current solution
 		if(refinement(inst, succ, comp, ncomp, it)) return 1;
 
-		//printf("press any key to continue...\n");
-		//getchar();
-
 		it++;
-
-
 
 	} while (!timeOut(inst, inst->timelimit));
 
