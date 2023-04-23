@@ -67,7 +67,8 @@ int TABU(instance* inst, double tl)
 			reverse(inst, solution, a, b);
 
 			int choose = rand() % 4;
-			if (delta > 0) {
+			if(delta > 0)
+			{
 				if (choose == 0)
 					tabu[a] = iteration;
 				if (choose == 1)
@@ -77,6 +78,7 @@ int TABU(instance* inst, double tl)
 				if (choose == 3)
 					tabu[solution[b]] = iteration;
 			}
+			
 			newCost += delta;  //update cost
 			//printf("- %d\n",delta);
 

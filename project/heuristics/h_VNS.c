@@ -111,7 +111,7 @@ int VNS(instance* inst) {
 		oldCost = cost;
 
 		kick(inst, solution, &cost);
-		kick(inst, solution, &cost);
+		//kick(inst, solution, &cost);
 
 		if (VERBOSE >= 10) {
 			if (checkSol(inst, solution)) return 1;
@@ -133,6 +133,8 @@ int VNS(instance* inst) {
 
 
 	} while (!timeOut(inst, inst->timelimit));
+
+	opt_2(inst, inst->timelimit, solution, &cost); //to change tl
 
 
 	free(solution);
