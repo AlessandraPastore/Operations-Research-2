@@ -74,7 +74,7 @@ This algorithm has complexity $O(n^2)$ since it needs to scan at most $n$ nodes 
 
 To slightly improve this greedy algorithm performance, in our implementation we actually preferred a multistart approach. The algorithm is called multiple times within a time limit and at each iteration a random $startNode$ is used as the starting node. In this way, at each iteration we obtain different solutions with different costs and when the time is up, at the end of the run, only the best solution (the one with minimal cost) is returned in output.
 
-\subsubsection*{The Grasp Variant}
+\subsubsection{The Grasp Variant}
 The Greedy Randomized Adaptive Search Procedure (GRASP) is a technique that introduces randomization in the choices of the greedy algorithms.
 Applied to the Nearest Neighbor algorithm, it actually works by adding a certain probability value during the running of it and this slightly modifies its behavior of improvement of the current solution.
 
@@ -158,13 +158,18 @@ That simple metric is computed by testing each non visited node with each possib
 The Farthest Insertion algorithm has a worst-case time complexity of $O(n^2)$, where $n$ is the number of nodes. However, it has been shown to perform well in practice and can often produce high-quality solutions that are close to optimal for small and medium-sized instances of the TSP.
 
 \section{Refinement Heuristics}
-\subsection{2-OPT Refining}
+\subsection{2-OPT Refining}\label{2OPT}
 One of the most popular heuristic algorithms for solving the TSP is the 2-opt algorithm.
 The 2-opt algorithm is a local search algorithm that iteratively improves an initial tour by swapping pairs of edges to reduce the length of the tour. The algorithm starts by generating an initial tour, such as one produced by the Nearest Neighbor or Farthest Insertion algorithm. It then repeatedly examines all possible pairs of edges in the tour, and if swapping a pair of edges will reduce the length of the tour, the edges are swapped.
 
 More specifically, the 2-opt algorithm works as follows: first, it generates an initial solution, in our implementation we choose to generate it using the multistart Nearest Neighbor algorithm paired with a GRASP approach. It then examines all pairs of edges $(a,a')$ and $(b,b')$, where $a,a',b$ and $b'$ are distinct nodes. If swapping the edges $(a,a')$ and $(b,b')$ will result in a shorter tour, the edges are swapped, and the algorithm continues to search for other pairs of edges to swap. This process is repeated until no further improvements can be made to the tour or until the time limit permits.
 
-To know that a certain swap results in a better solution, the algorithm computes $\Delta \operatorname{c}(a,b) = (c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$ and if it is negative then we found some good candidates, meaning that the new candidates edges would be shorter than the current ones.
+To know that a certain swap results in a better solution, the algorithm computes 
+\begin{equation}\label{eq:delta}
+\Delta \operatorname{c}(a,b) = (c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})
+\end{equation}
+
+and if it is negative then we found some good candidates, meaning that the new candidates edges would be shorter than the current ones.
 
 After the swap, the algorithm then changes the order of the successor in the tour to make $b$ connect to $a$ and obtain a new solution, as in fig \ref{fig:2OPT}.
 
@@ -252,12 +257,84 @@ The same idea goes behind the more general k-OPT Refining algorithm, where inste
 
 
 \section{Metaheuristics}
+
+
+
+Constructive heuristics and refinement heuristics  are often combined to form metaheuristic methods, which can be seen as general problem-solving frameworks that guide the search process by iteratively improving candidate solutions. (fig.\ref{fig:metaheur}) 
+
+Metaheuristic methods can be classified into two main categories: single-solution and population-based methods. Single-solution methods start with an initial solution and iteratively improve it by applying a set of moves or transformations. The single-solution metaheuristics that we implemented are variable neighborhood search (VNS), tabu search and simulated annealing. Population-based methods maintain a population of candidate solutions and explore the search space by iteratively generating new solutions through genetic operators such as crossover and mutation. For the population-based methods we implemented a genetic algorithm.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[]{images/metaheuristics.png}
+    \caption{General behavior of a metaheuristic method}
+    \label{fig:metaheur}
+\end{figure}
+
+
+
 \subsection{Variable Neighborhood Search}
 The Variable Neighborhood Search (VNS), proposed by Mladenović and Hansen in 1997,  is a metaheuristic optimization algorithm used to solve combinatorial optimization problems. The basic idea of VNS is to iteratively apply a perturbation operator to the current solution and then perform a local search around the perturbed solution. VNS is known for its flexibility and ability to escape from local optima by exploring different neighborhood structures.
-In our implementation the VNS algorithm tries to improve the solution made by the 2-opt algorithm. In order to try to escape from the local minima produced by the 2-opt, the algorithm performs for two times a random swap of 5 edges. 
+In our implementation the VNS algorithm tries to improve the solution made by the 2-opt algorithm. In order to try to escape from the local minima produced by the 2-opt, the algorithm performs a random swap of 5 edges, see fig. \ref{fig:VNS} %%%
+
+
+\begin{figure}[!h]
+    \centering
+    \begin{tikzpicture}
+        \tikzstyle{city} = [fill=purple!20,rounded corners]
+    
+
+        \filldraw[color=blue!60, fill=blue!5, very thick](0,0) circle (4);
+
+        \filldraw[color=red!60, fill=red!5, very thick](0,0) circle (1.5);
+
+        \filldraw[color=red!60, fill=red!5, very thick, fill opacity=0.2](-2.5,-2) circle (1.5);
+
+        
+       
+        \node[city,label=above:$x^{(n)}$] (A) at (0,0){};
+        \node[city] (B) at (-2.5,-2){};
+
+        
+
+        \draw[->] (A) edge[bend right] node [right] {} (B);
+
+        
+
+        
+
+
+        % define a random point (C) on this circle
+        \path (0,0) ++(-45:1.5) coordinate (C);
+
+        % draw (C) with a label
+        \fill[black] (C) circle[radius=2pt] ++(1.5:1em) node {2opt};
+
+        % define a random point (D) on this circle
+        \path (0,0) ++(40:4) coordinate (D);
+
+        % draw (C) with a label
+        \fill[black] (D) circle[radius=2pt] ++(4:1em) node {3opt};
+        
+
+        \draw[dashed] (A) -- (C);
+        \draw[dashed] (A) -- (D);
+
+
+
+
+        %\draw[->] (0,0) arc (0:200:1.5);
+       
+    
+    \end{tikzpicture}
+    \caption{Example of VNS kick} \label{fig:VNS}
+\end{figure}
+
+
+
 Then it reapplies the 2-opt procedure and if it finds a better solution it updates the global solution.
 The overall procedure is applied until a certain time limit is reached.
-The algorithm requires O(n) time for each kick, because after the swap operation we have to update the structure that contains all the nodes of the graph. We have also to sum the time required by the 2-opt algorithm. This time at the end has to be multiplied by the number of iterations that this procedure is performed. 
+The algorithm requires $O(n)$ time for each kick, because after the swap operation we have to update the structure that contains all the nodes of the graph. We also have to sum the time required by the 2-opt algorithm. This time at the end has to be multiplied by the number of iterations that this procedure is performed. 
 
 \begin{algorithm}[h!]
     \caption{VNS}\label{algo:VNS}
@@ -288,15 +365,28 @@ The algorithm requires O(n) time for each kick, because after the swap operation
 
 
 \subsection{Tabu}
-Tabu search is based on the concept of "tabu" which means "prohibited" or "forbidden". The algorithm maintains a tabu list that keeps track of recent moves that are prohibited from being repeated. 
-Tabu search is known for its ability to find good-quality solutions in a relatively short amount of time, although it does not guarantee finding the optimal solution.
-The algorithm starts with an initial solution, which can be generated randomly or by using a construction heuristic. In our implementation the initial solution is generated by the grasp heuristic.
-In our case at every iteration of the algorithm we select the pair of edges that have the minimum value of delta (delta= as in 2 opt). In this case it doesn't matter if the delta is negative or positive, we only took the minimum delta of the nodes that are not marked as “tabu”.  Then after every swap we select in a random way one of the four nodes involved in the swap operation, and it is inserted into the “tabu” list.
-The tabu list is updated during the search process to prevent cycling, which is repeatedly revisiting the same solutions. This allows tabu search to diversify the search and explore different regions of the solution space. Thanks to this feature the algorithm can move around the solution space, avoid being stuck in local minimum, and so try to find a better solution value.
-In order to implement the tabu list we create a list of length equals to the number of the nodes of the graph. Every time a node is selected to be a “tabu node” we set it corespective element of the list equals to the number of the current iteration. Then this node cannot be involved in any swap operations until the number of the next iterations have overcome the value of a parameter called “Tmax”. This parameter indicates the number of iterations for which the various nodes selected as forbidden cannot be selected in a swap operation.
-The value of Tmax is equivalent to the minimum between 100 and the number of nodes divided by 10.
-Each swap requires time equal to O(n) to rearrange the array containing the actual solution. So the overall complexity is equal to O(n*number of swaps).
-The algorithm stops its iteration after a given time limit.
+Tabu search is a metaheuristic method created by Fred W. Glover in 1986.
+Tabu search is mainly based on the concept of "tabu" which means "prohibited" or "forbidden", meaning that the algorithm actually maintains a tabu list that keeps track of recent moves that are prohibited from being repeated. 
+Tabu search is known for its ability to find good-quality solutions in a relatively short amount of time, although, as other heuristic methods, it does not guarantee finding the optimal solution.
+
+The algorithm starts with an initial solution, which can be generated randomly or by using a construction heuristic. In our implementation the initial solution is generated by the greedy heuristic with the grasp and multistart variant run for some time before returning an incumbent.
+
+At every iteration of the tabu algorithm, we select the pair of edges that have the minimum value of $\Delta$ (defined as in 2-opt, see equation \ref{eq:delta}). Unike 2-opt algorithm, in tabu search doesn't matter if delta is negative or positive, we only take the minimum computed delta of the nodes that are not marked as “tabu” and select those nodes as candidate for a swap of edges (as in fig.\ref{fig:2OPT}).  After every swap, one of the four nodes involved is randomly select, and it is inserted into the “tabu” list.
+
+The practice of using and updating a "tabu" list is used to prevent cycling, which means repeatedly visiting the same solutions over and over, without actually improving the current local optima. This allows the tabu method to diversify the search and explore different regions of the solution space. Thanks to this feature the algorithm moves around the solution space avoiding being stuck in local optima, and trying to find a better solution value, as can be seen in fig. \ref{fig:TABU}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width = \textwidth]{images/tabu.png}
+    \caption{General behavior of a TABU method}
+    \label{fig:TABU}
+\end{figure}
+
+In order to implement the tabu list we create a list of length equals to the number of the nodes of the graph. Every time a node is selected to be a “tabu node” we set its corresponding element of the list equals to the number of the current iteration. Then this node cannot be involved in any swap operations until the number of the next iterations have overcome the value of a parameter called \textit{Tabu Tenure} that we saved as $T_{max}$, representing the number of iterations a node is forced to remain a "tabu" node and cannot be selected in a swap operation.
+The value of $T_{max}$ is equivalent to the minimum between 100 and the number of nodes divided by 10, assuring that there are always nodes not labeled as forbidden and that can be used in the swap operation.
+
+Each swap requires time equal to $O(n)$ to rearrange the array containing the actual solution. So the overall complexity is equal to $O(n \cdot n_{swaps})$.
+The algorithm stops after a given time limit returning in output the best solution found until then.
 
 
 
@@ -308,7 +398,7 @@ The algorithm starts with an initial solution, which can be generated randomly o
 The algorithm at each iteration selects in a random way two edges (a,a'),(b,b'), where $a,a',b$ and $b'$ are distinct nodes. Then swap it (as shown in figure \ref{fig:2OPT} ) depending on a probability function that depends on a parameter called Temperature (T).
 In our implementation the initial value for the temperature is equal to the Cost of the solution found by the grasp algorithm, split by the number of nodes of the instance of the current TSP problem. At each iteration the temperature is multiplied by a factor alpha equals to 0.99. If the algorithm keeps going after 100 iterations, the temperature is set to its initial value.
 At each iteration the algorithm checks $\Delta \operatorname{c}(a,b) = (c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$, that is the new cost of swapping the two edges, clearly this parameter delta may be positive or negative. If the value of delta is negative, that is swapping the two edges the value of the solution is better, the algorithm makes the swap. Otherwise if the value of delta is positive the exchange depends on the value of the following probability function: $e^{\frac{-\Delta \operatorname{c}(a,b)}{T}}$.
-Each swap requires time equal to O(n) to rearrange the array containing the actual solution. So the overall complexity is equal to O(n*number of swaps).
+Each swap requires time equal to $O(n)$ to rearrange the array containing the actual solution. So the overall complexity is equal to O(n*number of swaps).
 The algorithm stops its iteration after a given time limit.
 
 	
