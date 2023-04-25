@@ -135,7 +135,7 @@ The Farthest Insertion heuristic described in algorithm \ref{algo:extramileage},
 
     \While{$\left | visited \right | \neq \left | V  \right |$}
     \State $candidate \gets $ generic node h $ \notin visited$
-    \State $candidate \gets *$ find edge i-j visited that minimizes $\Delta = c_{ih} + c_{hj} - c_{ij}*$
+    \State $candidate \gets *$ find edge i-j visited that minimizes $\Delta = c_{ih} + c_{hj} - c_{ij}$ $*$
     \State $cost \gets cost + \Delta$
     \State remove ($i$,$j$) edge to $solution$
     \State add ($i$,$h$) and ($h$,$j$) edges to $solution$
@@ -393,12 +393,21 @@ The algorithm stops after a given time limit returning in output the best soluti
 \subsection{Simulated Annealing}
 
 Simulated annealing is a metaheuristic optimization algorithm that can be used to solve the Traveling Salesman Problem (TSP).
-The name of the algorithm comes from annealing in metallurgy, a technique involving heating and controlled cooling of a material to alter its physical properties. This technique usually archives an approximate solution to the global minimum.
-The algorithm starts with an initial solution, which can be generated randomly or using a heuristic, in our case we use the output of the Grasp heuristic as the initial solution.
-The algorithm at each iteration selects in a random way two edges (a,a'),(b,b'), where $a,a',b$ and $b'$ are distinct nodes. Then swap it (as shown in figure \ref{fig:2OPT} ) depending on a probability function that depends on a parameter called Temperature (T).
-In our implementation the initial value for the temperature is equal to the Cost of the solution found by the grasp algorithm, split by the number of nodes of the instance of the current TSP problem. At each iteration the temperature is multiplied by a factor alpha equals to 0.99. If the algorithm keeps going after 100 iterations, the temperature is set to its initial value.
-At each iteration the algorithm checks $\Delta \operatorname{c}(a,b) = (c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$, that is the new cost of swapping the two edges, clearly this parameter delta may be positive or negative. If the value of delta is negative, that is swapping the two edges the value of the solution is better, the algorithm makes the swap. Otherwise if the value of delta is positive the exchange depends on the value of the following probability function: $e^{\frac{-\Delta \operatorname{c}(a,b)}{T}}$.
-Each swap requires time equal to $O(n)$ to rearrange the array containing the actual solution. So the overall complexity is equal to O(n*number of swaps).
+The name of the algorithm comes from annealing in metallurgy, a technique involving heating and controlled cooling of a material to alter its physical properties. This method uses a probabilistic technique that usually archives an approximate solution of the global minimum.
+
+Just like other metaheuristics, this algorithm starts with an initial solution, which can be generated randomly or using a heuristic. In our implementation we use the output of the Greedy heuristic with a grasp and multistart variant as the initial solution that we want to improve.
+
+At each iteration of the algorithm, we select two edges $(a,a')$,$(b,b')$ randomly, where $a,a',b$ and $b'$ are distinct nodes and compute the $\Delta$ as in equation \ref{eq:delta}. If there would be an improvement over the current solution, we swap the edges (as in fig.\ref{fig:2OPT} ). Else if the swap would result in the worsening of the solution, there is still a certain probability of making the swap anyway depending on a probability function over a parameter called Temperature. This method is actually an adaptation of the Metropolis algorithm published by Metropolis et al. in 1953 and the probability function used is defined as:
+
+\begin{equation*}
+    e^{\frac{-\Delta \operatorname{c}(a,b)}{T}}
+\end{equation*}
+
+where $T$ is called \textit{Temperature} and is computed over time as $T = \alpha \cdot T$, with $\alpha$ called \textit{cooling parameter} and starting with $T = T_0$ that actually depends on the input.
+
+In our implementation the initial value for the temperature $T_0$ is equal to the cost of the input solution found by the grasp algorithm, divided by the number of nodes of the instance of the current TSP problem. Then at each iteration, $T$ is multiplied by the cooling parameter $\alpha = 0.99$. After 100 iterations of the algorithm, the temperature is newly set to its initial value $T_0$.
+
+Each swap requires time equal to $O(n)$ to rearrange the array containing the actual solution. So the overall complexity is equal to $O(n \cdot number of swaps)$.
 The algorithm stops its iteration after a given time limit.
 
 	
@@ -461,16 +470,16 @@ In conclusion, the genetic algorithm is a powerful and flexible approach to solv
     \Require $G = (V,E), c:E \to \mathbb{R}^+$
     \Ensure $\text{sub optimal TSP solution}$
     
-    \State $population \gets *$ initialize population of chromosomes using GRASP$*$
+    \State $population \gets *$ initialize population of chromosomes using GRASP $*$
 
     \State $ generation \gets 0$
 
     \While{$generation < MAX \textunderscore GENERATION$}
 
         \State $parents \gets *$ initialize the offsparents  using a selection algorithm$*$
-        \State $offspring \gets *$ initialize the offspring using crossover$*$
+        \State $offspring \gets *$ initialize the offspring using crossover $*$
 
-        \State $mutant \gets *$ if appropriate, initialize the mutant$*$
+        \State $mutant \gets *$ if appropriate, initialize the mutant $*$
 
         \State $ newGeneration() $
         \State $ generation++ $
