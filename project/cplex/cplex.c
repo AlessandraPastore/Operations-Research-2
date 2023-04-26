@@ -208,7 +208,7 @@ int TSPopt(instance* inst)
 
 	//choose formulation
 	if (strcmp(inst->cplex, "BENDERS") == 0) return benders(inst, env, lp);
-	//else if (strcmp(inst->cplex, "LAZY") == 0) return lazy();
+	else if (strcmp(inst->cplex, "LAZY") == 0) return callback_sec(inst,env,lp);
 	else {
 		print_error("exact method name not appropriate");
 

@@ -63,6 +63,9 @@ typedef struct {
 	int ystart;
 	int indexStart;
 
+	//cplex
+	int ncols;
+
 } instance;
 
 
