@@ -94,11 +94,12 @@ double dist(instance* inst, int index1, int index2) {
 
 void computeCost(instance* inst)
 {
-
+	
 	for (int i = 0; i < inst->nnodes; i++)
 		for (int j = 0; j < i; j++)
 			inst->cost[i * inst->nnodes + j] = inst->cost[j * inst->nnodes + i] = dist(inst, i, j);
-
+	
+	
 	inst->flagCost = 1;
 	inst->zbest = -1;
 	inst->best_sol = (int*)calloc(inst->nnodes, sizeof(int));
@@ -264,3 +265,4 @@ void reverse(instance* inst, int* solution, int a, int b)
 	free(old);
 
 }
+

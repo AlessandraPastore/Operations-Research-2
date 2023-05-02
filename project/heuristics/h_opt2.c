@@ -21,7 +21,7 @@ int opt_2(instance* inst, double tl, int* solution, double* cost) {
 			for (int j = i + 1; j < inst->nnodes; j++)
 			{
 				double deltaTemp = get_cost(i, j, inst) + get_cost(solution[j], solution[i], inst) - (get_cost(i, solution[i], inst) + get_cost(j, solution[j], inst));
-
+				
 				if (deltaTemp < delta)
 				{
 					delta = deltaTemp;
@@ -40,7 +40,7 @@ int opt_2(instance* inst, double tl, int* solution, double* cost) {
 
 	} while (!timeOut(inst, tl) && delta < 0);
 
-
+	
 	if (VERBOSE >= 10) {
 		if (checkSol(inst, solution)) return 1;
 		if (checkCost(inst, solution, *cost)) return 1;
@@ -50,6 +50,7 @@ int opt_2(instance* inst, double tl, int* solution, double* cost) {
 	if (VERBOSE >= 10) printf("zbest: %f, cost: %f\n", inst->zbest, *cost);
 
 	//update solution
+	if(inst->refopt2!=1)
 	if (inst->zbest == -1 || inst->zbest > *cost) {
 		updateSol(inst, *cost, solution);
 	}

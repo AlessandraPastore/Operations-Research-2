@@ -65,6 +65,7 @@ typedef struct {
 
 	//cplex
 	int ncols;
+	int refopt2;
 
 } instance;
 

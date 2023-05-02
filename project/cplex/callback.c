@@ -61,6 +61,31 @@ static int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contexti
 
 		}
 	}
+	
+	else if(ncomp==1 && inst->refopt2==1){
+
+		//here solution may contain cross edge so we use 2_opt in order to improve it, and then post it to cplex
+		
+
+
+		
+
+		opt_2(inst, inst->timelimit / 10, succ, &objval);
+
+
+
+		// Reinit xstar to 0. We want to reuse it in order to avoid another memory allocation
+		memset(xstar, 0.0, inst->ncols);
+		
+		int* ind = (int*)malloc(inst->ncols * sizeof(int));
+
+		for (int j = 0; j < inst->ncols; j++) ind[j] = j;
+
+		for (int i = 0; i < inst->nnodes; i++) xstar[xpos(i, succ[i], inst)] = 1.0;
+		if (CPXcallbackpostheursoln(context, inst->ncols, ind, xstar, objval, CPXCALLBACKSOLUTION_NOCHECK)) print_error("CPXcallbackpostheursoln() error");
+		free(ind);
+
+	}
 
 	free(succ);
 	free(comp);
