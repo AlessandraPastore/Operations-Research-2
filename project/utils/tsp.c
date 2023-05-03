@@ -266,7 +266,7 @@ void reverse(instance* inst, int* solution, int a, int b)
 
 }
 
-void addSEC(instance* inst,int* comp,double* sk,int* index,int* value,int* nnz,int k)
+void addSEC(instance* inst,int* comp,double* sk,int* index,double* value,int* nnz,int k)
 {
 	for (int i = 0; i < inst->nnodes; i++) {
 		if (comp[i] != k) continue;

@@ -86,22 +86,8 @@ static int CPXPUBLIC my_callback_candidate(CPXCALLBACKCONTEXTptr context, CPXLON
 			int nnz = 0;
 			int izero = 0;
 
-
-			//sprintf(cname[0], "sec(%d,%d)", it, k);
-
-			for (int i = 0; i < inst->nnodes; i++) {
-				if (comp[i] != k) continue;
-				sk++;
-
-				for (int j = i + 1; j < inst->nnodes; j++) {
-					if (comp[j] != k) continue;
-
-					index[nnz] = xpos(i, j, inst);
-					value[nnz] = 1.0;
-					nnz++;
-				}
-			}
-
+			addSEC(inst, comp, &sk, index, value, &nnz, k);
+		
 			double rhs = sk - 1;// |S|-1
 
 			if (CPXcallbackrejectcandidate(context, 1, nnz, &rhs, &sense, &izero, index, value)) print_error("CPXcallbackrejectcandidate() error");

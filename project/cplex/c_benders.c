@@ -22,18 +22,7 @@ void SEC(instance *inst, CPXENVptr env, CPXLPptr lp, int ncomp, int *comp, int n
 
 		sprintf(cname[0], "sec(%d,%d)",it,k);
 
-		for (int i = 0; i < inst->nnodes; i++) {
-			if (comp[i] != k) continue;
-			sk++;
-			
-			for (int j = i + 1; j < inst->nnodes; j++) {
-				if (comp[j] != k) continue;
-
-				index[nnz] = xpos(i, j, inst);
-				value[nnz] = 1.0;
-				nnz++;
-			}
-		}
+		addSEC(inst, comp, &sk, index, value, &nnz, k);
 
 
 		double rhs = sk - 1;	// |S|-1
