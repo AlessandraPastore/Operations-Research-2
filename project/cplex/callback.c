@@ -1,6 +1,12 @@
 #include "../utils/utils.h"
+#include "../utils/tsp.h"
 
-static int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void* userhandle)
+
+
+
+
+
+static int CPXPUBLIC my_callback_candidate(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void* userhandle)
 /********************************************************************************************************/
 {
 	instance* inst = (instance*)userhandle;
@@ -30,7 +36,49 @@ static int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contexti
 		//colname parameter for CPXnewcols
 		char** cname = (char**)calloc(1, sizeof(char*));		// (char **) required by cplex... array of 1 pointer
 		cname[0] = (char*)calloc(100, sizeof(char));
+		if (inst->refopt2 == 1) {
 
+			//here solution may contain cross edge so we use 2_opt in order to improve it, and then post it to cplex
+			int* succ1 = (int*)malloc(inst->nnodes * sizeof(int));
+
+			//components vector
+			int* comp1 = (int*)malloc(inst->nnodes * sizeof(int));
+			int ncomp1 = ncomp;
+
+			for (int i = 0; i < inst->nnodes; i++)
+			{
+				succ1[i] = succ[i];
+				comp1[i] = comp[i];
+
+			}
+
+
+
+			refinement(inst, succ1, comp1, ncomp1, 0);
+			double cost = 0;
+
+			for (int i = 0; i < inst->nnodes; i++) {
+				cost += get_cost(i, succ1[i], inst);
+			}
+
+			objval = cost;
+			opt_2(inst, inst->timelimit / 10, succ1, &objval);
+
+
+
+			// Reinit xstar to 0. We want to reuse it in order to avoid another memory allocation
+			memset(xstar, 0.0, inst->ncols);
+
+			int* ind = (int*)malloc(inst->ncols * sizeof(int));
+
+			for (int j = 0; j < inst->ncols; j++) ind[j] = j;
+
+			for (int i = 0; i < inst->nnodes; i++) xstar[xpos(i, succ1[i], inst)] = 1.0;
+			if (CPXcallbackpostheursoln(context, inst->ncols, ind, xstar, objval, CPXCALLBACKSOLUTION_NOCHECK)) print_error("CPXcallbackpostheursoln() error");
+			free(ind);
+			free(succ1);
+			free(comp1);
+		}
 		//for each component
 		for (int k = 1; k <= ncomp; k++) {
 			char sense = 'L'; // <= constraint
@@ -54,38 +102,16 @@ static int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contexti
 				}
 			}
 
-
 			double rhs = sk - 1;// |S|-1
 
 			if (CPXcallbackrejectcandidate(context, 1, nnz, &rhs, &sense, &izero, index, value)) print_error("CPXcallbackrejectcandidate() error");
 
 		}
+	
+		
 	}
 	
-	else if(ncomp==1 && inst->refopt2==1){
-
-		//here solution may contain cross edge so we use 2_opt in order to improve it, and then post it to cplex
-		
-
-
-		
-
-		opt_2(inst, inst->timelimit / 10, succ, &objval);
-
-
-
-		// Reinit xstar to 0. We want to reuse it in order to avoid another memory allocation
-		memset(xstar, 0.0, inst->ncols);
-		
-		int* ind = (int*)malloc(inst->ncols * sizeof(int));
-
-		for (int j = 0; j < inst->ncols; j++) ind[j] = j;
-
-		for (int i = 0; i < inst->nnodes; i++) xstar[xpos(i, succ[i], inst)] = 1.0;
-		if (CPXcallbackpostheursoln(context, inst->ncols, ind, xstar, objval, CPXCALLBACKSOLUTION_NOCHECK)) print_error("CPXcallbackpostheursoln() error");
-		free(ind);
-
-	}
+	
 
 	free(succ);
 	free(comp);
@@ -93,6 +119,26 @@ static int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contexti
 	return 0;
 
 }
+
+static int CPXPUBLIC my_callback_relaxation(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void* userhandle)
+{
+
+}
+static int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void* userhandle)
+{
+	instance* inst = (instance*)userhandle;
+	if (contextid == CPX_CALLBACKCONTEXT_CANDIDATE) {
+		return my_callback_candidate(context, contextid, inst);
+	}
+	if (contextid == CPX_CALLBACKCONTEXT_RELAXATION) {
+		return my_callback_relaxation(context, contextid, inst);
+	}
+	return 1;
+
+}
+
+
+
 
 int callback_sec(instance* inst, CPXENVptr env, CPXLPptr lp) {
 
@@ -130,28 +176,48 @@ int callback_sec(instance* inst, CPXENVptr env, CPXLPptr lp) {
 		else print_error("CPXgetx() error");
 	}
 	build_sol(xstar, inst, succ, comp, &ncomp);
+	
+	int* visited = (int*)calloc(inst->nnodes, sizeof(int));
+	
 
+	int next = 0;
+
+	for (int i = 0; i < inst->nnodes; i++) {
+		visited[succ[next]]++;
+		printf("\n succ: %d", succ[next]);
+		next = succ[next];
+	}
+
+	for (int i = 0; i < inst->nnodes; i++) {
+		if (visited[i] != 1) {
+			printf("ERROR IN THE SOLUTION: %d as %d\n\n", i, visited[i]);
+			error = 1;
+		}
+	}
+	
 	for (int i = 0; i < inst->nnodes; i++)
 	{
 		for (int j = i + 1; j < inst->nnodes; j++)
 		{
-			if (xstar[xpos(i, j, inst)] > 0.5) printf("  ... x(%3d,%3d) = 1\n", i + 1, j + 1);
+			if (xstar[xpos(i, j, inst)] > 0.5)  printf("  ... x(%3d,%3d) = 1\n", i + 1, j + 1); 
 		}
 	}
+	
 	double objval = -1;
 	if (CPXgetobjval(env, lp, &objval)) {
 		if (inst->zbest != -1) {
 			printf("----- Terminated before convergence -----\n");
 			printf("BEST SOLUTION FOUND\nCOST: %f\n", inst->zbest);
-			plot(inst, succ, "benders");
+			plot(inst, succ, "lazycut");
 			return 0;
 		}
 		else print_error("CPXgetx() error");
 	}
 
 	if (VERBOSE >= 10) {
-		if (checkSol(inst, succ)) return 1;
 		if (checkCost(inst, succ, objval)) return 1;
+		if (checkSol(inst, succ)) return 1;
+		
 	}
 
 	//if current cost is better, update best solution
