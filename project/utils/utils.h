@@ -42,4 +42,6 @@ int performance(instance* inst);
 int TSPopt(instance* inst);
 int benders(instance* inst, CPXENVptr env, CPXLPptr lp);
 
+int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void* userhandle);
+
 #endif

@@ -91,4 +91,6 @@ int xpos(int i, int j, instance* inst);
 void build_sol(const double* xstar, instance* inst, int* succ, int* comp, int* ncomp); // build succ() and comp() wrt xstar()...
 
 
+
+
 #endif   /* TSP_H_ */

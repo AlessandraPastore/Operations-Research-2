@@ -3,9 +3,6 @@
 
 
 
-
-
-
 static int CPXPUBLIC my_callback_candidate(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void* userhandle)
 /********************************************************************************************************/
 {
@@ -108,9 +105,10 @@ static int CPXPUBLIC my_callback_candidate(CPXCALLBACKCONTEXTptr context, CPXLON
 
 static int CPXPUBLIC my_callback_relaxation(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void* userhandle)
 {
-
+	return 1;
 }
-static int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void* userhandle)
+
+int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void* userhandle)
 {
 	instance* inst = (instance*)userhandle;
 	if (contextid == CPX_CALLBACKCONTEXT_CANDIDATE) {
@@ -156,30 +154,13 @@ int callback_sec(instance* inst, CPXENVptr env, CPXLPptr lp) {
 		if (inst->zbest != -1) {
 			printf("----- Terminated before convergence -----\n");
 			printf("BEST SOLUTION FOUND\nCOST: %f\n", inst->zbest);
-			plot(inst, succ, "benders");
+			plot(inst, succ, "lazycut");
 			return 0;
 		}
 		else print_error("CPXgetx() error");
 	}
 	build_sol(xstar, inst, succ, comp, &ncomp);
 	
-	int* visited = (int*)calloc(inst->nnodes, sizeof(int));
-	
-
-	int next = 0;
-
-	for (int i = 0; i < inst->nnodes; i++) {
-		visited[succ[next]]++;
-		printf("\n succ: %d", succ[next]);
-		next = succ[next];
-	}
-
-	for (int i = 0; i < inst->nnodes; i++) {
-		if (visited[i] != 1) {
-			printf("ERROR IN THE SOLUTION: %d as %d\n\n", i, visited[i]);
-			error = 1;
-		}
-	}
 	
 	for (int i = 0; i < inst->nnodes; i++)
 	{

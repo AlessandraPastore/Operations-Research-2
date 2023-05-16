@@ -66,6 +66,9 @@
     <ClCompile Include="cplex\callback.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cplex\hardfix.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils\tsp.h">

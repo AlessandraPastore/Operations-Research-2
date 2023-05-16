@@ -120,6 +120,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cplex\callback.c" />
+    <ClCompile Include="cplex\hardfix.c" />
     <ClCompile Include="heuristics\h_refinement.c" />
     <ClCompile Include="utils\chrono.c" />
     <ClCompile Include="cplex\cplex.c" />
