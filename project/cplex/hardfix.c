@@ -10,7 +10,7 @@ int hardfix(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	//to store the solution
 	double* xstar = (double*)calloc(ncols, sizeof(double));
 
-	
+	//to do: calcolare quanto tempo ci ha messo greedy effettivamente
 	double tl = inst->timelimit/2;
 	grasp(inst, 1, tl);
 	double initialSol = inst->zbest;

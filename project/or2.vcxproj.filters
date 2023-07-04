@@ -9,7 +9,7 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="Source Files\Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
@@ -72,6 +72,9 @@
     <ClCompile Include="cplex\softfix.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cplex\mincut.c">
+      <Filter>Source Files\Resource Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils\tsp.h">
@@ -80,88 +83,8 @@
     <ClInclude Include="utils\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\bigguy.h">
-      <Filter>Source Files</Filter>
+    <ClInclude Include="utils\mincut.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\combs.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\config.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\consec1.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\cut.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\cuttree.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\delaunay.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\edgegen.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\fmatch.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\heldkarp.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\kdtree.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\linkern.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\localcut.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\lp.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\machdefs.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\macrorus.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\mlinkern.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\necklace.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\pq.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\pqsets.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\tinytsp.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\tsp.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\util.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\verify.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\..\concorde\INCLUDE\config.h.in">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\..\..\..\..\..\concorde\INCLUDE\Makefile.common">
-      <Filter>Source Files</Filter>
-    </None>
-    <None Include="..\..\..\..\..\..\concorde\INCLUDE\Makefile.common.in">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

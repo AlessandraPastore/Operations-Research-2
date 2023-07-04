@@ -121,6 +121,7 @@
   <ItemGroup>
     <ClCompile Include="cplex\callback.c" />
     <ClCompile Include="cplex\hardfix.c" />
+    <ClCompile Include="cplex\mincut.c" />
     <ClCompile Include="cplex\softfix.c" />
     <ClCompile Include="heuristics\h_refinement.c" />
     <ClCompile Include="utils\chrono.c" />
@@ -140,37 +141,9 @@
     <ClCompile Include="utils\tsp.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\bigguy.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\combs.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\config.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\consec1.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\cut.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\cuttree.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\delaunay.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\edgegen.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\fmatch.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\heldkarp.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\kdtree.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\linkern.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\localcut.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\lp.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\machdefs.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\macrorus.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\mlinkern.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\necklace.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\pq.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\pqsets.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\tinytsp.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\tsp.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\util.h" />
-    <ClInclude Include="..\..\..\..\..\..\concorde\INCLUDE\verify.h" />
+    <ClInclude Include="utils\mincut.h" />
     <ClInclude Include="utils\tsp.h" />
     <ClInclude Include="utils\utils.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\..\..\..\concorde\INCLUDE\config.h.in" />
-    <None Include="..\..\..\..\..\..\concorde\INCLUDE\Makefile.common" />
-    <None Include="..\..\..\..\..\..\concorde\INCLUDE\Makefile.common.in" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
