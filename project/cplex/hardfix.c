@@ -28,6 +28,8 @@ int hardfix(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	int beg = 0;
 	if (CPXaddmipstarts(env, lp, 1, inst->ncols, &beg, ind, xstar, &effortlevel, NULL)) print_error("CPXaddmipstarts() error");
 	free(ind);
+
+	//parameter to tune
 	double prob = 7;
 	double one = 1.0;
 	double zero = 0.0;

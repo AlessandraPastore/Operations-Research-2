@@ -388,6 +388,37 @@ The value of $T_{max}$ is equivalent to the minimum between 100 and the number o
 Each swap requires time equal to $O(n)$ to rearrange the array containing the actual solution. So the overall complexity is equal to $O(n \cdot n_{swaps})$.
 The algorithm stops after a given time limit returning in output the best solution found until then.
 
+\begin{algorithm}[h!]
+    \caption{Tabu}\label{algo:tabu}
+    \begin{algorithmic}[1]
+    \Require $G = (V,E), c:E \to \mathbb{R}^+$
+    \Ensure $\text{sub optimal TSP solution}$
+
+
+    \State $solution \gets$ 2OPT()
+    
+    \While{$ !time\textunderscore expired  $}
+    \State $\Delta\gets$ best delta among all pairs of nodes that are not in the tabu list
+    \State choose a random node of delta and insert it into tabu list
+    \State updates tabu list
+    \State $solution += \Delta$
+
+    \If{cost(solution) < cost(best\textunderscore solution)}
+    \State $ best\textunderscore solution \gets$ solution
+    \EndIf
+    
+
+    \EndWhile
+
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[scale=0.8]{images/tabuperf.png}
+    \caption{progress of the objective function of tabu}
+    \label{fig:TABUPERF}
+\end{figure}
 
 
 \subsection{Simulated Annealing}

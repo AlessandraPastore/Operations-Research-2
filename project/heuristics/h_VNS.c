@@ -127,7 +127,8 @@ int VNS(instance* inst) {
 		opt_2(inst, inst->timelimit, solution, &cost); //to change tl
 		
 		//add to plot newCost
-		if (iteration < 25)	addToPlot(cost, iteration);
+		if (iteration < 300)
+		addToPlot(cost, iteration);
 
 		iteration++;
 

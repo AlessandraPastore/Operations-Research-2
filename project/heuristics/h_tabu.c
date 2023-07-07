@@ -97,6 +97,7 @@ int TABU(instance* inst, double tl)
 		}
 
 		//add to plot newCost
+		if (iteration < 300)
 		addToPlot(newCost, iteration);
 		printf("----- new: %f -----\n", newCost);
 		

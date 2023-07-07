@@ -177,9 +177,9 @@ void plotPerf(char name[]) {
 	fprintf(commands, "set terminal png\n");
 	fprintf(commands, "set output \"./plot/%s.png\"\n", name);
 	fprintf(commands, "set style line 1 \\\n");
-	fprintf(commands, "    linecolor rgb'#FF0000' \\\n");
+	fprintf(commands, "    linecolor rgb'#000000' \\\n");
 	fprintf(commands, "    linetype 1 linewidth 2 \\\n");
-	fprintf(commands, "    pointtype 7 pointsize 2\n");
+	fprintf(commands, "    pointtype 7 pointsize 0.5\n");
 	fprintf(commands, "plot \"./output/outPerf.txt\" with linespoint linestyle 1\n");
 
 
