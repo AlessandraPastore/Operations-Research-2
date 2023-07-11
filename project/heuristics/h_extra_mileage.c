@@ -56,12 +56,15 @@ void computeExtra(instance* inst, int* visited, int* solution, double* cost) {
 }
 
 
-int extra_mileage(instance* inst) {
+int extra_mileage(instance* inst, int diam) {
 
 	printf("--- Starting EXTRA MILEAGE ---\n");
 
 	//compute costs
 	if (!inst->flagCost) computeCost(inst);
+
+	if (inst->seed != -1)
+		srand(inst->seed);
 
 	//vector with the solutions
 	int* solution = (int*)calloc(inst->nnodes, sizeof(int));
@@ -70,16 +73,37 @@ int extra_mileage(instance* inst) {
 	int* visited = (int*)calloc(inst->nnodes, sizeof(int));
 
 	int a, b;
-	double cost = 2 * diameter(inst, &a, &b);
+	double cost;
+	//Starts with diameter
+	do {
+
+		//puts visited all at zeros
+		memset(visited, 0, inst->nnodes * sizeof(int));
+
+		if (!diam) {
+			a = rand() % inst->nnodes;
+			b = rand() % inst->nnodes;
+
+			while(a == b) b = rand() % inst->nnodes;
+			cost = 2 * get_cost(a, b, inst);
+		}
+		else cost = 2 * diameter(inst, &a, &b);
+
+		if (VERBOSE >= 10) {
+			printf("a: %d\nb:%d\n", a, b);
+		}
+	
 
 
-	visited[a] = visited[b] = 1;
-	solution[a] = b;
-	solution[b] = a;
+		visited[a] = visited[b] = 1;
+		solution[a] = b;
+		solution[b] = a;
+	
+	
 
-	computeExtra(inst, visited, solution, &cost);
+		computeExtra(inst, visited, solution, &cost);
+	} while (!timeOut(inst, inst->timelimit) && !diam);
 
-	inst->timeEnd = second();
 
 	if (VERBOSE >= 10) {
 		if (checkSol(inst, solution)) return 1;

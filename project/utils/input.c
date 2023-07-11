@@ -168,7 +168,7 @@ void parse_command_line(int argc, char** argv, instance* inst)
 		if (strcmp(argv[i], "-seed") == 0) { inst->seed = atof(argv[++i]); continue; } 		//  random seed
 		if (strcmp(argv[i], "-help") == 0) { help = 1; continue; } 									// help
 		if (strcmp(argv[i], "--help") == 0) { help = 1; continue; } 									// help
-		//if (strcmp(argv[i], "-performance") == 0) { help = 1; break; } 
+		if (strcmp(argv[i], "-perf") == 0) { inst->perf = 1; continue; }
 		help = 1;
 	}
 

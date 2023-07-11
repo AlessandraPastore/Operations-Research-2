@@ -41,6 +41,7 @@ typedef struct {
 	char weight_type[10];                   // weight type for distance function
 
 	int seed;                               //random seed
+	int perf;								//runs performance profile
 
 	double timeStart;                       //start of the computation
 	double timeEnd;                         //end of the computation

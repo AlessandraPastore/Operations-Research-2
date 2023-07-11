@@ -10,9 +10,24 @@ int main(int argc, char** argv)
 
 	parse_command_line(argc, argv, &inst);
 
+	//printf("time limit: %d\n", inst.timelimit);
+
+	if (inst.perf) {
+		performance(&inst);
+
+		if (VERBOSE >= 0)
+		{
+			printf("... Performance finished\n");
+		}
+
+		return 0;
+
+	}
+		
+		
 
 
-	//performance(&inst);
+	
 	read_input(&inst);
 	inst.timeStart = second();
 

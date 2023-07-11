@@ -293,7 +293,7 @@ int CPXPUBLIC my_callback(CPXCALLBACKCONTEXTptr context, CPXLONG contextid, void
 
 
 
-
+// initialize callback
 int callback_sec(instance* inst, CPXENVptr env, CPXLPptr lp) {
 
 	printf("--- starting B&C via callback ---\n");

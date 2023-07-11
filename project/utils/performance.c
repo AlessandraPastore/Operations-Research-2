@@ -43,13 +43,49 @@ int call(instance* inst, char name[]) {
 	return 0;
 }
 
+//greedy grasp extramileage
+int gge(instance* inst, struct dirent* dir, FILE* out) {
+	if (call(inst, "GREEDY")) return 1;
+
+	printf("%s,%f\n", dir->d_name, inst->zbest);
+	fprintf(out, "%s,%f", dir->d_name, inst->zbest);
+
+	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+	inst->zbest = -1;
+
+	if (call(inst, "GREEDYGRASP")) return 1;
+
+	printf(",%f\n", inst->zbest);
+	fprintf(out, ",%f", inst->zbest);
+
+
+	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+	inst->zbest = -1;
+
+	if (call(inst, "EXTRAMILEAGE")) return 1;
+
+	printf(",%f\n", inst->zbest);
+	fprintf(out, ",%f\n", inst->zbest);
+}
+
+int graspTune(instance* inst, struct dirent* dir, FILE* out) {
+	if (call(inst, "GREEDYGRASP")) return 1;
+
+	printf(",%f\n", inst->zbest);
+	fprintf(out, ",%f", inst->zbest);
+}
+
 int performance(instance* inst) {
 
-	FILE* out = fopen(".\\output\\perf.txt", "w");
+	FILE* out = fopen(".\\output\\grasp9.txt", "w");
 	if (out == NULL) printf("output directory not found!");
 
+	printf("time limit: %f", inst->timelimit);
+
 	initInstance(inst);
-	fprintf(out, "3,greedy,grasp,extra\n");
+	//fprintf(out, "3,greedy,grasp,extra\n");
+
+	
 
 	DIR* d;
 	struct dirent* dir;
@@ -70,29 +106,15 @@ int performance(instance* inst) {
 			strcpy(inst->input_file, file);
 			read_input(inst);
 
-			if (call(inst, "GREEDY")) return 1;
-
-			printf("%s,%f\n", dir->d_name, inst->zbest);
-			fprintf(out, "%s,%f", dir->d_name, inst->zbest);
-
-			memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
-			inst->zbest = -1;
-
-			if (call(inst, "GREEDYGRASP")) return 1;
-
-			printf(",%f\n", inst->zbest);
-			fprintf(out, ",%f", inst->zbest);
-
-
-			memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
-			inst->zbest = -1;
-
-			if (call(inst, "EXTRAMILEAGE")) return 1;
-
-			printf(",%f\n", inst->zbest);
-			fprintf(out, ",%f\n", inst->zbest);
+			
 
 			//}
+
+			//gge(inst, dir, out);
+
+			graspTune(inst, dir, out);
+
+			
 		}
 		closedir(d);
 	}

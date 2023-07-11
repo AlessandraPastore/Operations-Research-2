@@ -11,6 +11,7 @@ int TABU(instance* inst, double tl)
 	double delta;
 	double newCost = inst->zbest;
 
+	//tune
 	int tmax;
 
 	if (inst->nnodes / 10 < 100)

@@ -19,7 +19,7 @@ void free_instance(instance* inst);
 //heuristics
 int heuristic(instance* inst);
 
-int extra_mileage(instance* inst);
+int extra_mileage(instance* inst, int diam);
 void computeExtra(instance* inst, int* visited, int* solution, double* cost);
 
 int grasp(instance* inst, int greedy, double tl);

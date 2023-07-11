@@ -22,10 +22,9 @@ int grasp(instance* inst, int greedy, double tl)
 	//0-1 vector to memorize nodes already part of the solution
 	int* visited = (int*)malloc(inst->nnodes * sizeof(int));
 
-	double graspRand = 0.8;
+	double graspRand = 0.9; //0.5,0.6,0.7,0.8,0.9
 	if (greedy) {
 		graspRand = 1;
-
 	}
 
 	int iter = 0;
@@ -139,7 +138,7 @@ int grasp(instance* inst, int greedy, double tl)
 
 	if (VERBOSE >= 50) printf("iter: %d\n", iter);
 
-	if (VERBOSE >= 10) printf("timeOut greedy: %f    that should be tl: %f\n", second() - inst->timeStart, tl);
+	//if (VERBOSE >= 10) printf("timeOut greedy: %f    that should be tl: %f\n", second() - inst->timeStart, tl);
 	if (VERBOSE >= 1) printf("BEST SOLUTION FOUND\nSTART: %d     COST: %f\n", inst->indexStart, inst->zbest);
 
 	plot(inst, inst->best_sol, "greedy");

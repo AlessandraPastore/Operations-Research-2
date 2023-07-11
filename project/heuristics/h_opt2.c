@@ -47,7 +47,9 @@ int opt_2(instance* inst, double tl, int* solution, double* cost) {
 	}
 
 
-	if (VERBOSE >= 10) printf("zbest: %f, cost: %f\n", inst->zbest, *cost);
+	if (VERBOSE >= 10) printf("zbest: %f\n", inst->zbest);
+
+	if (VERBOSE >= 10) printf("delta: %f\n", delta);
 
 	//update solution
 	if(inst->refopt2!=1)

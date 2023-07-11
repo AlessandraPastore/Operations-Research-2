@@ -111,7 +111,7 @@ int VNS(instance* inst) {
 		oldCost = cost;
 
 		kick(inst, solution, &cost);
-		//kick(inst, solution, &cost);
+		kick(inst, solution, &cost);
 
 		if (VERBOSE >= 10) {
 			if (checkSol(inst, solution)) return 1;
@@ -124,7 +124,7 @@ int VNS(instance* inst) {
 		plot(inst, solution, "VNS_kick");
 
 		//printf("- - entering opt2 - -\n");
-		opt_2(inst, inst->timelimit, solution, &cost); //to change tl
+		opt_2(inst, inst->timelimit, solution, &cost);
 		
 		//add to plot newCost
 		if (iteration < 300)
@@ -135,7 +135,6 @@ int VNS(instance* inst) {
 
 	} while (!timeOut(inst, inst->timelimit));
 
-	opt_2(inst, inst->timelimit, solution, &cost); //to change tl
 
 
 	free(solution);

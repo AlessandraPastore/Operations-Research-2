@@ -1,9 +1,9 @@
 #include "../utils/utils.h"
 
 #define POPULATION 100
-#define OFFSPRING_RATE 0.5
+#define OFFSPRING_RATE 0.2 //must be 0.5 or less
 #define MUTATION_RATE 0.04
-#define MAX_GEN 1000
+#define MAX_GEN 1000 
 
 
 // member of the population
@@ -187,6 +187,7 @@ int genetic(instance* inst) {
 	}
 
 	if (VERBOSE >= 1) printf("\n-- POPULATION INITIALIZED SUCCESS --\n");
+	inst->timeStart = second();
 
 	int gen = 1;
 
@@ -203,7 +204,8 @@ int genetic(instance* inst) {
 	chromosome mutant;
 	mutant.solution = (int*)calloc(inst->nnodes, sizeof(int));
 
-	inst->timeStart = second();
+	
+	
 
 	do {
 
@@ -215,10 +217,14 @@ int genetic(instance* inst) {
 		//sort population based on fitness. First we have the one with better fitness, last the worse
 		qsort(population, POPULATION, sizeof(chromosome), compareChromosomes);
 
+		
+
 		//check to update the best solution
 		if (inst->zbest == -1 || inst->zbest > population[0].fitness) {
 			updateSol(inst, population[0].fitness, population[0].solution);
 		}
+
+		
 
 		//compute the cumulative probabilities to use in the wheel roulette
 		population[0].sumProb = 1;
@@ -231,6 +237,8 @@ int genetic(instance* inst) {
 
 		//produce the entire offpring
 		while (count < POPULATION * OFFSPRING_RATE) {
+
+			
 
 			int p1, p2; //the parents
 
@@ -304,6 +312,9 @@ int genetic(instance* inst) {
 		}
 
 	} while (gen <= MAX_GEN && !timeOut(inst, inst->timelimit));
+
+	printf("timelimit: %f\n", inst->timelimit);
+	printf("gen:%d", gen);
 
 	//checks last generation for the best solution
 	//sort population based on fitness. First we have the one with better fitness, last the worse
