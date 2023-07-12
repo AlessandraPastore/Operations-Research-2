@@ -1,7 +1,7 @@
 #include "../utils/utils.h"
 
 
-#define alpha 0.99 //tune 99,97,96...
+#define alpha 0.95 //tune 99,97,96...
 #define e 2.71828
 
 

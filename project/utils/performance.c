@@ -43,8 +43,8 @@ int call(instance* inst, char name[]) {
 	return 0;
 }
 
-//greedy grasp extramileage
-int gge(instance* inst, struct dirent* dir, FILE* out) {
+//greedy grasp 2opt extramileage
+int gge2(instance* inst, struct dirent* dir, FILE* out) {
 	if (call(inst, "GREEDY")) return 1;
 
 	printf("%s,%f\n", dir->d_name, inst->zbest);
@@ -62,28 +62,71 @@ int gge(instance* inst, struct dirent* dir, FILE* out) {
 	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
 	inst->zbest = -1;
 
+	if (call(inst, "2_OPT")) return 1;
+
+	printf(",%f\n", inst->zbest);
+	fprintf(out, ",%f", inst->zbest);
+
+
+	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+	inst->zbest = -1;
+
 	if (call(inst, "EXTRAMILEAGE")) return 1;
 
 	printf(",%f\n", inst->zbest);
 	fprintf(out, ",%f\n", inst->zbest);
 }
 
-int graspTune(instance* inst, struct dirent* dir, FILE* out) {
-	if (call(inst, "GREEDYGRASP")) return 1;
+//tabu, vns, genetic, annealing
+int meta(instance* inst, struct dirent* dir, FILE* out) {
+	if (call(inst, "TABU")) return 1;
+
+	printf("%s,%f\n", dir->d_name, inst->zbest);
+	fprintf(out, "%s,%f", dir->d_name, inst->zbest);
+
+	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+	inst->zbest = -1;
+
+	if (call(inst, "VNS")) return 1;
 
 	printf(",%f\n", inst->zbest);
 	fprintf(out, ",%f", inst->zbest);
+
+
+	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+	inst->zbest = -1;
+
+	if (call(inst, "GENETIC")) return 1;
+
+	printf(",%f\n", inst->zbest);
+	fprintf(out, ",%f", inst->zbest);
+
+
+	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+	inst->zbest = -1;
+
+	if (call(inst, "ANNEALING")) return 1;
+
+	printf(",%f\n", inst->zbest);
+	fprintf(out, ",%f\n", inst->zbest);
 }
+
+int tune(instance* inst, struct dirent* dir, FILE* out, char name[]) {
+	if (call(inst, name)) return 1;
+
+	fprintf(out, "%f\n", inst->zbest);
+}
+
 
 int performance(instance* inst) {
 
-	FILE* out = fopen(".\\output\\grasp9.txt", "w");
+	FILE* out = fopen(".\\output\\sa95.txt", "w");
 	if (out == NULL) printf("output directory not found!");
 
 	printf("time limit: %f", inst->timelimit);
 
 	initInstance(inst);
-	//fprintf(out, "3,greedy,grasp,extra\n");
+	fprintf(out, "4,tabu,vns,genetic,annealing\n");
 
 	
 
@@ -110,9 +153,9 @@ int performance(instance* inst) {
 
 			//}
 
-			//gge(inst, dir, out);
+			meta(inst, dir, out);
 
-			graspTune(inst, dir, out);
+			//tune(inst, dir, out, "ANNEALING");
 
 			
 		}

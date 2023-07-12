@@ -110,8 +110,18 @@ int VNS(instance* inst) {
 
 		oldCost = cost;
 
-		kick(inst, solution, &cost);
-		kick(inst, solution, &cost);
+		
+		
+		
+
+		int count = 2; //1,2,3,4 to tune
+
+		//if (inst->nnodes > 500) count = 4;
+		
+
+		for (int i = 0; i < count; i++) kick(inst, solution, &cost);
+		
+		
 
 		if (VERBOSE >= 10) {
 			if (checkSol(inst, solution)) return 1;

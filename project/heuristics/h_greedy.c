@@ -22,7 +22,7 @@ int grasp(instance* inst, int greedy, double tl)
 	//0-1 vector to memorize nodes already part of the solution
 	int* visited = (int*)malloc(inst->nnodes * sizeof(int));
 
-	double graspRand = 0.9; //0.5,0.6,0.7,0.8,0.9
+	double graspRand = 0.9; //tuned parameter
 	if (greedy) {
 		graspRand = 1;
 	}

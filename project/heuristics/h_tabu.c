@@ -13,11 +13,13 @@ int TABU(instance* inst, double tl)
 
 	//tune
 	int tmax;
+	int tenure_ratio = 2; //tune: 10,8,6,4
+	int tenure = 100; //tune: 100,150,200
 
-	if (inst->nnodes / 10 < 100)
-		tmax = inst->nnodes / 10;
+	if (inst->nnodes / tenure_ratio < tenure)
+		tmax = inst->nnodes / tenure_ratio;
 	else
-		tmax = 100;
+		tmax = tenure;
 
 
 	//vector with the new edge combination
