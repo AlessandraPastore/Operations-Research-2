@@ -207,10 +207,14 @@ int TSPopt(instance* inst)
 
 
 	//choose formulation
+	//exact methods
 	if (strcmp(inst->cplex, "BENDERS") == 0) return benders(inst, env, lp);
 	else if (strcmp(inst->cplex, "LAZY") == 0) return callback_sec(inst, env, lp);
+
 	else if (strcmp(inst->cplex, "CONCORDE") == 0) return callback_relaxation(inst, env, lp);
-	else if (strcmp(inst->cplex, "LAZYOPT") == 0) { inst->refopt2 = 1; return callback_sec(inst, env, lp); }
+	else if (strcmp(inst->cplex, "LAZYOPT") == 0) { inst->refopt2 = 1; return callback_sec(inst, env, lp); } //without tuning
+	
+	//matheuristics
 	else if (strcmp(inst->cplex, "HARD") == 0) return hardfix(inst, env, lp);
 	else if (strcmp(inst->cplex, "SOFT") == 0) return softfix(inst, env, lp);
 	else {

@@ -167,8 +167,9 @@ static int CPXPUBLIC my_callback_relaxation(CPXCALLBACKCONTEXTptr context, CPXLO
 	CPXcallbackgetinfoint(context, CPXCALLBACKINFO_NODECOUNT, &node);
 	CPXcallbackgetinfoint(context, CPXCALLBACKINFO_THREADID, &threadid);
 
+	int mod = 10; //tune:10,5,2,1
 
-	if (node % 10 != 0) return 0;
+	if (node % mod != 0) return 0;  
 
 	long ncols = inst->ncols;
 	

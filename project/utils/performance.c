@@ -31,7 +31,7 @@ void initInstance(instance* inst) {
 
 }
 
-int call(instance* inst, char name[]) {
+int callH(instance* inst, char name[]) {
 
 	inst->timeStart = second();
 	strcpy(inst->heuristic, name);
@@ -43,9 +43,21 @@ int call(instance* inst, char name[]) {
 	return 0;
 }
 
+int callC(instance* inst, char name[]) {
+
+	inst->timeStart = second();
+	strcpy(inst->cplex, name);
+	if (TSPopt(inst)) {
+		print_error("ERROR IN CPLEX");
+		return 1;
+	}
+
+	return 0;
+}
+
 //greedy grasp 2opt extramileage
 int gge2(instance* inst, struct dirent* dir, FILE* out) {
-	if (call(inst, "GREEDY")) return 1;
+	if (callH(inst, "GREEDY")) return 1;
 
 	printf("%s,%f\n", dir->d_name, inst->zbest);
 	fprintf(out, "%s,%f", dir->d_name, inst->zbest);
@@ -53,7 +65,7 @@ int gge2(instance* inst, struct dirent* dir, FILE* out) {
 	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
 	inst->zbest = -1;
 
-	if (call(inst, "GREEDYGRASP")) return 1;
+	if (callH(inst, "GREEDYGRASP")) return 1;
 
 	printf(",%f\n", inst->zbest);
 	fprintf(out, ",%f", inst->zbest);
@@ -62,7 +74,7 @@ int gge2(instance* inst, struct dirent* dir, FILE* out) {
 	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
 	inst->zbest = -1;
 
-	if (call(inst, "2_OPT")) return 1;
+	if (callH(inst, "2_OPT")) return 1;
 
 	printf(",%f\n", inst->zbest);
 	fprintf(out, ",%f", inst->zbest);
@@ -71,7 +83,7 @@ int gge2(instance* inst, struct dirent* dir, FILE* out) {
 	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
 	inst->zbest = -1;
 
-	if (call(inst, "EXTRAMILEAGE")) return 1;
+	if (callH(inst, "EXTRAMILEAGE")) return 1;
 
 	printf(",%f\n", inst->zbest);
 	fprintf(out, ",%f\n", inst->zbest);
@@ -79,7 +91,7 @@ int gge2(instance* inst, struct dirent* dir, FILE* out) {
 
 //tabu, vns, genetic, annealing
 int meta(instance* inst, struct dirent* dir, FILE* out) {
-	if (call(inst, "TABU")) return 1;
+	if (callH(inst, "TABU")) return 1;
 
 	printf("%s,%f\n", dir->d_name, inst->zbest);
 	fprintf(out, "%s,%f", dir->d_name, inst->zbest);
@@ -87,7 +99,7 @@ int meta(instance* inst, struct dirent* dir, FILE* out) {
 	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
 	inst->zbest = -1;
 
-	if (call(inst, "VNS")) return 1;
+	if (callH(inst, "VNS")) return 1;
 
 	printf(",%f\n", inst->zbest);
 	fprintf(out, ",%f", inst->zbest);
@@ -96,7 +108,7 @@ int meta(instance* inst, struct dirent* dir, FILE* out) {
 	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
 	inst->zbest = -1;
 
-	if (call(inst, "GENETIC")) return 1;
+	if (callH(inst, "GENETIC")) return 1;
 
 	printf(",%f\n", inst->zbest);
 	fprintf(out, ",%f", inst->zbest);
@@ -105,14 +117,35 @@ int meta(instance* inst, struct dirent* dir, FILE* out) {
 	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
 	inst->zbest = -1;
 
-	if (call(inst, "ANNEALING")) return 1;
+	if (callH(inst, "ANNEALING")) return 1;
 
 	printf(",%f\n", inst->zbest);
 	fprintf(out, ",%f\n", inst->zbest);
 }
 
-int tune(instance* inst, struct dirent* dir, FILE* out, char name[]) {
-	if (call(inst, name)) return 1;
+int exact(instance* inst, struct dirent* dir, FILE* out) {
+
+	if (callC(inst, "BENDERS")) return 1;
+
+	int end = inst->timeStart - second();
+
+	//printf("%s,%f\n", dir->d_name, end);
+	fprintf(out, "%s,%d", dir->d_name, end);
+
+	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+	inst->zbest = -1;
+
+	if (callC(inst, "LAZY")) return 1;
+
+	end = inst->timeStart - second();
+
+	//printf(",%f\n", end);
+	fprintf(out, ",%d\n", end);
+
+}
+
+int tuneH(instance* inst, struct dirent* dir, FILE* out, char name[]) {
+	if (callH(inst, name)) return 1;
 
 	fprintf(out, "%f\n", inst->zbest);
 }
@@ -120,13 +153,13 @@ int tune(instance* inst, struct dirent* dir, FILE* out, char name[]) {
 
 int performance(instance* inst) {
 
-	FILE* out = fopen(".\\output\\sa95.txt", "w");
+	FILE* out = fopen(".\\output\\exact.txt", "w");
 	if (out == NULL) printf("output directory not found!");
 
 	printf("time limit: %f", inst->timelimit);
 
 	initInstance(inst);
-	fprintf(out, "4,tabu,vns,genetic,annealing\n");
+	fprintf(out, "2,benders,callback\n");
 
 	
 
@@ -153,9 +186,11 @@ int performance(instance* inst) {
 
 			//}
 
-			meta(inst, dir, out);
+			//meta(inst, dir, out);
 
 			//tune(inst, dir, out, "ANNEALING");
+
+			exact(inst, dir, out);
 
 			
 		}

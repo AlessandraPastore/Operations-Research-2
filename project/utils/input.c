@@ -154,6 +154,7 @@ void parse_command_line(int argc, char** argv, instance* inst)
 	strcpy(inst->input_file, "NULL");
 	inst->timelimit = 0;
 	inst->seed = -1;
+	inst->perf = 0;
 	strcpy(inst->heuristic, "NULL");
 	strcpy(inst->cplex, "NULL");
 

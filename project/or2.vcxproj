@@ -119,10 +119,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cplex\callback.c" />
-    <ClCompile Include="cplex\hardfix.c" />
-    <ClCompile Include="cplex\mincut.c" />
-    <ClCompile Include="cplex\softfix.c" />
+    <ClCompile Include="cplex\c_callback.c" />
+    <ClCompile Include="cplex\c_hardfix.c" />
+    <ClCompile Include="cplex\c_mincut.c" />
+    <ClCompile Include="cplex\c_softfix.c" />
     <ClCompile Include="heuristics\h_refinement.c" />
     <ClCompile Include="utils\chrono.c" />
     <ClCompile Include="cplex\cplex.c" />
