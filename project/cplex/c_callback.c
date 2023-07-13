@@ -384,7 +384,7 @@ int callback_relaxation(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	//to store the solution
 	double* xstar = (double*)calloc(ncols, sizeof(double));
 
-	CPXsetdblparam(env, CPX_PARAM_TILIM, inst->timelimit);
+	CPXsetdblparam(env, CPX_PARAM_TILIM, inst->timelimit - inst->timeStart);
 	CPXLONG contextid = contextid = CPX_CALLBACKCONTEXT_CANDIDATE | CPX_CALLBACKCONTEXT_RELAXATION; // ... context for concorde
 
 	if (CPXcallbacksetfunc(env, lp, contextid, my_callback, inst)) print_error("CPXcallbacksetfunc() error");

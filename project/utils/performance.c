@@ -127,7 +127,7 @@ int exact(instance* inst, struct dirent* dir, FILE* out) {
 
 	if (callC(inst, "BENDERS")) return 1;
 
-	int end = inst->timeStart - second();
+	int end = second() - inst->timeStart;;
 
 	//printf("%s,%f\n", dir->d_name, end);
 	fprintf(out, "%s,%d", dir->d_name, end);
@@ -137,7 +137,7 @@ int exact(instance* inst, struct dirent* dir, FILE* out) {
 
 	if (callC(inst, "LAZY")) return 1;
 
-	end = inst->timeStart - second();
+	end = second() - inst->timeStart;
 
 	//printf(",%f\n", end);
 	fprintf(out, ",%d\n", end);
@@ -150,16 +150,24 @@ int tuneH(instance* inst, struct dirent* dir, FILE* out, char name[]) {
 	fprintf(out, "%f\n", inst->zbest);
 }
 
+int tuneC(instance* inst, struct dirent* dir, FILE* out, char name[]) {
+	if (callC(inst, name)) return 1;
+
+	int end = second() - inst->timeStart;
+
+	fprintf(out, "%d\n", end);
+}
+
 
 int performance(instance* inst) {
 
-	FILE* out = fopen(".\\output\\exact.txt", "w");
+	FILE* out = fopen(".\\output\\con10.txt", "w");
 	if (out == NULL) printf("output directory not found!");
 
 	printf("time limit: %f", inst->timelimit);
 
 	initInstance(inst);
-	fprintf(out, "2,benders,callback\n");
+	//fprintf(out, "2,benders,callback\n");
 
 	
 
@@ -188,9 +196,11 @@ int performance(instance* inst) {
 
 			//meta(inst, dir, out);
 
-			//tune(inst, dir, out, "ANNEALING");
+			//tuneH(inst, dir, out, "ANNEALING");
 
-			exact(inst, dir, out);
+			//exact(inst, dir, out);
+
+			tuneC(inst, dir, out, "CONCORDE");
 
 			
 		}
