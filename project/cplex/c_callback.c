@@ -328,7 +328,8 @@ int callback_sec(instance* inst, CPXENVptr env, CPXLPptr lp) {
 			plot(inst, succ, "lazycut");
 			return 0;
 		}
-		else print_error("CPXgetx() error");
+		
+		else { printf("no sol found!"); return 0; }
 	}
 	build_sol(xstar, inst, succ, comp, &ncomp);
 	
@@ -349,7 +350,7 @@ int callback_sec(instance* inst, CPXENVptr env, CPXLPptr lp) {
 			plot(inst, succ, "lazycut");
 			return 0;
 		}
-		else print_error("CPXgetx() error");
+		else { printf("no sol found!"); return 0; }
 	}
 
 	if (VERBOSE >= 10) {
@@ -408,7 +409,7 @@ int callback_relaxation(instance* inst, CPXENVptr env, CPXLPptr lp) {
 			plot(inst, succ, "relaxationCallback");
 			return 0;
 		}
-		else print_error("CPXgetx() error");
+		else { printf("no sol found!"); return 0; }
 	}
 	build_sol(xstar, inst, succ, comp, &ncomp);
 
@@ -429,7 +430,7 @@ int callback_relaxation(instance* inst, CPXENVptr env, CPXLPptr lp) {
 			plot(inst, succ, "relaxationCallback");
 			return 0;
 		}
-		else print_error("CPXgetx() error");
+		else { printf("no sol found!"); return 0; }
 	}
 
 	if (VERBOSE >= 10) {
