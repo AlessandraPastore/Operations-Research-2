@@ -49,7 +49,7 @@ static int violated_cuts_callback(double cutval, int num_nodes, int* members, vo
 	free(values);
 	free(edges);
 
-	printf("----------------io vado bene!-------------");
+	//printf("----------------io vado bene!-------------");
 	return 0;
 }
 

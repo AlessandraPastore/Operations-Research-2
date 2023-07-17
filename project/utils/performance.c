@@ -161,20 +161,39 @@ int tuneC(instance* inst, struct dirent* dir, FILE* out, char name[]) {
 
 int performance(instance* inst) {
 
-	FILE* out = fopen(".\\output\\con10.txt", "w");
-	if (out == NULL) printf("output directory not found!");
+	FILE* out = fopen(".\\output\\soft5.txt", "a"); //append
+	if (out == NULL) {
+		printf("output directory not found!");
+		return 1;
+	}
 
-	printf("time limit: %f", inst->timelimit);
+	//printf("time limit: %f", inst->timelimit);
 
-	initInstance(inst);
+	//initInstance(inst);
 	//fprintf(out, "2,benders,callback\n");
 
+	//FILE* in = fopen(inst->input_file, "r"); //append
+	//if (in == NULL) printf("input directory not found!");
+
+	read_input(inst);
+
+	if (callC(inst, "HARD")) return 1;
+
+	//int end = second() - inst->timeStart;
+
+	fprintf(out, "%f\n", inst->zbest);
+
+
+
 	
+	/*
 
 	DIR* d;
 	struct dirent* dir;
 	d = opendir(".\\input");
 	if (d) {
+		
+		
 		while ((dir = readdir(d)) != NULL) {
 			printf("%s\n", dir->d_name);
 			if (strncmp(dir->d_name, ".", 1) == 0) continue;
@@ -188,7 +207,7 @@ int performance(instance* inst) {
 			strcat(file, dir->d_name);
 			printf("FILE:%s\n", file);
 			strcpy(inst->input_file, file);
-			read_input(inst);
+			//read_input(inst);
 
 			
 
@@ -200,18 +219,22 @@ int performance(instance* inst) {
 
 			//exact(inst, dir, out);
 
-			tuneC(inst, dir, out, "CONCORDE");
+			//tuneC(inst, dir, out, "CONCORDE");
+
+			System(or2.exe -)
 
 			
-		}
+		} 
 		closedir(d);
 	}
-
-
-
-
-
 	free(dir);
+	*/
+
+
+
+
+
+	
 	free_instance(inst);
 	fclose(out);
 	return 0;
