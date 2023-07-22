@@ -40,10 +40,11 @@ int annealing(instance* inst, double tl)
 
 		double deltaTemp = get_cost(i, j, inst) + get_cost(solution[j], solution[i], inst) - (get_cost(i, solution[i], inst) + get_cost(j, solution[j], inst));
 
-		double prob = pow(e, (-deltaTemp / T));
-		int random = rand() % 10;
+		double prob = exp(-deltaTemp / T);
+		//int random = rand() % 10;
+		double random = rand() / RAND_MAX;
 
-		if (random < prob * 10)
+		if (random < prob)
 		{
 			reverse(inst, solution, i, j);
 			newCost += deltaTemp;

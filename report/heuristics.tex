@@ -74,12 +74,7 @@ This algorithm has complexity $O(n^2)$ since it needs to scan at most $n$ nodes 
 
 To slightly improve this greedy algorithm performance, in our implementation we actually preferred a multistart approach. The algorithm is called multiple times within a time limit and at each iteration a random $startNode$ is used as the starting node. In this way, at each iteration we obtain different solutions with different costs and when the time is up, at the end of the run, only the best solution (the one with minimal cost) is returned in output.
 
-\subsubsection{The Grasp Variant}
-The Greedy Randomized Adaptive Search Procedure (GRASP) is a technique that introduces randomization in the choices of the greedy algorithms.
-Applied to the Nearest Neighbor algorithm, it actually works by adding a certain probability value during the running of it and this slightly modifies its behavior of improvement of the current solution.
-
-At each iteration, instead of choosing the nearest node to the current one, we have a certain probability of choosing the second nearest node. That way we can add some randomness to the algorithm and this can actually improve the overall optimality of the final solution.
-Obviously even this variant has been implemented and runs similarly to the multistart Nearest Neighbor algorithm within a time limit, and with different starting nodes at each iteration.
+\input{tuning/grasp.tex}
 
 \subsection{Extra-Mileage: Farthest Insertion}\label{extramileage}
 The Farthest Insertion heuristic described in algorithm \ref{algo:extramileage}, also called Extra-Mileage heuristic, unlike the Nearest Neighbor algorithm, doesn’t need a starting node, instead starts by connecting the farthest nodes in the graph as an initial cycle. Because of that it is defined as a deterministic method, meaning that it will always return the same solution over the same input instance.
@@ -116,7 +111,7 @@ The Farthest Insertion heuristic described in algorithm \ref{algo:extramileage},
     \caption{Example of Farthest Insertion} \label{fig:extra}
 \end{figure}
 
-\begin{algorithm}[h!]
+\begin{algorithm}[!h]
     \caption{Farthest Insertion}\label{algo:extramileage}
     \begin{algorithmic}[1]
     \Require $G = (V,E), c:E \to \mathbb{R}^+$
@@ -157,12 +152,14 @@ That simple metric is computed by testing each non visited node with each possib
 
 The Farthest Insertion algorithm has a worst-case time complexity of $O(n^2)$, where $n$ is the number of nodes. However, it has been shown to perform well in practice and can often produce high-quality solutions that are close to optimal for small and medium-sized instances of the TSP.
 
+\input{tuning/extra.tex}
+
 \section{Refinement Heuristics}
 \subsection{2-OPT Refining}\label{2OPT}
 One of the most popular heuristic algorithms for solving the TSP is the 2-opt algorithm.
 The 2-opt algorithm is a local search algorithm that iteratively improves an initial tour by swapping pairs of edges to reduce the length of the tour. The algorithm starts by generating an initial tour, such as one produced by the Nearest Neighbor or Farthest Insertion algorithm. It then repeatedly examines all possible pairs of edges in the tour, and if swapping a pair of edges will reduce the length of the tour, the edges are swapped.
 
-More specifically, the 2-opt algorithm works as follows: first, it generates an initial solution, in our implementation we choose to generate it using the multistart Nearest Neighbor algorithm paired with a GRASP approach. It then examines all pairs of edges $(a,a')$ and $(b,b')$, where $a,a',b$ and $b'$ are distinct nodes. If swapping the edges $(a,a')$ and $(b,b')$ will result in a shorter tour, the edges are swapped, and the algorithm continues to search for other pairs of edges to swap. This process is repeated until no further improvements can be made to the tour or until the time limit permits.
+More specifically, the 2-opt algorithm \ref*{algo:2-OPT} works as follows: first, it generates an initial solution, in our implementation we choose to generate it using the multistart Nearest Neighbor algorithm paired with a GRASP approach. It then examines all pairs of edges $(a,a')$ and $(b,b')$, where $a,a',b$ and $b'$ are distinct nodes. If swapping the edges $(a,a')$ and $(b,b')$ will result in a shorter tour, the edges are swapped, and the algorithm continues to search for other pairs of edges to swap. This process is repeated until no further improvements can be made to the tour or until the time limit permits.
 
 To know that a certain swap results in a better solution, the algorithm computes 
 \begin{equation}\label{eq:delta}
@@ -172,6 +169,43 @@ To know that a certain swap results in a better solution, the algorithm computes
 and if it is negative then we found some good candidates, meaning that the new candidates edges would be shorter than the current ones.
 
 After the swap, the algorithm then changes the order of the successor in the tour to make $b$ connect to $a$ and obtain a new solution, as in fig \ref{fig:2OPT}.
+
+\begin{algorithm}[!h]
+    \caption{2-OPT}\label{algo:2-OPT}
+    \begin{algorithmic}[1]
+    \Require $G = (V,E), c:E \to \mathbb{R}^+$
+    \Ensure $\text{sub optimal TSP solution}$
+
+
+    \State $solution \gets$ GRASP()
+    \State $cost \gets$ cost\textunderscore grasp()
+    
+
+    \While{$ !time\textunderscore expired  $}
+    \State $\Delta\textunderscore temp \gets$ 0
+    \State $edge\textunderscore 1 \gets$ empty
+    \State $edge\textunderscore 2 \gets$ empty
+    \ForEach {$(a,a') \in E $ }
+        \ForEach {$(b,b') \neq (a,a')\in E $}
+        \State $\Delta \operatorname{c}(a,b) \gets$  $(c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$
+        \If{$\Delta\textunderscore temp  > \Delta \operatorname{c}(a,b) $}
+        \State $edge\textunderscore 1 \gets$ (a,a')
+        \State $edge\textunderscore 2 \gets$ (b,b')
+        \State $\Delta\textunderscore temp \gets$ $\Delta \operatorname{c}(a,b)$
+        \EndIf
+        \EndFor
+    \EndFor
+    
+    \If{ $\Delta\textunderscore temp  <0$}
+    \State $swap(edge\textunderscore 1,edge\textunderscore 2) $ // swap the selected (a,a'), (b,b') as shown in figure \ref{fig:2OPT}
+    \State $cost \gets  $ $cost$ + $\Delta\textunderscore temp$
+    \EndIf
+    
+
+    \EndWhile
+
+    \end{algorithmic}
+\end{algorithm}
 
 \begin{figure}[!h]
     \centering
@@ -214,339 +248,34 @@ After the swap, the algorithm then changes the order of the successor in the tou
     \caption{Example of 2-OPT} \label{fig:2OPT}
 \end{figure}
 
+
+
 The 2-opt algorithm is known to be effective in practice, and it has been used to solve many large-scale instances of the TSP. The algorithm is relatively efficient, with a time complexity of $O(n^2)$, where $n$ is the number of nodes in the graph.
 
 The same idea goes behind the more general k-OPT Refining algorithm, where instead of swapping only 2 edges at the time, k edges are selected and swapped. For example, 3-opt involves swapping three edges in the tour, while 4-opt involves swapping four edges. By considering larger sets of edges, k-opt can potentially find more optimal solutions than 2-opt, but it is also computationally more expensive.
-\begin{algorithm}[h!]
-    \caption{2-OPT}\label{algo:2-OPT}
-    \begin{algorithmic}[1]
-    \Require $G = (V,E), c:E \to \mathbb{R}^+$
-    \Ensure $\text{sub optimal TSP solution}$
-
-
-    \State $solution \gets$ GRASP()
-    \State $cost \gets$ cost\textunderscore grasp()
-    
-
-    \While{$ !time\textunderscore expired  $}
-    \State $\Delta\textunderscore temp \gets$ 0
-    \State $edge\textunderscore 1 \gets$ empty
-    \State $edge\textunderscore 2 \gets$ empty
-    \ForEach {$(a,a') \in E $ }
-        \ForEach {$(b,b') \neq (a,a')\in E $}
-        \State $\Delta \operatorname{c}(a,b) \gets$  $(c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$
-        \If{$\Delta\textunderscore temp  > \Delta \operatorname{c}(a,b) $}
-        \State $edge\textunderscore 1 \gets$ (a,a')
-        \State $edge\textunderscore 2 \gets$ (b,b')
-        \State $\Delta\textunderscore temp \gets$ $\Delta \operatorname{c}(a,b)$
-        \EndIf
-        \EndFor
-    \EndFor
-    
-    \If{ $\Delta\textunderscore temp  <0$}
-    \State $swap(edge\textunderscore 1,edge\textunderscore 2) $ // swap the selected (a,a'), (b,b') as shown in figure \ref{fig:2OPT}
-    \State $cost \gets  $ $cost$ + $\Delta\textunderscore temp$
-    \EndIf
-    
-
-    \EndWhile
-
-    \end{algorithmic}
-\end{algorithm}
 
 
 
-\section{Metaheuristics}
 
 
 
-Constructive heuristics and refinement heuristics  are often combined to form metaheuristic methods, which can be seen as general problem-solving frameworks that guide the search process by iteratively improving candidate solutions. (fig.\ref{fig:metaheur}) 
+\section{Comparison of Heuristic algorithms}
+All the algorithms introduced above fall in the category of Heuristics and as such it is needed to assert which of them performs the better.
 
-Metaheuristic methods can be classified into two main categories: single-solution and population-based methods. Single-solution methods start with an initial solution and iteratively improve it by applying a set of moves or transformations. The single-solution metaheuristics that we implemented are variable neighborhood search (VNS), tabu search and simulated annealing. Population-based methods maintain a population of candidate solutions and explore the search space by iteratively generating new solutions through genetic operators such as crossover and mutation. For the population-based methods we implemented a genetic algorithm.
+Using a limited number of instances and a limited running time, we collected the cost of the results of each algorithm and we compared them. It is important to notice that the results are highly dependent over the size of the instances used, even if we tried to test the algorithms over both small and bigger once.
+
+We compared the Nearest Neighbor algorithm, its GRASP variant with multistart, the Extra-Mileage algorithm with the diameter start and the 2-opt algorithm.
+
+During the GRASP tuning, we predicted that the default version of the Greedy algorithm (Nearest Neighbor) would give better results than the GRASP variant, and this performance profile actually proves us right.
+
+As we can see in Figure \ref*{fig:gge2}, the 2-opt algorithm is the better performing, while the GRASP variant is the worst one. 
 
 \begin{figure}[!h]
     \centering
-    \includegraphics[]{images/metaheuristics.png}
-    \caption{General behavior of a metaheuristic method}
-    \label{fig:metaheur}
+    \includegraphics[width=\textwidth]{images/gge2.pdf}
+    \caption{Performance Profile of Heuristics}
+    \label{fig:gge2}
 \end{figure}
-
-
-
-\subsection{Variable Neighborhood Search}
-The Variable Neighborhood Search (VNS), proposed by Mladenović and Hansen in 1997,  is a metaheuristic optimization algorithm used to solve combinatorial optimization problems. The basic idea of VNS is to iteratively apply a perturbation operator to the current solution and then perform a local search around the perturbed solution. VNS is known for its flexibility and ability to escape from local optima by exploring different neighborhood structures.
-In our implementation the VNS algorithm tries to improve the solution made by the 2-opt algorithm. In order to try to escape from the local minima produced by the 2-opt, the algorithm performs a random swap of 5 edges, see fig. \ref{fig:VNS} %%%
-
-
-\begin{figure}[!h]
-    \centering
-    \begin{tikzpicture}
-        \tikzstyle{city} = [fill=purple!20,rounded corners]
-    
-
-        \filldraw[color=blue!60, fill=blue!5, very thick](0,0) circle (4);
-
-        \filldraw[color=red!60, fill=red!5, very thick](0,0) circle (1.5);
-
-        \filldraw[color=red!60, fill=red!5, very thick, fill opacity=0.2](-2.5,-2) circle (1.5);
-
-        
-       
-        \node[city,label=above:$x^{(n)}$] (A) at (0,0){};
-        \node[city] (B) at (-2.5,-2){};
-
-        
-
-        \draw[->] (A) edge[bend right] node [right] {} (B);
-
-        
-
-        
-
-
-        % define a random point (C) on this circle
-        \path (0,0) ++(-45:1.5) coordinate (C);
-
-        % draw (C) with a label
-        \fill[black] (C) circle[radius=2pt] ++(1.5:1em) node {2opt};
-
-        % define a random point (D) on this circle
-        \path (0,0) ++(40:4) coordinate (D);
-
-        % draw (C) with a label
-        \fill[black] (D) circle[radius=2pt] ++(4:1em) node {3opt};
-        
-
-        \draw[dashed] (A) -- (C);
-        \draw[dashed] (A) -- (D);
-
-
-
-
-        %\draw[->] (0,0) arc (0:200:1.5);
-       
-    
-    \end{tikzpicture}
-    \caption{Example of VNS kick} \label{fig:VNS}
-\end{figure}
-
-
-
-Then it reapplies the 2-opt procedure and if it finds a better solution it updates the global solution.
-The overall procedure is applied until a certain time limit is reached.
-The algorithm requires $O(n)$ time for each kick, because after the swap operation we have to update the structure that contains all the nodes of the graph. We also have to sum the time required by the 2-opt algorithm. This time at the end has to be multiplied by the number of iterations that this procedure is performed. 
-
-\begin{algorithm}[h!]
-    \caption{VNS}\label{algo:VNS}
-    \begin{algorithmic}[1]
-    \Require $G = (V,E), c:E \to \mathbb{R}^+$
-    \Ensure $\text{sub optimal TSP solution}$
-
-
-    \State $solution \gets$ 2-opt()
-   
-   
-    \While{$ !time\textunderscore expired$}
-    \State kick(solution) 
-    \State kick(solution)  
-    \State $ solution \gets $ 2-opt(solution)
-    
-    
-    \If{cost(solution) < cost(best\textunderscore solution)}
-    \State $ best\textunderscore solution \gets$ solution
-    \EndIf
-    
-
-    \EndWhile
-
-    \end{algorithmic}
-\end{algorithm}
-
-
-
-\subsection{Tabu}
-Tabu search is a metaheuristic method created by Fred W. Glover in 1986.
-Tabu search is mainly based on the concept of "tabu" which means "prohibited" or "forbidden", meaning that the algorithm actually maintains a tabu list that keeps track of recent moves that are prohibited from being repeated. 
-Tabu search is known for its ability to find good-quality solutions in a relatively short amount of time, although, as other heuristic methods, it does not guarantee finding the optimal solution.
-
-The algorithm starts with an initial solution, which can be generated randomly or by using a construction heuristic. In our implementation the initial solution is generated by the greedy heuristic with the grasp and multistart variant run for some time before returning an incumbent.
-
-At every iteration of the tabu algorithm, we select the pair of edges that have the minimum value of $\Delta$ (defined as in 2-opt, see equation \ref{eq:delta}). Unike 2-opt algorithm, in tabu search doesn't matter if delta is negative or positive, we only take the minimum computed delta of the nodes that are not marked as “tabu” and select those nodes as candidate for a swap of edges (as in fig.\ref{fig:2OPT}).  After every swap, one of the four nodes involved is randomly select, and it is inserted into the “tabu” list.
-
-The practice of using and updating a "tabu" list is used to prevent cycling, which means repeatedly visiting the same solutions over and over, without actually improving the current local optima. This allows the tabu method to diversify the search and explore different regions of the solution space. Thanks to this feature the algorithm moves around the solution space avoiding being stuck in local optima, and trying to find a better solution value, as can be seen in fig. \ref{fig:TABU}
-
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width = \textwidth]{images/tabu.png}
-    \caption{General behavior of a TABU method}
-    \label{fig:TABU}
-\end{figure}
-
-In order to implement the tabu list we create a list of length equals to the number of the nodes of the graph. Every time a node is selected to be a “tabu node” we set its corresponding element of the list equals to the number of the current iteration. Then this node cannot be involved in any swap operations until the number of the next iterations have overcome the value of a parameter called \textit{Tabu Tenure} that we saved as $T_{max}$, representing the number of iterations a node is forced to remain a "tabu" node and cannot be selected in a swap operation.
-The value of $T_{max}$ is equivalent to the minimum between 100 and the number of nodes divided by 10, assuring that there are always nodes not labeled as forbidden and that can be used in the swap operation.
-
-Each swap requires time equal to $O(n)$ to rearrange the array containing the actual solution. So the overall complexity is equal to $O(n \cdot n_{swaps})$.
-The algorithm stops after a given time limit returning in output the best solution found until then.
-
-\begin{algorithm}[h!]
-    \caption{Tabu}\label{algo:tabu}
-    \begin{algorithmic}[1]
-    \Require $G = (V,E), c:E \to \mathbb{R}^+$
-    \Ensure $\text{sub optimal TSP solution}$
-
-
-    \State $solution \gets$ 2OPT()
-    
-    \While{$ !time\textunderscore expired  $}
-    \State $\Delta\gets$ best delta among all pairs of nodes that are not in the tabu list
-    \State choose a random node of delta and insert it into tabu list
-    \State updates tabu list
-    \State $solution += \Delta$
-
-    \If{cost(solution) < cost(best\textunderscore solution)}
-    \State $ best\textunderscore solution \gets$ solution
-    \EndIf
-    
-
-    \EndWhile
-
-    \end{algorithmic}
-\end{algorithm}
-
-\begin{figure}[!h]
-    \centering
-    \includegraphics[scale=0.8]{images/tabuperf.png}
-    \caption{progress of the objective function of tabu}
-    \label{fig:TABUPERF}
-\end{figure}
-
-
-\subsection{Simulated Annealing}
-
-Simulated annealing is a metaheuristic optimization algorithm that can be used to solve the Traveling Salesman Problem (TSP).
-The name of the algorithm comes from annealing in metallurgy, a technique involving heating and controlled cooling of a material to alter its physical properties. This method uses a probabilistic technique that usually archives an approximate solution of the global minimum.
-
-Just like other metaheuristics, this algorithm starts with an initial solution, which can be generated randomly or using a heuristic. In our implementation we use the output of the Greedy heuristic with a grasp and multistart variant as the initial solution that we want to improve.
-
-At each iteration of the algorithm, we select two edges $(a,a')$,$(b,b')$ randomly, where $a,a',b$ and $b'$ are distinct nodes and compute the $\Delta$ as in equation \ref{eq:delta}. If there would be an improvement over the current solution, we swap the edges (as in fig.\ref{fig:2OPT} ). Else if the swap would result in the worsening of the solution, there is still a certain probability of making the swap anyway depending on a probability function over a parameter called Temperature. This method is actually an adaptation of the Metropolis algorithm published by Metropolis et al. in 1953 and the probability function used is defined as:
-
-\begin{equation*}
-    e^{\frac{-\Delta \operatorname{c}(a,b)}{T}}
-\end{equation*}
-
-where $T$ is called \textit{Temperature} and is computed over time as $T = \alpha \cdot T$, with $\alpha$ called \textit{cooling parameter} and starting with $T = T_0$ that actually depends on the input.
-
-In our implementation the initial value for the temperature $T_0$ is equal to the cost of the input solution found by the grasp algorithm, divided by the number of nodes of the instance of the current TSP problem. Then at each iteration, $T$ is multiplied by the cooling parameter $\alpha = 0.99$. After 100 iterations of the algorithm, the temperature is newly set to its initial value $T_0$.
-
-Each swap requires time equal to $O(n)$ to rearrange the array containing the actual solution. So the overall complexity is equal to $O(n \cdot number of swaps)$.
-The algorithm stops its iteration after a given time limit.
-
-	
-\begin{algorithm}[h!]
-    \caption{Simulated annealing}\label{algo:SimulatedAnnealing}
-    \begin{algorithmic}[1]
-    \Require $G = (V,E), c:E \to \mathbb{R}^+$
-    \Ensure $\text{sub optimal TSP solution}$
-
-
-    \State $solution \gets$ GRASP()
-    \State $cost \gets$ cost\textunderscore grasp()
-    \State $T \textunderscore initial \gets  $ cost/$|$V$|$ 
-    \State $T \gets  $ T\textunderscore initial
-    \State $ \alpha \gets $ 0.99
-    \State $ iteration \gets $ 0
-   
-
-
-
-
-    \While{$ !time\textunderscore expired$}
-    \State $(a,a') \gets $ random edge
-    \State $(b,b') \gets $ random edge 
-    \State $p \gets $ random(0,1) // random value from 0 to 0.99
-    \State $\Delta \operatorname{c}(a,b) \gets$  $(c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$
-    
-    \If{ p $\leq$ $e^{\frac{-\Delta \operatorname{c}(a,b)}{T}}$}
-    \State $cost \gets$ cost + $\Delta \operatorname{c}(a,b) $
-    \State $swap(a,b)$ // swap the edge as shown in figure \ref{fig:2OPT}
-    \EndIf
-    \State $T \gets $ T*$\alpha$
-    \State $iteration \gets $ iteration + 1
-    \If{ iteration $\geq$ 100}
-    \State $T \gets  $ T\textunderscore initial
-    \State $iteration \gets  $ 0
-    \EndIf
-    
-
-    \EndWhile
-
-    \end{algorithmic}
-\end{algorithm}
-
-\subsection{Genetic Algorithm}
-Another approach to solving the TSP is to use a genetic algorithm, which is a type of heuristic optimization algorithm inspired by the process of natural selection. Genetic algorithms work by creating an initial population of candidate solutions (called chromosomes), and then repeatedly applying genetic operators such as crossover and mutation to generate new, potentially better solutions, called offspring [\ref{algo:genetic}].
-
-
-The choices of crossover and the chromosomes that make it to the next generation are based on the fitness of each chromosome, that is defined as minus the cost of the tsp tour. The genetic algorithm then selects the fittest individuals to serve as parents for the next generation, with the hope that their good qualities will be passed on to their offspring.
-
-To add some randomness in the hope of escaping the local optimums, a mutant is added with some probability to each new generation. A mutant is a chromosome of the current generation, chosen at random, to which a mutation has been applied, aka has some edges swapped at random.
-
-Through this iterative process, the genetic algorithm explores the space of possible solutions and gradually converges on a near-optimal tour.
-
-In conclusion, the genetic algorithm is a powerful and flexible approach to solving the Traveling Salesman Problem. While it may not always find the optimal solution, it can quickly find high-quality solutions that are good enough for many practical applications.
-
-\begin{algorithm}
-    \caption{Genetic algorithm}\label{algo:genetic}
-    \begin{algorithmic}[1]
-    \Require $G = (V,E), c:E \to \mathbb{R}^+$
-    \Ensure $\text{sub optimal TSP solution}$
-    
-    \State $population \gets *$ initialize population of chromosomes using GRASP $*$
-
-    \State $ generation \gets 0$
-
-    \While{$generation < MAX \textunderscore GENERATION$}
-
-        \State $parents \gets *$ initialize the offsparents  using a selection algorithm$*$
-        \State $offspring \gets *$ initialize the offspring using crossover $*$
-
-        \State $mutant \gets *$ if appropriate, initialize the mutant $*$
-
-        \State $ newGeneration() $
-        \State $ generation++ $
-
-    \EndWhile
-
-    \State $ solution \gets *$ chromosome with best fitness$*$
-
-    
-
-    \end{algorithmic}
-\end{algorithm}
-
-It's important to state elitism is implemented which means that the chromosomes with higher fitness (aka with lower cost) are always passed down to the next generation, ensuring that the best solution within all iterations of the genetic algorithm is never killed. 
-
-\subsubsection{Implementation choices}
-There are several algorithms that can be used in conjunction with genetic algorithm to enhance its performance.
-During each iteration of the genetic algorithm, selection, crossover and mutation are the main steps to compute to produce the new generation.
-Selection algorithm determine which individuals from the current population should be chosen for reproduction to generate the next generation. The most commonly used selection algorithms are:
-
-\begin{itemize}
-    \item Roulette Wheel Selection: each chromosome in the population is assigned a probability of selection based on its fitness. The probabilities are proportional to the fitness of the individual, so that individuals with higher fitness have a higher chance of being selected. A random number is then generated, and the individual corresponding to the selected probability is chosen for reproduction. (It is the algorithm that we chose to implement in our project)
-    \item Tournament Selection: a small subset of the population is randomly selected, and the individual with the highest fitness within that subset is chosen for reproduction.
-\end{itemize}
-
-After choosing two parents using selection, a new individual must be generated using a crossover algorithm. 
-These algorithms determine how the tour information is exchanged between two parents during reproduction. Common crossover algorithms include single-point crossover, two-point crossover, and uniform crossover.
-We implemented the single-point crossover and it works by choosing a single breaking point at random within the solutions of the parents and generating a partial new solution merging the chosen halves from the parents, without inserting duplicate nodes.
-After that the new solution must be repaired and we chose to do so using the Extra-Mileage [\ref{extramileage}] algorithm.
-
-Mutation is computed within a certain probability and the chosen individual has its tour modified by the swapping of two random edges. Other common mutation algorithms include bit-flip mutation and inversion mutation.
-
-
-
-
-
 
 
 
