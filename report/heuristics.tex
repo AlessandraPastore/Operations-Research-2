@@ -159,7 +159,7 @@ The Farthest Insertion algorithm has a worst-case time complexity of $O(n^2)$, w
 One of the most popular heuristic algorithms for solving the TSP is the 2-opt algorithm.
 The 2-opt algorithm is a local search algorithm that iteratively improves an initial tour by swapping pairs of edges to reduce the length of the tour. The algorithm starts by generating an initial tour, such as one produced by the Nearest Neighbor or Farthest Insertion algorithm. It then repeatedly examines all possible pairs of edges in the tour, and if swapping a pair of edges will reduce the length of the tour, the edges are swapped.
 
-More specifically, the 2-opt algorithm \ref*{algo:2-OPT} works as follows: first, it generates an initial solution, in our implementation we choose to generate it using the multistart Nearest Neighbor algorithm paired with a GRASP approach. It then examines all pairs of edges $(a,a')$ and $(b,b')$, where $a,a',b$ and $b'$ are distinct nodes. If swapping the edges $(a,a')$ and $(b,b')$ will result in a shorter tour, the edges are swapped, and the algorithm continues to search for other pairs of edges to swap. This process is repeated until no further improvements can be made to the tour or until the time limit permits.
+More specifically, the 2-opt algorithm \ref{algo:2-OPT} works as follows: first, it generates an initial solution, in our implementation we choose to generate it using the multistart Nearest Neighbor algorithm paired with a GRASP approach. It then examines all pairs of edges $(a,a')$ and $(b,b')$, where $a,a',b$ and $b'$ are distinct nodes. If swapping the edges $(a,a')$ and $(b,b')$ will result in a shorter tour, the edges are swapped, and the algorithm continues to search for other pairs of edges to swap. This process is repeated until no further improvements can be made to the tour or until the time limit permits.
 
 To know that a certain swap results in a better solution, the algorithm computes 
 \begin{equation}\label{eq:delta}
@@ -268,7 +268,7 @@ We compared the Nearest Neighbor algorithm, its GRASP variant with multistart, t
 
 During the GRASP tuning, we predicted that the default version of the Greedy algorithm (Nearest Neighbor) would give better results than the GRASP variant, and this performance profile actually proves us right.
 
-As we can see in Figure \ref*{fig:gge2}, the 2-opt algorithm is the better performing, while the GRASP variant is the worst one. 
+As we can see in Figure \ref{fig:gge2}, the 2-opt algorithm is the better performing, while the GRASP variant is the worst one. 
 
 \begin{figure}[!h]
     \centering

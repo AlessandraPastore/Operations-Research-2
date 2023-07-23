@@ -12,7 +12,7 @@ The basic idea behind Benders' Decomposition is to partition the original proble
     \sum_{e \in E(S_k)} x_e \leq |S_k|-1 \quad \quad \forall S_k: k=1,2,...
 \end{equation*}
 
-In our implementation \ref*{algo:benders} we use CPLEX to build an initial ILP model of the TSP instance with only the degree equals 2 constraints for each node. We solve this model iteratively to obtain a solution,  which may not be feasible for the original TSP, in the sense that it contains subtours (internal cycles). Each subtour is considered a connected component and we generate Benders' cuts based on these components to eliminate them from consideration in subsequent iterations of the algorithm. We add these cuts to the CPLEX model, called \textit{Subtour Elimination Constraint} (SEC), which tightens the relaxation and improves the solution quality.
+In our implementation \ref{algo:benders} we use CPLEX to build an initial ILP model of the TSP instance with only the degree equals 2 constraints for each node. We solve this model iteratively to obtain a solution,  which may not be feasible for the original TSP, in the sense that it contains subtours (internal cycles). Each subtour is considered a connected component and we generate Benders' cuts based on these components to eliminate them from consideration in subsequent iterations of the algorithm. We add these cuts to the CPLEX model, called \textit{Subtour Elimination Constraint} (SEC), which tightens the relaxation and improves the solution quality.
 
 
 
@@ -55,7 +55,7 @@ In our implementation \ref*{algo:benders} we use CPLEX to build an initial ILP m
 \end{algorithm}
 
 \subsection{Patching Heuristic}
-In the Algorithm \ref*{algo:benders} at line 10, we compute the Patching Heuristic.
+In the Algorithm \ref{algo:benders} at line 10, we compute the Patching Heuristic.
 It is an extension of Benders' Decomposition that aims to improve the quality of solutions obtained by the original Benders' algorithm before it terminates. 
 
 It addresses a limitation of Benders' Decomposition, which may produce solutions with a relatively large optimality gap due to the relaxation of the TSP constraints in the master problem. The patching heuristic helps close this gap by iteratively improving the solution through additional modifications.
@@ -63,7 +63,7 @@ It addresses a limitation of Benders' Decomposition, which may produce solutions
 At each iteration of Benders, a solution is obtained, but it might still contain subtours due to the relaxation of constraints. The Patching Heuristic aims to identify and remove these subtours from the solution, thus achieving a feasible solution with tighter bound on the optimal solution value.
 
 In our implementation, the Patching Heuristic repairs the current solution with subtours one component at a time until all components are connected. 
-Starting from component number 1, it tries to find the edge that connect this component to a different one with lowest $\Delta$ (as defined in Equation \ref*{eq:delta}) and then merges the two components. This process is repeated until all components are merged into one.
+Starting from component number 1, it tries to find the edge that connect this component to a different one with lowest $\Delta$ (as defined in Equation \ref{eq:delta}) and then merges the two components. This process is repeated until all components are merged into one.
 
 \begin{figure}[!h]
     \centering
@@ -96,3 +96,7 @@ Starting from component number 1, it tries to find the edge that connect this co
 
 
 \section{Concorde}
+
+\subsection{Tuning of Concorde}
+
+\section{Comparison of Exact Methods}

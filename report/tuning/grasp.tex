@@ -7,7 +7,7 @@ Applied to the Nearest Neighbor algorithm, it actually works by adding a certain
 At each iteration, instead of choosing the nearest node to the current one, we have a \textit{p} probability of choosing the second nearest node. That way we can add some randomness to the algorithm and this can actually improve the overall optimality of the final solution.
 This variant has been implemented in the project and runs similarly to the multistart Nearest Neighbor algorithm within a time limit, and with different starting nodes at each iteration.
 
-We run the GRASP algorithm multiple times within a certain time limit, each iteration with a different starting node $v \in V$. We tested 5 different probabilities of choosing the second nearest node and the results are shown in Figure \ref*{fig:grasp}
+We run the GRASP algorithm multiple times within a certain time limit, each iteration with a different starting node $v \in V$. We tested 5 different probabilities of choosing the second nearest node and the results are shown in Figure \ref{fig:grasp}
 
 \begin{figure}[!h]
     \centering

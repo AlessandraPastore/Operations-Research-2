@@ -173,7 +173,7 @@ The name of the algorithm comes from annealing in metallurgy, a technique involv
 
 Just like other metaheuristics, this algorithm starts with an initial solution, which can be generated randomly or using a heuristic. In our implementation we use the output of the Greedy heuristic with a grasp and multistart variant as the initial solution that we want to improve.
 
-At each iteration of the algorithm \ref*{algo:SimulatedAnnealing}, we select two edges $(a,a')$,$(b,b')$ randomly, where $a,a',b$ and $b'$ are distinct nodes and compute the $\Delta$ as in equation \ref{eq:delta}. If there would be an improvement over the current solution, we swap the edges (as in fig.\ref{fig:2OPT} ). Else if the swap would result in the worsening of the solution, there is still a certain probability of making the swap anyway depending on a probability function over a parameter called Temperature. This method is actually an adaptation of the Metropolis algorithm published by Metropolis et al. in 1953 and the probability function used is defined as:
+At each iteration of the algorithm \ref{algo:SimulatedAnnealing}, we select two edges $(a,a')$,$(b,b')$ randomly, where $a,a',b$ and $b'$ are distinct nodes and compute the $\Delta$ as in equation \ref{eq:delta}. If there would be an improvement over the current solution, we swap the edges (as in fig.\ref{fig:2OPT} ). Else if the swap would result in the worsening of the solution, there is still a certain probability of making the swap anyway depending on a probability function over a parameter called Temperature. This method is actually an adaptation of the Metropolis algorithm published by Metropolis et al. in 1953 and the probability function used is defined as:
 
 
 
@@ -305,7 +305,7 @@ Mutation is computed within a certain probability and the chosen individual has 
 This section is dedicated to the comparison of the Metaheuristic algorithms described above. 
 It is important to highlight that these algorithms can vary its performance depending on their implementation, thus the results we are going to describe are intrinsically correct only within the boundaries of our own model.
 
-In Figure \ref*{fig:meta} we are comparing Tabu Search, VNS, Genetic and Simulated Annealing over the same instances, within the same time limit of 5 minutes, all of them with their corresponding tuned parameter, to assert the best possible performance.
+In Figure \ref{fig:meta} we are comparing Tabu Search, VNS, Genetic and Simulated Annealing over the same instances, within the same time limit of 5 minutes, all of them with their corresponding tuned parameter, to assert the best possible performance.
 
 
 
