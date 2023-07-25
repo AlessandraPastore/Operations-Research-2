@@ -15,7 +15,7 @@ int hardfix(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	grasp(inst, 1, tl);
 	double initialSol = inst->zbest;
 
-	CPXsetdblparam(env, CPX_PARAM_TILIM, inst->timelimit/2);
+	CPXsetdblparam(env, CPX_PARAM_TILIM, inst->timelimit - second());
 
 	for (int i = 0; i < inst->nnodes; i++) xstar[xpos(i, inst->best_sol[i], inst)] = 1.0;
 
@@ -30,7 +30,7 @@ int hardfix(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	free(ind);
 
 	
-	double prob = 7; //tune: 5,6,7,8
+	double prob = 8; //tune: 5,6,7,8
 	double one = 1.0;
 	double zero = 0.0;
 	char lb = 'L';
@@ -86,7 +86,7 @@ int hardfix(instance* inst, CPXENVptr env, CPXLPptr lp) {
 		}
 
 
-	} while (!timeOut(inst, tl));
+	} while (!timeOut(inst, inst->timelimit));
 	
 	free(indexes);
 

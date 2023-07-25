@@ -15,7 +15,7 @@ int softfix(instance* inst, CPXENVptr env, CPXLPptr lp) {
 	grasp(inst, 1, tl);
 	double initialSol = inst->zbest;
 
-	CPXsetdblparam(env, CPX_PARAM_TILIM, inst->timelimit / 2);
+	CPXsetdblparam(env, CPX_PARAM_TILIM, inst->timelimit / 2 - second());
 
 	for (int i = 0; i < inst->nnodes; i++) xstar[xpos(i, inst->best_sol[i], inst)] = 1.0;
 
@@ -98,7 +98,7 @@ int softfix(instance* inst, CPXENVptr env, CPXLPptr lp) {
 			else {
 				numberOfPlateau++;
 			}
-			if (numberOfPlateau > 3) //tune: 2,3,4,5
+			if (numberOfPlateau > 5) //tune: 2,3,4,5
 				radindex++;
 			if (radindex > 2)
 				radindex = 0;
@@ -115,7 +115,7 @@ int softfix(instance* inst, CPXENVptr env, CPXLPptr lp) {
 		
 
 
-	} while (!timeOut(inst, tl));
+	} while (!timeOut(inst, inst->timelimit));
 
 	free(indexes);
 	free(values);

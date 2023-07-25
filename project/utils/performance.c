@@ -55,6 +55,22 @@ int callC(instance* inst, char name[]) {
 	return 0;
 }
 
+int extra(instance* inst, struct dirent* dir, FILE* out) {
+	if (callH(inst, "EXTRAMILEAGE")) return 1;
+
+	printf("%s,%f\n", dir->d_name, inst->zbest);
+	fprintf(out, "%s,%f", dir->d_name, inst->zbest);
+
+	memset(inst->best_sol, 0, inst->nnodes * sizeof(int));
+	inst->zbest = -1;
+
+
+	if (callH(inst, "EXTRAMILEAGE2")) return 1;
+
+	printf(",%f\n", inst->zbest);
+	fprintf(out, ",%f\n", inst->zbest);
+}
+
 //greedy grasp 2opt extramileage
 int gge2(instance* inst, struct dirent* dir, FILE* out) {
 	if (callH(inst, "GREEDY")) return 1;
@@ -161,29 +177,44 @@ int tuneC(instance* inst, struct dirent* dir, FILE* out, char name[]) {
 
 int performance(instance* inst) {
 
-	FILE* out = fopen(".\\output\\con10.txt", "w");
-	if (out == NULL) printf("output directory not found!");
+	FILE* out = fopen(".\\output\\extra.txt", "a"); //append
+	if (out == NULL) {
+		printf("output directory not found!");
+		return 1;
+	}
 
-	printf("time limit: %f", inst->timelimit);
+	//printf("time limit: %f", inst->timelimit);
 
 	initInstance(inst);
-	//fprintf(out, "2,benders,callback\n");
+	fprintf(out, "2,diameter,random start\n");
 
+	//FILE* in = fopen(inst->input_file, "r"); //append
+	//if (in == NULL) printf("input directory not found!");
+
+	//read_input(inst);
+
+	//if (callC(inst, "HARD")) return 1;
+
+	//int end = second() - inst->timeStart;
+
+	//fprintf(out, "%f\n", inst->zbest);
+
+
+
+	
 	
 
 	DIR* d;
 	struct dirent* dir;
 	d = opendir(".\\input");
 	if (d) {
+		
+		
 		while ((dir = readdir(d)) != NULL) {
 			printf("%s\n", dir->d_name);
 			if (strncmp(dir->d_name, ".", 1) == 0) continue;
 			if (strncmp(dir->d_name, "..", 1) == 0) continue;
 
-
-			//for(int i=0; i<20; i++){
-
-				//randomInstance(inst);
 			char file[] = ".\\input\\";
 			strcat(file, dir->d_name);
 			printf("FILE:%s\n", file);
@@ -200,18 +231,24 @@ int performance(instance* inst) {
 
 			//exact(inst, dir, out);
 
-			tuneC(inst, dir, out, "CONCORDE");
+			//tuneC(inst, dir, out, "CONCORDE");
 
 			
-		}
+
+			//extra(inst, dir, out);
+
+			
+		} 
 		closedir(d);
 	}
-
-
-
-
-
 	free(dir);
+	
+
+
+
+
+
+	
 	free_instance(inst);
 	fclose(out);
 	return 0;
