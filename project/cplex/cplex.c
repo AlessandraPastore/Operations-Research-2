@@ -15,6 +15,7 @@ void set_params(instance* inst, CPXENVptr env) {
 
 	// TO DO, NUM THREADS
 	// TO DO, set tree memory limit
+	
 }
 
 void build_model(instance* inst, CPXENVptr env, CPXLPptr lp)
