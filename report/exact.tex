@@ -94,9 +94,37 @@ Starting from component number 1, it tries to find the edge that connect this co
 
 
 
+\section{Callback For SECs}
 
-\section{Concorde}
+A TSP problem can also be solved by the branch and cut technique with the help of CPLEX callback functions. Branch and cut combines the concepts of branch and bound with cutting planes to efficiently explore the solution space and find optimal solutions. The branch and cut method begins by solving a relaxation of the original problem. This relaxation (known as LP relaxation) allows fractional solutions, which are not feasible for the original problem, but it provides an upper bound on the optimal solution value.
+Next, the algorithm branches on the fractional variables in the LP relaxation, creating multiple subproblems, and then solves each subproblem separately.\\
+To speed up the search the method uses valid inequalities (cutting planes) that can be added to the LP relaxation to eliminate fractional solutions, with the result of improving the lower bound on the optimal solution. \\
+The branch and cut algorithm iteratively performs branching, solving LP relaxations, and adding cutting planes until it either finds an optimal solution or proves that no better solution can be found. \\
+The CPLEX software can invoke a custom callback function whenever a new integer solution is found during the process of searching for a new solution .This solution takes the name of the candidate solution.\\
+In this case we check if the solution provided by CPLEX is feasible. In this case we are checking if it contains subtours. If the answer is positive, we add SECs for the connected component. \\
+The main difference between this approach and Bender’s method is that in this case only a single decision tree is generated.
 
-\subsection{Tuning of Concorde}
+\begin{algorithm}
+    \caption{Callback For SECs}\label{algo:SECcallback}
+    \begin{algorithmic}[1]
+    \Require TSP solution with subtours
+    \State find subtours that belong to the solution
+    \ForEach {subtour s$\in$ solution}
+    \State add SEC that remove subtour s
+    \EndFor
+    
+    \end{algorithmic}
+\end{algorithm}
+
+
+\section{User Cuts Callback}
+This time we present another possible implementation of a CPLEX callback. Now the callback is used in the relaxed solution of the problem. This special type of solution doesn’t consider the integer constraints of the decision variables. \\
+The task that this specific callback has to solve is the same as the one presented in the previous section, but the function  is applied on the continuous relaxation of the problem.\\
+In order to implement this type of procedure we need the use of the Concorde library, because the solution found is not integer.
+We use the function \textit{CCcut\_connect\_components} to find the number of connected components in a fractional solution. Now if there is only one component, it may not be a TSP solution, because it could be still fractional. In this case we use the function \textit{CCcut\_violated\_cuts} in order to cut this solution.\\
+
+
+\subsection{Tuning of User Cuts Callback}
+We cannot apply this type of callback at every node of the branching tree, because it would take too much time to find the solution, due to the high time taken by the algorithms present in the concorde library. So we apply this procedure only if the “number” that identify every node of the branching tree has a particular feature.
 
 \section{Comparison of Exact Methods}
