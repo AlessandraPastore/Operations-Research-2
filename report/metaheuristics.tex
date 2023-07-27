@@ -139,15 +139,19 @@ The algorithm stops after a given time limit returning in output the best soluti
 
 
     \State $solution \gets$ 2OPT()
-    
+    \State $cost \gets$ cost\textunderscore 2OPT()
     \While{$ !time\textunderscore expired  $}
     \State $\Delta\gets$ best delta among all pairs of nodes that are not in the tabu list
     \State choose a random node of delta and insert it into tabu list
     \State updates tabu list
-    \State $solution += \Delta$
+    \State $edge\textunderscore 1 \gets$ new edge (a,b) that has to be inserted
+    \State $edge\textunderscore 2 \gets$ new edge (b',a') that has to be inserted
+    \State $swap(edge\textunderscore 1,edge\textunderscore 2) $ // swap the selected (a,a'), (b,b') as shown in figure \ref{fig:2OPT}
+    \State $cost += \Delta$
 
-    \If{cost(solution) < cost(best\textunderscore solution)}
+    \If{cost < cost(best\textunderscore solution)}
     \State $ best\textunderscore solution \gets$ solution
+    \State $ cost(best\textunderscore solution) \gets$ cost
     \EndIf
     
 

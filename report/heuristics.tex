@@ -181,24 +181,20 @@ After the swap, the algorithm then changes the order of the successor in the tou
     \State $cost \gets$ cost\textunderscore grasp()
     
 
-    \While{$ !time\textunderscore expired  $}
-    \State $\Delta\textunderscore temp \gets$ 0
-    \State $edge\textunderscore 1 \gets$ empty
-    \State $edge\textunderscore 2 \gets$ empty
-    \ForEach {$(a,a') \in E $ }
-        \ForEach {$(b,b') \neq (a,a')\in E $}
-        \State $\Delta \operatorname{c}(a,b) \gets$  $(c_{ab} + c_{a'b'}) - (c_{aa'} + c_{bb'})$
-        \If{$\Delta\textunderscore temp  > \Delta \operatorname{c}(a,b) $}
-        \State $edge\textunderscore 1 \gets$ (a,a')
-        \State $edge\textunderscore 2 \gets$ (b,b')
-        \State $\Delta\textunderscore temp \gets$ $\Delta \operatorname{c}(a,b)$
-        \EndIf
-        \EndFor
-    \EndFor
+    \While{$ !time\textunderscore expired  $ and there is an improvement}
     
-    \If{ $\Delta\textunderscore temp  <0$}
+   
+   
+    \State $\Delta \gets$  best value of equation \ref{eq:delta} for this iteration
+    \State $edge\textunderscore 1 \gets$ new edge (a,b) that has to be inserted
+    \State $edge\textunderscore 2 \gets$ new edge (b',a') that has to be inserted
+    
+    
+    \If{ $\Delta <0$}
     \State $swap(edge\textunderscore 1,edge\textunderscore 2) $ // swap the selected (a,a'), (b,b') as shown in figure \ref{fig:2OPT}
-    \State $cost \gets  $ $cost$ + $\Delta\textunderscore temp$
+    \State $cost \gets  $ $cost$ + $\Delta$
+    \Else 
+        \State no improvement
     \EndIf
     
 
