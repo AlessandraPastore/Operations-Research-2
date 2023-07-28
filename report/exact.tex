@@ -127,4 +127,20 @@ We use the function \textit{CCcut\_connect\_components} to find the number of co
 \subsection{Tuning of User Cuts Callback}
 We cannot apply this type of callback at every node of the branching tree, because it would take too much time to find the solution, due to the high time taken by the algorithms present in the concorde library. So we apply this procedure only if the “number” that identify every node of the branching tree has a particular feature.
 
+In Figure \ref{fig:concorde} the numbers tested refer to the ratio of nodes to which the callback is applied.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{images/concorde.pdf}
+    \caption{Tuning of node ratio in User Cuts Callback}
+    \label{fig:concorde}
+\end{figure}
+
 \section{Comparison of Exact Methods}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{images/exact.pdf}
+    \caption{Performance Profile of Exact Methods}
+    \label{fig:exact}
+\end{figure}

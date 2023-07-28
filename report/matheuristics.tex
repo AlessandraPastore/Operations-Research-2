@@ -37,6 +37,14 @@ The performance of this method is highly conditioned by the type of the initial 
     \end{algorithmic}
 \end{algorithm}
 
+\subsection{Tuning of HardFixing}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{images/hard.pdf}
+    \caption{Tuning of ...  in HardFixing}
+    \label{fig:hard}
+\end{figure}
+
 \section{Local Branching}
 
 The Local Branching or soft fixing, is a matheuristic proposed by Fischetti [reference], that tries to improve the performance of the Hard-fixing matheuristics.\\
@@ -88,5 +96,46 @@ In this algorithm too, the initial solution is provided by the greedy heuristic,
     \end{algorithmic}
 \end{algorithm}
 
+\subsection{Tuning of Local Branching}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{images/soft.pdf}
+    \caption{Tuning of ...  in Local Branching}
+    \label{fig:soft}
+\end{figure}
+
 
 \section{Comparison of Matheuristics}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=\textwidth]{images/hs.pdf}
+    \caption{Performance Profile of Matheuristics}
+    \label{fig:hs}
+\end{figure}
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{lcc}
+    \cline{2-3}
+                & \textbf{hard fixing} & \textbf{soft fixing} \\ \hline
+    att48.tsp   & 10601.127450         & 10601.127450         \\
+    att532.tsp  & 28212.391348         & 28248.540350         \\
+    d493.tsp    & 35605.036596         & 35676.629322         \\
+    d657.tsp    & 50855.493487         & 50855.493487         \\
+    dsj1000.tsp & 21619342.0      & 21619342.0      \\
+    lin318.tsp  & 42649.518313         & 42649.518313         \\
+    p654.tsp    & 40251.581798         & 40251.581798         \\
+    pcb442.tsp  & 51328.083821         & 51328.083821         \\
+    pr1002.tsp  & 284653.597388        & 286205.676140        \\
+    pr439.tsp   & 110741.414203        & 110741.414203        \\
+    rat575.tsp  & 6960.514805          & 6965.028779          \\
+    rat783.tsp  & 9307.311019          & 9322.754398          \\
+    rd400.tsp   & 15516.720499         & 15516.720499         \\
+    u574.tsp    & 38125.252074         & 38149.920552         \\
+    u724.tsp    & 44201.295322         & 44201.295322         \\
+    vm1084.tsp  & 276173.143915        & 276173.143915        \\ \hline
+    \end{tabular}
+    \caption{Results of Matheuristic Methods}
+    \label{table:math}
+    \end{table}
