@@ -38,10 +38,13 @@ The performance of this method is highly conditioned by the type of the initial 
 \end{algorithm}
 
 \subsection{Tuning of HardFixing}
+An essential aspect of our hard fixing method's implementation lies in the parameter that governs the probability of fixing a specific edge. Consequently, we have embarked on tuning this parameter to achieve enhanced performance.
+\\
+Figure \ref{fig:hard} illustrates the diverse probabilities tested in the matheuristic. The values shown in the figure represent the true probabilities divided by ten. Notably, the value 8 demonstrates superior performance, corresponding to selecting 80\% of the edges from the previous solution.
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{images/hard.pdf}
-    \caption{Tuning of ...  in HardFixing}
+    \caption{Tuning of probability in HardFixing}
     \label{fig:hard}
 \end{figure}
 
@@ -71,7 +74,7 @@ In this algorithm too, the initial solution is provided by the greedy heuristic,
 
 
 \begin{algorithm}
-    \caption{Hard Fixing}\label{algo:SoftFixing}
+    \caption{Local Branching}\label{algo:SoftFixing}
     \begin{algorithmic}[1]
     \Require $G = (V,E), c:E \to \mathbb{R}^+$
     \Ensure $\text{sub optimal TSP solution}$
@@ -97,10 +100,11 @@ In this algorithm too, the initial solution is provided by the greedy heuristic,
 \end{algorithm}
 
 \subsection{Tuning of Local Branching}
+In this specific case, our focus was on the algorithm's behavior when it repeatedly produces the same solution with a fixed value of "k" in constraint \ref{eq:localBranch}. To address this, we fine-tuned the number of iterations the algorithm should execute without any improvement. Once this threshold is reached, the algorithm automatically adjusts the value of "k." Figure \ref{fig:soft} provides insight into our findings, showing that setting the number of iterations without improvements to 5 results in optimal performance.
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{images/soft.pdf}
-    \caption{Tuning of ...  in Local Branching}
+    \caption{Tuning of number of non improvement iteration before to change the value of k in Local Branching}
     \label{fig:soft}
 \end{figure}
 
