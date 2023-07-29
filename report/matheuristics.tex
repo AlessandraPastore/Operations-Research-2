@@ -52,28 +52,8 @@ Figure \ref{fig:hard} illustrates the diverse probabilities tested in the matheu
 
 The Local Branching or soft fixing, is a matheuristic proposed by Fischetti [reference], that tries to improve the performance of the Hard-fixing matheuristics.\\
 A critical point of hard-fixing consists in the choice of the variables that have to be fixed at each step. So, to try to solve this issue, soft fixing requires that a given number of variables have to be fixed, but unlike the hard-fixing method, it doesn’t choose them explicitly. In Local Branching this operation is performed by adding a new constraint that forces the solver to maintain a certain number of variables to the previous value. In our case we add a constraint that informs the solver that a given number of edges have to be maintained. \\
-The main idea behind this approach is the Hamming distance. This particular distance measures the number of positions at which the corresponding symbols are different. It can be used to calculate the “distance” between two vectors. \\
-We can apply this concept to the vector that represents the solution of a TSP instance. This solution can be seen as a binary vector, of length |E|, where each element is set to 1 if the corresponding edge is part of the solution and 0 otherwise. So given two vectors that corresponds to two different solutions of the same TSP instance, the Hamming distance between the two array can be formulated as:
-\begin{equation}
-   H(x,x^*)= \sum_{e\in E: x_e^*=1}^{}(1-x_e) + \sum_{e\in E: x_e^*=0}^{}x_e
-\end{equation}
-The first term counts the number of flipped 1’s, and the second counts the number of flipped 0’s. \\
-Now looking at the form of the solution provided by the TSP solver, it is possible to add a new constraint that limits the hamming distance between the old and the new solution:
 
-\begin{equation}\label{eq:hamming}
-    \sum_{e\in E: x_e^*=1}^{}(1-x_e) + \sum_{e\in E: x_e^*=0}^{}x_e \leq r
-\end{equation}
-We know that a valid TSP solution has a number of edges equal to n (number of nodes), and the number of flipped 0’s is the same as the flipped 1’s . So applying these knowledges to the \ref{eq:hamming} equation and with the aid of some algebra tricks it can be reformulated as:
-\begin{equation}\label{eq:localBranch}
-    \sum_{e\in E: x_e^*=1}^{}x_e \geq n-k
-\end{equation}
-where k=r/2.
-\\
-In our specific implementation the parameter k is changed every time the solver is stuck in the same solution. \\
-In this algorithm too, the initial solution is provided by the greedy heuristic, and from this start configuration the solver at each iteration tries to improve the incumbent adding the constraint \ref{eq:localBranch}, until the time limit is reached.
-
-
-\begin{algorithm}
+\begin{algorithm}[h!]
     \caption{Local Branching}\label{algo:SoftFixing}
     \begin{algorithmic}[1]
     \Require $G = (V,E), c:E \to \mathbb{R}^+$
@@ -99,8 +79,31 @@ In this algorithm too, the initial solution is provided by the greedy heuristic,
     \end{algorithmic}
 \end{algorithm}
 
+The main idea behind this approach is the Hamming distance. This particular distance measures the number of positions at which the corresponding symbols are different. It can be used to calculate the “distance” between two vectors. \\
+We can apply this concept to the vector that represents the solution of a TSP instance. This solution can be seen as a binary vector, of length |E|, where each element is set to 1 if the corresponding edge is part of the solution and 0 otherwise. So given two vectors that corresponds to two different solutions of the same TSP instance, the Hamming distance between the two array can be formulated as:
+\begin{equation}
+   H(x,x^*)= \sum_{e\in E: x_e^*=1}^{}(1-x_e) + \sum_{e\in E: x_e^*=0}^{}x_e
+\end{equation}
+The first term counts the number of flipped 1’s, and the second counts the number of flipped 0’s. \\
+Now looking at the form of the solution provided by the TSP solver, it is possible to add a new constraint that limits the hamming distance between the old and the new solution:
+
+\begin{equation}\label{eq:hamming}
+    \sum_{e\in E: x_e^*=1}^{}(1-x_e) + \sum_{e\in E: x_e^*=0}^{}x_e \leq r
+\end{equation}
+We know that a valid TSP solution has a number of edges equal to n (number of nodes), and the number of flipped 0’s is the same as the flipped 1’s . So applying these knowledges to the \ref{eq:hamming} equation and with the aid of some algebra tricks it can be reformulated as:
+\begin{equation}\label{eq:localBranch}
+    \sum_{e\in E: x_e^*=1}^{}x_e \geq n-k
+\end{equation}
+where k=r/2.
+\\
+In our specific implementation the parameter k is changed every time the solver is stuck in the same solution. \\
+In Algorithm \ref{algo:SoftFixing} too, the initial solution is provided by the greedy heuristic, and from this start configuration the solver at each iteration tries to improve the incumbent adding the constraint \ref{eq:localBranch}, until the time limit is reached.
+
+
+
+
 \subsection{Tuning of Local Branching}
-In this specific case, our focus was on the algorithm's behavior when it repeatedly produces the same solution with a fixed value of "k" in constraint \ref{eq:localBranch}. To address this, we fine-tuned the number of iterations the algorithm should execute without any improvement. Once this threshold is reached, the algorithm automatically adjusts the value of "k." Figure \ref{fig:soft} provides insight into our findings, showing that setting the number of iterations without improvements to 5 results in optimal performance.
+In this specific case, our focus was on the algorithm's behavior when it repeatedly produces the same solution with a fixed value of ``k" in constraint \ref{eq:localBranch}. To address this, we fine-tuned the number of iterations the algorithm should execute without any improvement. Once this threshold is reached, the algorithm automatically adjusts the value of ``k". Figure \ref{fig:soft} provides insight into our findings, showing that setting the number of iterations without improvements to 5 results in optimal performance.
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{images/soft.pdf}
@@ -111,6 +114,8 @@ In this specific case, our focus was on the algorithm's behavior when it repeate
 
 \section{Comparison of Matheuristics}
 
+We tested the HardFixing Algorithm and the Local Branching Algorithm over the same instances, running for the same amount of time per instance. Both Figure \ref{fig:hs} and Table \ref{table:math} shows how they performs identically in more than 50\% of the instances, returning the same correct value. Overall HardFixing is by far the best one, since it provides stronger constraints and leads to more precise solutions. 
+
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{images/hs.pdf}
@@ -118,7 +123,7 @@ In this specific case, our focus was on the algorithm's behavior when it repeate
     \label{fig:hs}
 \end{figure}
 
-\begin{table}[]
+\begin{table}[!h]
     \centering
     \begin{tabular}{lcc}
     \cline{2-3}

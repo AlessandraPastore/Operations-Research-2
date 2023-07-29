@@ -138,7 +138,9 @@ In Figure \ref{fig:concorde} the numbers tested refer to the ratio of nodes to w
 
 \section{Comparison of Exact Methods}
 
+We tested the performance of all three exact methods mentioned above, running on the same instances for 5 minutes each. In Figure \ref{fig:exact} it can be seen that all of them performs really well in 30\% of instances, but the User Cuts Callback using the Concorde library actually outperforms the other methods overall, even if it employs time-consuming routines based on Concorde documentation.
 
+It is quite straightforward why Benders Algorithm performs the worst, since it reconstruct the model at each iteration, wasting more time compared to the other methods.
 
 \begin{figure}[!h]
     \centering
