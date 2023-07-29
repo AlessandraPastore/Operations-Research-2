@@ -264,8 +264,6 @@ We compared the Nearest Neighbor algorithm, its GRASP variant with multistart, t
 
 During the GRASP tuning, we predicted that the default version of the Greedy algorithm (Nearest Neighbor) would give better results than the GRASP variant, and this performance profile actually proves us right.
 
-As we can see in Figure \ref{fig:gge2}, the 2-opt algorithm is the better performing, while the GRASP variant is the worst one. 
-
 \begin{figure}[!h]
     \centering
     \includegraphics[width=\textwidth]{images/gge2.pdf}
@@ -273,7 +271,11 @@ As we can see in Figure \ref{fig:gge2}, the 2-opt algorithm is the better perfor
     \label{fig:gge2}
 \end{figure}
 
-\begin{table}[]
+As we can see in Figure \ref{fig:gge2}, the 2-opt algorithm is the better performing, while the GRASP variant is the worst one. 
+
+
+
+\begin{table}[!h]
     \centering
     \begin{tabular}{lcccc}
     \cline{2-5}
@@ -298,6 +300,8 @@ As we can see in Figure \ref{fig:gge2}, the 2-opt algorithm is the better perfor
     \caption{Results of Heuristic Methods}
     \label{table:heuristics}
 \end{table}
+
+Data in Table \ref{table:heuristics} show the values found running the Heuristic Algorithms over the relative instances. Remember that the results may vary depending on the machine used for running the algorithms and the time limit used for each instance.
 
 
 
