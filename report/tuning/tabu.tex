@@ -1,10 +1,4 @@
-\begin{figure}[!h]
-    \centering
-    \includegraphics[width=\textwidth]{images/tabu.pdf}
-    \caption{Tuning of Tabu Tenure Ratio}
-    \label{fig:tabu}
-\end{figure}
-\subsection{Tuning of Tabu}
+\section{Tuning of Tabu}
 
 This section is used to identify and then tune the possible parameters that can alter the results of the Tabu Search algorithm.
 
@@ -18,9 +12,19 @@ In Figure \ref{fig:tabu} we can see that a \textit{Tenure Ratio} of 2 has to be 
 
 The secondo parameter to be tested is the \textit{Tenure} itself. As an initial hypothesis we thought that having a bigger \textit{Tenure}, in the sense of forbidding certain moves for more time, could end up in finding better solutions, but Figure \ref{fig:tabu2} actually shows the opposite.
 
+
 \begin{figure}[!h]
     \centering
-    \includegraphics[width=\textwidth]{images/tabu2.pdf}
-    \caption{Tuning of Tabu Tenure}
-    \label{fig:tabu2}
-\end{figure}
+        %Prima riga
+        \begin{subfigure}{0.48\textwidth} %Controllo della posizione in orizzontale
+            \includegraphics[scale=0.45]{images/tabu.pdf} 
+            \caption{Tuning of Tabu Tenure Ratio}
+            \label{fig:tabu}
+        \end{subfigure}
+        \begin{subfigure}{0.48\textwidth}
+            \includegraphics[scale=0.45]{images/tabu2.pdf}
+            \caption{Tuning of Tabu Tenure}
+            \label{fig:tabu2}
+        \end{subfigure}
+    \caption{Tuning of Tabu Search}
+    \end{figure}
