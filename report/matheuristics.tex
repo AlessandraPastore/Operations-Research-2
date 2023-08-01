@@ -19,19 +19,19 @@ The performance of this method is highly conditioned by the type of the initial 
 
     \State $solution \gets$ greedy()
     \State $cost \gets $ cost(solution)
-    \State Build basic TSP model in CPLEX
+    \State $*$ Build basic TSP model in CPLEX $*$
 
 
 
     \While{$ !time\textunderscore expired  $}
     \ForEach {edge e$\in$ solution}
-    \State fix e with probability p
+    \State $*$ fix e with probability p $*$
     \EndFor
     \State $solution \gets$ findNewSolution()
     \If{cost(solution) < cost(best\textunderscore solution)}
     \State $ best\textunderscore solution \gets$ solution
     \EndIf
-    \State unfix all variables
+    \State $*$ unfix all variables $*$
     \EndWhile
 
     \end{algorithmic}
@@ -61,19 +61,19 @@ A critical point of hard-fixing consists in the choice of the variables that hav
 
     \State $solution \gets$ greedy()
     \State $cost \gets $ cost(solution)
-    \State Build basic TSP model in CPLEX
+    \State $*$ Build basic TSP model in CPLEX $*$
 
 
 
     \While{$ !time\textunderscore expired  $}
-    \State add constraint \ref{eq:localBranch}
+    \State $*$ add constraint \ref{eq:localBranch} $*$
     \State $solution \gets$ findNewSolution()
     \If{cost(solution) < cost(best\textunderscore solution)}
     \State $ best\textunderscore solution \gets$ solution
     \ElsIf{not improvement for a certain number of iteration}
-    \State change parameter k
+    \State $*$ change parameter k $*$
     \EndIf
-    \State remove constraint \ref{eq:localBranch}
+    \State $*$ remove constraint \ref{eq:localBranch} $*$
     \EndWhile
 
     \end{algorithmic}
