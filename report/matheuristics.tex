@@ -1,6 +1,6 @@
 Matheuristics refers to the integration of Mathematical Programming and problem-specific heuristics to develop hybrid algorithms that leverage the strengths of both approaches. Many real-world optimization problems are computationally challenging and may not be efficiently solvable using exact mathematical programming approaches alone. This is where heuristics come into play. Heuristics are approximate methods that trade optimality for computational efficiency. They aim to quickly find good solutions by leveraging problem-specific knowledge, rules of thumb, or iterative improvement techniques.
 The combination of mathematical programming and heuristics in matheuristics allows for a powerful approach to tackle complex optimization problems, providing a good balance between solution quality and computational efficiency. It is particularly useful for problems, such as TSP, where finding exact optimal solutions is infeasible or time-consuming, but good-quality solutions are still desired within a reasonable amount of time.
-In the following section we present two of such techniques, that are hard fixing and local branching.
+In the following section we present two of such techniques, that are Hard Fixing and local branching.
 
 \section{Hard Fixing}
 Hard-fixing matheuristics is a specific approach that sets the value of certain decision variables to a specific value and then tries to solve the new simplified problem with the remaining variables. By fixing variables, the problem size is reduced, and the solver can focus on finding a solution in a smaller search space.\\
@@ -38,7 +38,7 @@ The performance of this method is highly conditioned by the type of the initial 
 \end{algorithm}
 
 \subsection{Tuning of HardFixing}
-An essential aspect of our hard fixing method's implementation lies in the parameter that governs the probability of fixing a specific edge. Consequently, we have embarked on tuning this parameter to achieve enhanced performance.
+An essential aspect of our Hard Fixing method's implementation lies in the parameter that governs the probability of fixing a specific edge. Consequently, we have embarked on tuning this parameter to achieve enhanced performance.
 \\
 Figure \ref{fig:hard} illustrates the diverse probabilities tested in the matheuristic. The values shown in the figure represent the true probabilities divided by ten. Notably, the value 8 demonstrates superior performance, corresponding to selecting 80\% of the edges from the previous solution.
 \begin{figure}[!h]
@@ -50,8 +50,8 @@ Figure \ref{fig:hard} illustrates the diverse probabilities tested in the matheu
 
 \section{Local Branching}
 
-The Local Branching or soft fixing, is a matheuristic proposed by M. Fischetti and A. Lodi \cite{fischetti2003local}, that tries to improve the performance of the Hard-fixing matheuristics.\\
-A critical point of hard-fixing consists in the choice of the variables that have to be fixed at each step. So, to try to solve this issue, soft fixing requires that a given number of variables have to be fixed, but unlike the hard-fixing method, it doesn’t choose them explicitly. In Local Branching this operation is performed by adding a new constraint that forces the solver to maintain a certain number of variables to the previous value. In our case we add a constraint that informs the solver that a given number of edges have to be maintained. \\
+The Local Branching or Soft Fixing, is a matheuristic proposed by M. Fischetti and A. Lodi \cite{fischetti2003local}, that tries to improve the performance of the Hard-fixing matheuristics.\\
+A critical point of hard-fixing consists in the choice of the variables that have to be fixed at each step. So, to try to solve this issue, Soft Fixing requires that a given number of variables have to be fixed, but unlike the hard-fixing method, it doesn’t choose them explicitly. In Local Branching this operation is performed by adding a new constraint that forces the solver to maintain a certain number of variables to the previous value. In our case we add a constraint that informs the solver that a given number of edges have to be maintained. \\
 
 \begin{algorithm}[h!]
     \caption{Local Branching}\label{algo:SoftFixing}
@@ -127,7 +127,7 @@ We tested the HardFixing Algorithm and the Local Branching Algorithm over the sa
     \centering
     \begin{tabular}{lcc}
     \cline{2-3}
-                & \textbf{hard fixing} & \textbf{soft fixing} \\ \hline
+                & \textbf{Hard Fixing} & \textbf{Soft Fixing} \\ \hline
     att48.tsp   & 10601.127450         & 10601.127450         \\
     att532.tsp  & 28212.391348         & 28248.540350         \\
     d493.tsp    & 35605.036596         & 35676.629322         \\
