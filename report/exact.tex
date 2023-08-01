@@ -2,7 +2,7 @@ Exact algorithms for the TSP are methods that guarantee finding the optimal solu
 
 
 \section{Benders}
-Benders' Decomposition is a powerful optimization technique used to solve large-scale combinatorial problems like the Travelling Salesman Problem (TSP). It was introduced by Jacques F. Benders in the 1960s and has since become a widely used approach in the field of mathematical programming.
+Benders' Decomposition is a powerful optimization technique used to solve large-scale combinatorial problems like the Travelling Salesman Problem (TSP). It was introduced by Jacques F. Benders in the 1960s \cite{benders1962} and has since become a widely used approach in the field of mathematical programming.
 
 The Travelling Salesman Problem is known to be a challenging NP-hard problem, meaning that finding the optimal solution for large instances can be computationally intractable using traditional methods like brute-force or exact algorithms. Benders' Decomposition addresses this issue by breaking down the problem into smaller, more manageable subproblems and solving them iteratively.
 
@@ -99,9 +99,9 @@ Starting from a first component, it tries to find the edge with lowest $\Delta$ 
 A TSP problem can also be solved by the Branch and Cut technique with the help of CPLEX callback functions. Branch and Cut combines the concepts of branch and bound with cutting planes to efficiently explore the solution space and find optimal solutions. The Branch and Cut method begins by solving a relaxation of the original problem. This relaxation (known as LP relaxation) allows fractional solutions, which are not feasible for the original problem, but it provides an upper bound on the optimal solution value.
 Next, the algorithm branches on the fractional variables in the LP relaxation, creating multiple subproblems, and then solves each subproblem separately.\\
 To speed up the search the method uses valid inequalities (cutting planes) that can be added to the LP relaxation to eliminate fractional solutions, with the result of improving the lower bound on the optimal solution. \\
-The Branch and Cut Algorithm \ref{algo:SECcallback} iteratively performs branching, solving LP relaxations, and adding cutting planes until it either finds an optimal solution or proves that no better solution can be found. \\
-The CPLEX software can invoke a custom callback function whenever a new integer solution is found during the process of searching for a new solution .This solution takes the name of the candidate solution.\\
-In this case we check if the solution provided by CPLEX is feasible. In this case we are checking if it contains subtours. If the answer is positive, we add SECs for the connected component. \\
+The Branch and Cut iteratively performs branching, solving LP relaxations, and adding cutting planes until it either finds an optimal solution or proves that no better solution can be found. \\
+The CPLEX software can invoke a custom callback (Algorithm \ref{algo:SECcallback}) function whenever a new integer solution is found during the process of searching for a new solution .This solution takes the name of the candidate solution.\\
+In this case we check if the solution provided by CPLEX is feasible. Now we are checking if it contains subtours. If the answer is positive, we add SECs for the connected component. \\
 The main difference between this approach and Bender’s method is that in this case only a single decision tree is generated.
 
 \begin{algorithm}
