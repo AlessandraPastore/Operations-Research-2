@@ -50,7 +50,7 @@ Figure \ref{fig:hard} illustrates the diverse probabilities tested in the matheu
 
 \section{Local Branching}
 
-The Local Branching or soft fixing, is a matheuristic proposed by Fischetti [reference], that tries to improve the performance of the Hard-fixing matheuristics.\\
+The Local Branching or soft fixing, is a matheuristic proposed by M. Fischetti and A. Lodi \cite{fischetti2003local}, that tries to improve the performance of the Hard-fixing matheuristics.\\
 A critical point of hard-fixing consists in the choice of the variables that have to be fixed at each step. So, to try to solve this issue, soft fixing requires that a given number of variables have to be fixed, but unlike the hard-fixing method, it doesn’t choose them explicitly. In Local Branching this operation is performed by adding a new constraint that forces the solver to maintain a certain number of variables to the previous value. In our case we add a constraint that informs the solver that a given number of edges have to be maintained. \\
 
 \begin{algorithm}[h!]

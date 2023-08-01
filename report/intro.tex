@@ -1,7 +1,7 @@
 \section{History of TSP}
 The TSP was first mathematically formulated in the 19th century by the Irish mathematician William Rowan Hamilton and by the British mathematician Thomas Kirkman. In the 1930s, the TSP was first considered mathematically by Merrill M. Flood.\\
 George Dantzig, a renowned mathematician, is known for his pivotal role in the development of early exact algorithms for the TSP. In 1954 Dantzig, along with Ray Fulkerson and Selmer Johnson, formulated the first linear programming approach to solve the TSP. This work marked a significant advancement in the understanding and solving of the TSP.\\
-Richard M. Karp proved that the traveling salesman problem (TSP) is NP-hard in 1972. He did this by showing that the TSP can be reduced to the Hamiltonian cycle problem, which is known to be NP-hard.\\
+Richard M. Karp proved that the travelling salesman problem (TSP) is NP-hard in 1972 \cite{karp1972reducibility}. He did this by showing that the TSP can be reduced to the Hamiltonian cycle problem, which is known to be NP-hard.\\
 In the 1990s  Applegate, Bixby, Chvátal, and Cook developed a TSP solver, called Concorde \cite{Concorde}. \\
 In 1991, Gerhard Reinelt introduced TSPLIB\cite{TSPLIB}, an extensive compilation of benchmark instances encompassing varying levels of complexity.\\
 Today, the TSP is still an active area of research, with researchers working to develop new algorithms and heuristics for solving the problem. The TSP is one of the most important problems in computer science, and its applications are widespread. For example, the TSP is used to plan the routes for delivery trucks, to schedule the flights of airplanes, and to design the circuits of integrated circuits.
@@ -9,11 +9,11 @@ Today, the TSP is still an active area of research, with researchers working to 
 
 \section{Problem formulation}
 
-Given a directed graph G=(V,A) the Travelling Salesman Problem consists in finding a Hamiltonian circuit of a minimum cost. This problem arises in various real-world applications, whenever there is a need to find an optimal or near-optimal route for visiting a set of locations.\\
+According to  \cite{fischetti2019introduction}, given a directed graph G=(V,A) the Travelling Salesman Problem consists in finding a Hamiltonian circuit of a minimum cost. This problem arises in various real-world applications, whenever there is a need to find an optimal or near-optimal route for visiting a set of locations.\\
 The problem can also be defined on an undirected graph; this happens when the cost associated with an arc does not depend on its orientation.\\ 
 In our work we put our attention on the \textit{Symmetric Travelling Salesman Problem}. In this scenario there is an undirected weighted complete graph G=(V,E) where V=\{$v_1,\dotsc,v_n$\} is the set of nodes, and E is the set of edges. Every edge has an associated cost, let c: E $\rightarrow \mathbb{R}^+$ be a function that assigns to every edge a proper cost.\\
 The goal of TSP is to find the shortest tour that connects all the nodes. The tour can be formulated as a sequence of edges, or nodes. In order to solve this problem, there is the need to formulate it as a mathematical problem.
-\\According to  \cite{fischetti2019introduction} and using the following integer variables:
+Using the following integer variables:
 
 
 

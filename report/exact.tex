@@ -101,7 +101,7 @@ Next, the algorithm branches on the fractional variables in the LP relaxation, c
 To speed up the search the method uses valid inequalities (cutting planes) that can be added to the LP relaxation to eliminate fractional solutions, with the result of improving the lower bound on the optimal solution. \\
 The Branch and Cut Algorithm \ref{algo:SECcallback} iteratively performs branching, solving LP relaxations, and adding cutting planes until it either finds an optimal solution or proves that no better solution can be found. \\
 The CPLEX software can invoke a custom callback function whenever a new integer solution is found during the process of searching for a new solution .This solution takes the name of the candidate solution.\\
-In this case we check if the solution provided by CPLEX is feasible. In this case we are checking if it contains subtours. If the answer is positive, we add SECs for the connected component. \\
+In this case we check if the solution provided by CPLEX is feasible. Now we are checking if it contains subtours. If the answer is positive, we add SECs for the connected component. \\
 The main difference between this approach and Bender’s method is that in this case only a single decision tree is generated.
 
 \begin{algorithm}
