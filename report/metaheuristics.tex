@@ -8,7 +8,7 @@ Constructive heuristics and refinement heuristics  are often combined to form me
     \label{fig:metaheur}
 \end{figure}
 
-Metaheuristic methods can be classified into two main categories: single-solution and population-based methods. Single-solution methods start with an initial solution and iteratively improve it by applying a set of moves or transformations. The single-solution metaheuristics that we implemented are Variable Neighborhood Search (VNS), Tabu Search and Simulated Annealing. Population-based methods maintain a population of candidate solutions and explore the search space by iteratively generating new solutions through genetic operators such as crossover and mutation. For the population-based methods we implemented a Genetic Algorithm.
+Metaheuristic methods can be classified into two main categories: single-solution and population-based methods. Single-solution methods start with an initial solution and iteratively improve it by applying a set of moves or transformations. The single-solution metaheuristics that we implemented are Variable Neighborhood Search (VNS), Tabu Search and Simulated Annealing. Population-based methods maintain a population of candidate solutions and explore the search space by iteratively generating new solutions through genetic operators such as crossover and mutation. For the population-based methods we implemented a genetic Algorithm.
 
 
 
@@ -174,7 +174,7 @@ The algorithm stops after a given time limit returning in output the best soluti
 
 \section{Simulated Annealing}
 
-Simulated annealing is a metaheuristic optimization algorithm that can be used to solve the Travelling Salesman Problem (TSP).
+Simulated Annealing is a metaheuristic optimization algorithm that can be used to solve the Travelling Salesman Problem (TSP).
 The name of the algorithm comes from annealing in metallurgy, a technique involving heating and controlled cooling of a material to alter its physical properties. This method uses a probabilistic technique that usually archives an approximate solution of the global minimum.
 
 Just like other metaheuristics, this algorithm starts with an initial solution, which can be generated randomly or using a heuristic. In our implementation we use the output of the Greedy heuristic with the GRASP and multistart variant as the initial solution that we want to improve.
@@ -188,7 +188,7 @@ At each iteration of the Algorithm \ref{algo:SimulatedAnnealing}, we select two 
 \end{equation*}
 
 \begin{algorithm}[!h]
-    \caption{Simulated annealing}\label{algo:SimulatedAnnealing}
+    \caption{Simulated Annealing}\label{algo:SimulatedAnnealing}
     \begin{algorithmic}[1]
     \Require $G = (V,E), c:E \to \mathbb{R}^+$, a valid tour solution
     \Ensure $\text{sub optimal TSP solution}$
@@ -245,20 +245,20 @@ The algorithm stops its iteration after a given time limit.
 
 \input{tuning/annealing.tex}
 
-\section{Genetic Algorithm}
-Another approach to solving the TSP is to use a Genetic Algorithm, which is a type of heuristic optimization algorithm inspired by the process of natural selection. Genetic algorithms work by creating an initial population of candidate solutions (called chromosomes), and then repeatedly applying genetic operators such as crossover and mutation to generate new, potentially better solutions, called offspring [\ref{algo:genetic}].
+\section{genetic Algorithm}
+Another approach to solving the TSP is to use a genetic Algorithm, which is a type of heuristic optimization algorithm inspired by the process of natural selection. genetic Algorithms work by creating an initial population of candidate solutions (called chromosomes), and then repeatedly applying genetic operators such as crossover and mutation to generate new, potentially better solutions, called offspring [\ref{algo:genetic}].
 
 
-The choices of crossover and the chromosomes that make it to the next generation are based on the fitness of each chromosome, that is defined as minus the cost of the tsp tour. The Genetic Algorithm then selects the fittest individuals to serve as parents for the next generation, with the hope that their good qualities will be passed on to their offspring.
+The choices of crossover and the chromosomes that make it to the next generation are based on the fitness of each chromosome, that is defined as minus the cost of the tsp tour. The genetic Algorithm then selects the fittest individuals to serve as parents for the next generation, with the hope that their good qualities will be passed on to their offspring.
 
 To add some randomness in the hope of escaping the local optimums, a mutant is added with some probability to each new generation. A mutant is a chromosome of the current generation, chosen at random, to which a mutation has been applied, aka has some edges swapped at random.
 
-Through this iterative process, the Genetic Algorithm explores the space of possible solutions and gradually converges on a near-optimal tour.
+Through this iterative process, the genetic Algorithm explores the space of possible solutions and gradually converges on a near-optimal tour.
 
-In conclusion, the Genetic Algorithm is a powerful and flexible approach to solving the Travelling Salesman Problem. While it may not always find the optimal solution, it can quickly find high-quality solutions that are good enough for many practical applications.
+In conclusion, the genetic Algorithm is a powerful and flexible approach to solving the Travelling Salesman Problem. While it may not always find the optimal solution, it can quickly find high-quality solutions that are good enough for many practical applications.
 
 \begin{algorithm}
-    \caption{Genetic algorithm}\label{algo:genetic}
+    \caption{genetic Algorithm}\label{algo:genetic}
     \begin{algorithmic}[1]
     \Require $G = (V,E), c:E \to \mathbb{R}^+$
     \Ensure $\text{sub optimal TSP solution}$
@@ -286,11 +286,11 @@ In conclusion, the Genetic Algorithm is a powerful and flexible approach to solv
     \end{algorithmic}
 \end{algorithm}
 
-It's important to state elitism is implemented which means that the chromosomes with higher fitness (aka with lower cost) are always passed down to the next generation, ensuring that the best solution within all iterations of the Genetic Algorithm is never killed. 
+It's important to state elitism is implemented which means that the chromosomes with higher fitness (aka with lower cost) are always passed down to the next generation, ensuring that the best solution within all iterations of the genetic Algorithm is never killed. 
 
 \subsubsection{Implementation choices}
-There are several algorithms that can be used in conjunction with Genetic Algorithm to enhance its performance.
-During each iteration of the Genetic Algorithm, selection, crossover and mutation are the main steps to compute to produce the new generation.
+There are several algorithms that can be used in conjunction with genetic Algorithm to enhance its performance.
+During each iteration of the genetic Algorithm, selection, crossover and mutation are the main steps to compute to produce the new generation.
 Selection algorithm determine which individuals from the current population should be chosen for reproduction to generate the next generation. The most commonly used selection algorithms are:
 
 \begin{itemize}
